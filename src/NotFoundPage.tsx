@@ -28,7 +28,7 @@ export const NotFoundPage = () => {
           <a href="/#contact" className="flex items-center justify-center gap-2 px-6 py-4 bg-white/5 border border-white/10 hover:border-[var(--primary)]/50 hover:bg-white/10 text-white font-bold rounded-xl hover:-translate-y-1 smooth-transition">
             <MessageSquare size={20} /> Contact Dezo
           </a>
-          <a href="https://wa.me/917787063088" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-6 py-4 bg-[#25D366]/20 border border-[#25D366]/50 hover:bg-[#25D366]/30 text-white font-bold rounded-xl hover:-translate-y-1 smooth-transition">
+          <a href="https://wa.me/919114411026" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-6 py-4 bg-[#25D366]/20 border border-[#25D366]/50 hover:bg-[#25D366]/30 text-white font-bold rounded-xl hover:-translate-y-1 smooth-transition">
             <Phone size={20} /> WhatsApp Us
           </a>
         </div>

@@ -18,7 +18,7 @@ const PageLayout = ({ title, h1, meta, children, schemaData }: any) => {
       "postalCode": "751024",
       "addressCountry": "IN"
     },
-    "telephone": "+917787063088",
+    "telephone": "+919114411026",
     "email": "contact@dezo.in",
     "priceRange": "$$"
   };
@@ -578,7 +578,7 @@ export const ContactPage = () => {
         <h2 className="text-2xl font-bold text-main-dark mb-4">Let's Discuss Your Digital Growth</h2>
         <p className="mb-6 text-main-muted">Whether you need a new website, a high-converting landing page, or a digital marketing strategy, our team is ready to help.</p>
         <div className="space-y-4">
-          <p><strong>Phone:</strong> +91 77870 63088</p>
+          <p><strong>Phone:</strong> +91 91144 11026</p>
           <p><strong>Email:</strong> contact@dezo.in</p>
           <p><strong>Address:</strong> Phase 2, Patia, Bhubaneswar, Odisha 751024</p>
         </div>
