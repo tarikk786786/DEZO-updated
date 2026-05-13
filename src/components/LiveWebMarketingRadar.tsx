@@ -17,12 +17,14 @@ export const LiveWebMarketingRadar = () => {
   const fetchNews = async () => {
     try {
       const res = await fetch('/api/web-marketing-news');
-      const data = await res.json();
-      if (data.news && data.news.length > 0) {
-        setNews(data.news);
-      } else {
-        setNews(fallbackNews);
+      if (res.ok && res.headers.get('content-type')?.includes('application/json')) {
+        const data = await res.json();
+        if (data.news && data.news.length > 0) {
+          setNews(data.news);
+          return;
+        }
       }
+      setNews(fallbackNews);
     } catch (err) {
       setNews(fallbackNews);
     } finally {

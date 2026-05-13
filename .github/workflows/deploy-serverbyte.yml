@@ -1,0 +1,49 @@
+name: Deploy React App to ServerByte cPanel FTP
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  web-deploy:
+    name: Deploy to ServerByte FTP
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Application
+        run: npm run build
+
+      - name: Create or Ensure SPA .htaccess
+        run: |
+          echo '<IfModule mod_rewrite.c>' > dist/.htaccess
+          echo '  RewriteEngine On' >> dist/.htaccess
+          echo '  RewriteBase /' >> dist/.htaccess
+          echo '  RewriteRule ^index\.html$ - [L]' >> dist/.htaccess
+          echo '  RewriteCond %{REQUEST_FILENAME} !-f' >> dist/.htaccess
+          echo '  RewriteCond %{REQUEST_FILENAME} !-d' >> dist/.htaccess
+          echo '  RewriteRule . /index.html [L]' >> dist/.htaccess
+          echo '</IfModule>' >> dist/.htaccess
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/
+          server-dir: /public_html/
+          dangerous-clean-slate: false

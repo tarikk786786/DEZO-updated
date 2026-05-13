@@ -8,7 +8,7 @@ export const generateWithAI = async (tool: string, input: any) => {
       body: JSON.stringify({ tool, input })
     });
 
-    if (res.ok) {
+    if (res.ok && res.headers.get('content-type')?.includes('application/json')) {
       const data = await res.json();
       return data;
     }
