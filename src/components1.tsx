@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'motion/react';
 
 export const useIntersectionObserver = (options: any = {}) => {
   const [isIntersecting, setIsIntersecting] = useState(false);
@@ -25,33 +26,31 @@ export const useIntersectionObserver = (options: any = {}) => {
 };
 
 export const Reveal = ({ children, delay = 0, direction = 'up', className = '' }: any) => {
-  const [ref, isVisible] = useIntersectionObserver({ triggerOnce: true });
-  
-  const getTransform = () => {
-    if (isVisible) return 'translate(0, 0) scale(1)';
-    if (direction === 'up') return 'translateY(var(--anim-dist))';
-    if (direction === 'left') return 'translateX(var(--anim-dist))';
-    if (direction === 'right') return 'translateX(calc(var(--anim-dist) * -1))';
-    if (direction === 'scale') return 'scale(0.95)';
-    return 'none';
+  const getVariants = () => {
+    if (direction === 'up') return { hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 }};
+    if (direction === 'down') return { hidden: { opacity: 0, y: -50 }, visible: { opacity: 1, y: 0 }};
+    if (direction === 'left') return { hidden: { opacity: 0, x: 50 }, visible: { opacity: 1, x: 0 }};
+    if (direction === 'right') return { hidden: { opacity: 0, x: -50 }, visible: { opacity: 1, x: 0 }};
+    if (direction === 'scale') return { hidden: { opacity: 0, scale: 0.9 }, visible: { opacity: 1, scale: 1 }};
+    if (direction === 'outward') return { hidden: { opacity: 0, scale: 1.1 }, visible: { opacity: 1, scale: 1 }};
+    return { hidden: { opacity: 0 }, visible: { opacity: 1 }};
   };
 
   return (
-    <div 
-      ref={ref as any} 
-      className={className}
-      style={{ 
-        opacity: isVisible ? 1 : 0,
-        transform: getTransform(),
-        transitionProperty: 'opacity, transform',
-        transitionDuration: 'var(--anim-speed)',
-        transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
-        transitionDelay: `${delay}ms`,
-        willChange: 'opacity, transform'
+    <motion.div
+      variants={getVariants()}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ 
+        duration: 0.8, 
+        delay: delay / 1000, 
+        ease: [0.16, 1, 0.3, 1] 
       }}
+      className={className}
     >
       {children}
-    </div>
+    </motion.div>
   );
 };
 

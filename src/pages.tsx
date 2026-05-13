@@ -2,6 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { ThemeStyles } from './ThemeStyles';
 import { Link } from 'react-router-dom';
+import { motion } from 'motion/react';
 
 const PageLayout = ({ title, h1, meta, children, schemaData }: any) => {
   const orgSchema = {
@@ -631,11 +632,16 @@ export const BlogPage = () => (
         "Ecommerce Website Development Checklist for Indian Businesses",
         "How Local SEO Helps Businesses in Bhubaneswar Grow"
       ].map((title, i) => (
-        <div key={i} className="bg-panel-white p-6 rounded-2xl border border-main-light shadow-sm">
-          <div className="text-xs font-bold text-[var(--primary)] mb-2 uppercase">Article</div>
+        <motion.div 
+          key={i} 
+          whileHover={{ y: -5, scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="bg-panel-white p-6 rounded-2xl border border-main-light shadow-sm hover:border-[var(--primary)]/50 hover:shadow-xl smooth-transition cursor-pointer"
+        >
+          <div className="text-xs font-bold text-[var(--primary)] mb-2 uppercase tracking-widest">Article</div>
           <h3 className="text-xl font-bold text-main-dark mb-4 leading-tight">{title}</h3>
-          <span className="text-sm font-bold text-main-muted flex items-center gap-2 group cursor-pointer hover:text-[var(--primary)] smooth-transition">Read More →</span>
-        </div>
+          <span className="text-sm font-bold text-[var(--primary)] flex items-center gap-2 group-hover:translate-x-1 smooth-transition">Read More →</span>
+        </motion.div>
       ))}
     </div>
   </PageLayout>

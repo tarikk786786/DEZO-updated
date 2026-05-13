@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Globe, Target, TrendingUp } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 export const RotatingText = () => {
   const phrases = [
@@ -16,32 +17,30 @@ export const RotatingText = () => {
   ];
 
   const [index, setIndex] = useState(0);
-  const [fade, setFade] = useState(true);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setFade(false);
-      setTimeout(() => {
-        setIndex((prev) => (prev + 1) % phrases.length);
-        setFade(true);
-      }, 600);
+      setIndex((prev) => (prev + 1) % phrases.length);
     }, 4000);
     return () => clearInterval(interval);
   }, [phrases.length]);
 
   return (
-    <div className="min-h-[60px] md:min-h-[80px] flex items-center justify-center lg:justify-start pt-2 mb-4">
-      <h3 
-        className="text-xl sm:text-2xl md:text-3xl font-black leading-tight tracking-tight text-main-light smooth-transition"
-        style={{
-          opacity: fade ? 1 : 0,
-          transform: fade ? 'translateY(0)' : 'translateY(10px)'
-        }}
-      >
-        <span className="text-brand-gold border-b-2 border-white/20 pb-1 inline-block">
-          {phrases[index]}
-        </span>
-      </h3>
+    <div className="min-h-[60px] md:min-h-[80px] flex items-center justify-center lg:justify-start pt-2 mb-4 relative overflow-hidden">
+      <AnimatePresence mode="wait">
+        <motion.h3 
+          key={index}
+          initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          exit={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="text-xl sm:text-2xl md:text-3xl font-black leading-tight tracking-tight text-main-light absolute"
+        >
+          <span className="text-brand-gold border-b-2 border-white/20 pb-1 inline-block">
+            {phrases[index]}
+          </span>
+        </motion.h3>
+      </AnimatePresence>
     </div>
   );
 };
@@ -61,12 +60,30 @@ export const FallbackImage = ({ src, alt, className, fallbackInitials }: any) =>
 export const HeroVisual = ({ nightMode }: any) => {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener('change', handler);
+    return () => mediaQuery.removeEventListener('change', handler);
+  }, []);
 
   const handleMouseMove = (e: any) => {
-    if (nightMode || !containerRef.current) return;
+    if (nightMode || !containerRef.current || prefersReducedMotion) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20; 
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -20;
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 15; 
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -15;
+    setMouse({ x, y });
+  };
+
+  const handleTouchMove = (e: any) => {
+    if (nightMode || !containerRef.current || prefersReducedMotion) return;
+    const touch = e.touches[0];
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = ((touch.clientX - rect.left) / rect.width - 0.5) * 10; 
+    const y = ((touch.clientY - rect.top) / rect.height - 0.5) * -10;
     setMouse({ x, y });
   };
 
@@ -76,7 +93,9 @@ export const HeroVisual = ({ nightMode }: any) => {
     <div 
       ref={containerRef}
       onMouseMove={handleMouseMove}
+      onTouchMove={handleTouchMove}
       onMouseLeave={handleMouseLeave}
+      onTouchEnd={handleMouseLeave}
       className="w-full h-full relative" 
       style={{ perspective: '2000px' }}
     >
@@ -84,7 +103,7 @@ export const HeroVisual = ({ nightMode }: any) => {
         className="w-full h-full transition-transform duration-[600ms] ease-out"
         style={{ 
           transformStyle: 'preserve-3d', 
-          transform: nightMode ? 'none' : `rotateY(${mouse.x}deg) rotateX(${mouse.y}deg)` 
+          transform: (nightMode || prefersReducedMotion) ? 'none' : `rotateY(${mouse.x}deg) rotateX(${mouse.y}deg)` 
         }}
       >
         {/* Main Glass 3D Browser Window */}

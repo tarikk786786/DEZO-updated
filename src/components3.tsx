@@ -1,54 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Megaphone, LayoutTemplate, Target, CheckCircle2, 
-  ArrowRight, Users, ChevronDown, Check, Zap, Star, ShieldCheck
+  ArrowRight, Users, ChevronDown, Check, Zap, Star, ShieldCheck,
+  Globe, Code, Search, Smartphone, TrendingUp, Layers, CheckCircle
 } from 'lucide-react';
 import { Reveal } from './components1';
 import { FallbackImage } from './components2';
+import { motion } from 'motion/react';
 
 export const ServicesSection = ({ nightMode }: { nightMode?: boolean }) => {
   const services = [
     {
-      title: "Web Development Services",
-      description: "Custom-coded, lightning-fast, and highly converting websites tailored to your brand's unique needs.",
+      title: "Business Websites (Starts ₹4,999)",
+      description: "Fast, modern, SEO-ready business websites built for trust and lead generation.",
       icon: <LayoutTemplate size={32} />,
-      features: ["React/Next.js Architecture", "Mobile First Design", "Lighthouse Optimized", "CMS Integration"]
+      features: ["Premium Design", "Mobile First", "SEO-Ready Structure", "WhatsApp Integration"]
     },
     {
-      title: "Ecommerce Website Development",
-      description: "Scalable online stores with secure checkout, inventory management, and high conversion rates.",
-      icon: <LayoutTemplate size={32} />,
-      features: ["Shopify & Custom", "Secure Gateway", "Inventory Sync", "Optimized Cart"]
+      title: "Ecommerce Websites",
+      description: "High-converting online stores with secure checkout and modern product displays.",
+      icon: <Globe size={32} />,
+      features: ["Secure Payments", "Inventory Management", "Fast Loading", "Optimized Cart"]
     },
     {
-      title: "Landing Page Design",
-      description: "High-converting landing pages built for speed, psychological triggers, and ad campaign success.",
-      icon: <LayoutTemplate size={32} />,
-      features: ["A/B Testing", "Fast Loading", "Conversion UX", "Ad Alignment"]
+      title: "Platform & Database (Starts ₹3,000 extra)",
+      description: "Advanced custom platforms, portals, and database-driven dynamic websites.",
+      icon: <Layers size={32} />,
+      features: ["Custom UI/UX", "Database Setup", "Dynamic Content", "Admin Dashboard"]
     },
     {
-      title: "SEO Services",
-      description: "Data-driven SEO strategies that put you on the first page of Google and keep you there.",
-      icon: <Target size={32} />,
-      features: ["Technical SEO", "Content Strategy", "Link Building", "Local SEO"]
+      title: "Basic Digital Marketing (Free)",
+      description: "Free marketing guidance included with our website packages to help you grow.",
+      icon: <TrendingUp size={32} />,
+      features: ["Growth Strategy", "Social Media Setup", "Basic Lead Gen", "Conversion Tips"]
     },
     {
       title: "Meta Ads Management",
-      description: "High-ROI Facebook and Instagram ad campaigns designed to generate quality leads and sales.",
+      description: "Targeted Facebook and Instagram campaigns to generate quality business leads.",
       icon: <Megaphone size={32} />,
-      features: ["Creative Design", "Audience Targeting", "Retargeting Funnels", "Pixel Setup"]
+      features: ["Creative Ad Design", "Audience Targeting", "Retargeting", "Lead Gen Focus"]
     },
     {
-      title: "Google Ads Management",
-      description: "Capture high-intent search traffic with optimized Search, Display, and Performance Max campaigns.",
-      icon: <Megaphone size={32} />,
-      features: ["Search Network", "Shopping Ads", "Keyword Strategy", "CPA Optimization"]
+      title: "SEO Services",
+      description: "Technical SEO and content optimization to rank higher on Google search.",
+      icon: <Target size={32} />,
+      features: ["On-Page SEO", "Technical Audits", "Keyword Strategy", "Local Visibility"]
     }
   ];
 
   return (
-    <section id="services" className="py-24 lg:py-32 bg-main-dark border-y border-main-dark overflow-hidden">
-      <div className="max-w-[90rem] mx-auto px-4 lg:px-8">
+    <section id="services" className="py-24 lg:py-32 bg-main-dark border-y border-main-dark overflow-hidden relative">
+      {/* Background ambient lighting */}
+      <div className="absolute inset-0 pointer-events-none flex justify-center items-center opacity-40">
+        <div className="w-[800px] h-[800px] bg-gradient-to-r from-[var(--primary)] to-transparent rounded-full blur-[150px] mix-blend-screen opacity-20"></div>
+      </div>
+      <div className="max-w-[90rem] mx-auto px-4 lg:px-8 relative z-10">
         <Reveal direction="up">
           <div className="text-center mb-16">
             <h2 className="clamp-h2 font-black text-main-light mb-4 tracking-tight">Premium Website Development That Converts</h2>
@@ -56,27 +62,32 @@ export const ServicesSection = ({ nightMode }: { nightMode?: boolean }) => {
           </div>
         </Reveal>
         
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 cursor-pointer">
           {services.map((service, idx) => (
             <Reveal key={idx} delay={idx * 150} direction="up" className="h-full">
-              <div className="bg-main-light rounded-3xl p-8 lg:p-10 border border-main-light h-full hover:border-brand-primary smooth-transition flex flex-col group relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-brand-primary/5 blur-3xl rounded-full pointer-events-none group-hover:bg-brand-primary/10 smooth-transition"></div>
-                <div className="w-16 h-16 rounded-2xl bg-panel-white flex items-center justify-center text-brand-primary mb-8 shadow-sm border border-main-light group-hover:scale-110 smooth-transition">
+              <motion.div 
+                whileHover={{ y: -8, scale: 1.01, transition: { duration: 0.3 } }}
+                whileTap={{ scale: 0.98 }}
+                className="bg-main-light rounded-3xl p-8 lg:p-10 border border-main-light h-full hover:border-[var(--primary)]/50 hover:shadow-[0_20px_40px_rgba(139,92,246,0.15)] smooth-transition flex flex-col group relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 to-[var(--accent)]/5 opacity-0 group-hover:opacity-100 smooth-transition pointer-events-none"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--primary)]/5 blur-3xl rounded-full pointer-events-none group-hover:bg-[var(--primary)]/20 smooth-transition"></div>
+                <div className="w-16 h-16 rounded-2xl bg-panel-white flex items-center justify-center text-[var(--primary)] mb-8 shadow-sm border border-main-light group-hover:scale-110 group-hover:rotate-3 smooth-transition relative z-10">
                   {service.icon}
                 </div>
-                <h3 className="text-2xl font-black text-main-dark mb-4">{service.title}</h3>
-                <p className="text-main-muted leading-relaxed mb-8 flex-grow">{service.description}</p>
-                <ul className="space-y-3">
+                <h3 className="text-2xl font-black text-main-dark mb-4 relative z-10">{service.title}</h3>
+                <p className="text-main-muted leading-relaxed mb-8 flex-grow relative z-10">{service.description}</p>
+                <ul className="space-y-3 relative z-10">
                   {service.features.map((feature, fIdx) => (
                     <li key={fIdx} className="flex items-center gap-3 text-sm font-bold text-main-dark">
-                      <div className="w-5 h-5 rounded-full bg-brand-primary/10 flex items-center justify-center text-brand-primary shrink-0">
+                      <div className="w-5 h-5 rounded-full bg-[var(--primary)]/10 flex items-center justify-center text-[var(--primary)] shrink-0">
                         <Check size={12} strokeWidth={3} />
                       </div>
                       {feature}
                     </li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             </Reveal>
           ))}
         </div>
@@ -148,28 +159,36 @@ export const MissionTargetSection = () => {
         </div>
         <div className="grid md:grid-cols-2 gap-8">
           <Reveal direction="up" delay={100}>
-            <div className="bg-panel-white p-10 rounded-[2rem] border border-main-light h-full group hover:shadow-[0_20px_40px_var(--primary)_0.1] smooth-transition relative overflow-hidden">
+            <motion.div 
+              whileHover={{ y: -8, scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
+              className="bg-panel-white p-10 rounded-[2rem] border border-main-light h-full group hover:shadow-[0_20px_40px_-10px_rgba(139,92,246,0.2)] smooth-transition relative overflow-hidden"
+            >
                <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--primary)] opacity-[0.05] group-hover:opacity-20 blur-3xl rounded-full smooth-transition"></div>
-               <div className="w-16 h-16 bg-[var(--primary)]/10 text-[var(--primary)] rounded-full flex items-center justify-center mb-6">
+               <div className="w-16 h-16 bg-[var(--primary)]/10 text-[var(--primary)] rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:rotate-6 smooth-transition">
                  <Target size={32} />
                </div>
                <h3 className="text-2xl font-black text-main-dark mb-4">Local Business Growth</h3>
                <p className="text-main-muted leading-relaxed">
                  We aim to become the leading digital partner for forward-thinking enterprises, delivering web solutions that don't just look good but perform exceptionally. Our target is scaling businesses through data-driven digital architecture and establishing long-term partnerships.
                </p>
-            </div>
+            </motion.div>
           </Reveal>
           <Reveal direction="up" delay={200}>
-            <div className="bg-panel-white p-10 rounded-[2rem] border border-main-light h-full group hover:shadow-[0_20px_40px_var(--accent)_0.1] smooth-transition relative overflow-hidden">
+            <motion.div 
+              whileHover={{ y: -8, scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
+              className="bg-panel-white p-10 rounded-[2rem] border border-main-light h-full group hover:shadow-[0_20px_40px_-10px_rgba(236,72,153,0.2)] smooth-transition relative overflow-hidden"
+            >
                <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)] opacity-[0.05] group-hover:opacity-20 blur-3xl rounded-full smooth-transition"></div>
-               <div className="w-16 h-16 bg-[var(--accent)]/10 text-[var(--accent)] rounded-full flex items-center justify-center mb-6">
+               <div className="w-16 h-16 bg-[var(--accent)]/10 text-[var(--accent)] rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:-rotate-6 smooth-transition">
                  <Star size={32} />
                </div>
                <h3 className="text-2xl font-black text-main-dark mb-4">Transparent Delivery and Support</h3>
                <p className="text-main-muted leading-relaxed">
                  To shatter the barriers of digital entry by providing top-tier, enterprise-grade development and design at accessible price points. We believe every business deserves a premium digital presence, and we are here to make that a reality through innovative engineering.
                </p>
-            </div>
+            </motion.div>
           </Reveal>
         </div>
       </div>
@@ -178,54 +197,54 @@ export const MissionTargetSection = () => {
 };
 
 export const WhyChooseUsSection = () => {
+  const reasons = [
+    { title: "11+ Years Experience", icon: <Star size={24} /> },
+    { title: "100+ Websites Monthly", icon: <Globe size={24} /> },
+    { title: "Expert Developers", icon: <Code size={24} /> },
+    { title: "SEO-Friendly Websites", icon: <Search size={24} /> },
+    { title: "Mobile-First Design", icon: <Smartphone size={24} /> },
+    { title: "Meta Ads + SEO Support", icon: <TrendingUp size={24} /> },
+    { title: "Fast Delivery", icon: <Zap size={24} /> },
+    { title: "Real Portfolio", icon: <Layers size={24} /> },
+    { title: "Transparent Process", icon: <CheckCircle size={24} /> },
+    { title: "Conversion-Focused Design", icon: <Target size={24} /> },
+  ];
+
   return (
     <section className="py-24 lg:py-32 bg-main-dark relative overflow-hidden" style={{ background: 'var(--hero-bg)' }}>
       <div className="max-w-[90rem] mx-auto px-4 lg:px-8 relative z-10">
         <div className="text-center max-w-4xl mx-auto mb-16">
           <Reveal direction="up">
             <h2 className="clamp-h2 font-black text-white mb-6">Why Businesses Choose DEZO</h2>
-            <p className="text-main-muted text-lg font-medium">Premium quality, fast performance, transparent process, SEO-ready structure, and reliable support after delivery.</p>
+            <p className="text-main-muted text-lg font-medium">DEZO does not just design websites. We build business growth systems that help people trust you, contact you, and buy from you.</p>
           </Reveal>
         </div>
         
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {[
-            {
-              title: "Why We Are Different",
-              desc: "We don't use bloatware or slow builders. Every line of code is structured using modern frameworks (React, Next.js). We optimize for Core Web Vitals, ensuring fast performance, resulting in better SEO and conversions.",
-              icon: <ShieldCheck size={28} />
-            },
-            {
-              title: "Transparent & Efficient",
-              desc: "By utilizing streamlined agile processes, strategic development workflows, and an efficient tech-stack architecture, we reduce overhead and deliver premium digital assets that genuinely grow your business.",
-              icon: <Star size={28} />
-            },
-            {
-              title: "Our Commitment",
-              desc: "Our commitment is simple: We deliver pixel-perfect, highly scalable web applications and data-driven marketing campaigns. We prioritize transparent communication and long-term partnerships over quick wins.",
-              icon: <Target size={28} />
-            }
-          ].map((item, i) => (
-            <Reveal key={i} direction="up" delay={i * 100}>
-              <div className="bg-white/5 backdrop-blur-md p-8 rounded-[2rem] border border-white/10 h-full hover:bg-white/10 smooth-transition relative overflow-hidden group">
-                 <div className="w-14 h-14 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] rounded-full flex items-center justify-center text-white mb-6 shadow-lg shadow-[var(--primary)]/30 group-hover:scale-110 smooth-transition">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 mb-16">
+          {reasons.map((item, i) => (
+            <Reveal key={i} direction="up" delay={i * 50}>
+              <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 h-full flex flex-col items-center justify-center text-center hover:bg-white/10 hover:border-[var(--primary)]/50 hover:-translate-y-1 smooth-transition relative overflow-hidden group">
+                 <div className="text-[var(--primary)] mb-4 group-hover:scale-110 smooth-transition">
                    {item.icon}
                  </div>
-                 <h3 className="text-xl font-black text-white mb-4">{item.title}</h3>
-                 <p className="text-main-muted leading-relaxed">{item.desc}</p>
+                 <h3 className="text-sm font-bold text-white leading-snug">{item.title}</h3>
                  
-                 <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[var(--primary)] opacity-10 blur-3xl rounded-full group-hover:opacity-30 smooth-transition"></div>
+                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-[var(--primary)] opacity-0 blur-xl rounded-full group-hover:opacity-20 smooth-transition pointer-events-none"></div>
               </div>
             </Reveal>
           ))}
         </div>
         
         <Reveal direction="up" delay={300}>
-          <div className="bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20 border border-[var(--primary)]/30 rounded-[2rem] p-10 text-center relative overflow-hidden">
+          <div className="bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20 border border-[var(--primary)]/30 rounded-[2rem] p-10 text-center relative overflow-hidden max-w-4xl mx-auto">
             <h3 className="text-2xl font-black text-white mb-4">Dedicated Support After Delivery</h3>
-            <p className="text-main-muted max-w-2xl mx-auto font-medium">
+            <p className="text-main-muted mx-auto font-medium mb-6">
               We stand by our work. Our relationship doesn't end at launch; we provide continuous technical support, SEO monitoring, and infrastructure optimizations to ensure your long-term success.
             </p>
+            <a href="https://wa.me/919114411026?text=Hi%20dezo%2C%20I%20want%20to%20know%20more%20about%20your%20services" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-[#25D366] text-white font-bold rounded-full hover:shadow-lg hover:shadow-[#25D366]/30 smooth-transition max-w-max mx-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 1.833 6.368L.141 24l5.803-1.492A12 12 0 1 0 11.944 0zm0 22C6.918 22 2.802 18.237 2.451 13.315l1.637 1.636a8.878 8.878 0 0 1 10.9-10.9l1.636-1.636C12.186 2.012 11.968 2 11.944 2c-5.522 0-10 4.477-10 10 0 1.76.452 3.411 1.233 4.887L1.93 21.365l4.63-1.196A9.957 9.957 0 0 0 11.944 22c5.522 0 10-4.478 10-10s-4.478-10-10-10zm5.176-6.425c-.282-.141-1.669-.824-1.927-.919-.258-.094-.447-.141-.635.141-.188.282-.729.919-.894 1.107-.165.188-.33.211-.612.07-.282-.141-1.19-.439-2.268-1.4-8.37-1.135 7.42-1.925 7.185-1.442-.236.483-3.692.671-5.127.812-.141.141-.33.353-.33.353s-.188.165-.188.447c0 .282.188.635.423.824.236.188.236.47.236.753.047.893-1.011 2.585-2.067 2.679-1.011.094-1.364.094-1.904-.094s-.541-.47-.541-.894.236-1.011.682-1.364c.541-.423.705-.682.894-1.152.188-.47.094-.894-.047-1.176-.141-.282-.635-1.528-.87-2.092-.235-.564-.47-.487-.635-.494-.165-.008-.353-.008-.541-.008s-.494.07-.753.353c-.258.282-1.011.988-1.011 2.4 0 1.411 1.035 2.775 1.176 2.963.141.188 2.022 3.081 4.891 4.316.682.294 1.223.47 1.646.6.682.216 1.305.185 1.796.113.551-.082 1.669-.682 1.904-1.34s.235-1.223.165-1.341c-.07-.118-.258-.188-.541-.33z"/></svg> 
+                Discuss With Us
+            </a>
           </div>
         </Reveal>
       </div>
@@ -280,8 +299,8 @@ export const IndustriesTestimonialsSections = () => {
               },
               {
                 text: "We hired DEZO for Google Ads management and landing page design. The conversion rate skyrocketed from 2% to 8%. Absolutely premium quality work.",
-                author: "Rohan K.",
-                role: "B2B SaaS CEO"
+                author: "Kunal T.",
+                role: "B2B SaaS Founder"
               }
             ].map((testimonial, i) => (
               <Reveal key={i} direction="up" delay={i * 100} className="h-full">
@@ -374,8 +393,8 @@ export const BlogSection = () => {
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <Reveal direction="left">
             <div>
-              <div className="text-xs font-bold text-[var(--primary)] tracking-[0.2em] uppercase mb-4">Our Journal</div>
-              <h2 className="clamp-h2 font-black text-main-dark leading-tight">Latest Website Design & Digital Marketing Projects</h2>
+              <div className="text-xs font-bold text-[var(--primary)] tracking-[0.2em] uppercase mb-4">DEZO Learnings</div>
+              <h2 className="clamp-h2 font-black text-main-dark leading-tight">Resources for Web Growth & Marketing</h2>
             </div>
           </Reveal>
           <Reveal direction="right">
@@ -447,13 +466,17 @@ export const ProcessSection = () => {
   );
 };
 
-export const FaqSection = ({ openIndex, setOpenIndex }: { openIndex: number | null, setOpenIndex: (i: number | null) => void }) => {
+export const FaqSection = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
   const faqs = [
-    { q: "What does Dezo do?", a: "Dezo is a web development and digital marketing agency in India. We help businesses create fast, mobile-friendly websites, ecommerce stores, and high-converting landing pages. We also provide SEO, Meta Ads, and Google Ads management." },
-    { q: "Does Dezo build ecommerce websites?", a: "Yes, we specialize in building fast and scalable ecommerce websites that convert visitors into buyers, featuring secure payment gateways and conversion-focused UI/UX." },
-    { q: "Does Dezo provide SEO services?", a: "Yes, we implement technical SEO, on-page optimization, and content strategies to help businesses grow their organic search rankings consistently." },
-    { q: "Can Dezo run Meta Ads and Google Ads?", a: "Absolutely. Our performance marketing team builds data-driven Meta Ads and Google Ads campaigns designed to generate quality leads and maximize your ROI." },
-    { q: "Is Dezo suitable for small businesses in India?", a: "Yes, we provide affordable, high-quality digital growth solutions tailored to both local small businesses and large enterprises across India." }
+    { q: "How much does a website cost in India?", a: "At DEZO, our premium business websites start at just ₹4,999. The final price depends on specific requirements like the number of pages, custom design complexity, backend databases, and advanced functionalities." },
+    { q: "What is included in ₹4,999 website?", a: "The starter ₹4,999 package includes a premium mobile-first design, basic SEO setup, fast-loading layout, WhatsApp integration, and free basic digital marketing guidance to help you grow." },
+    { q: "What are platform/database add-ons?", a: "If your business needs dynamic data (like user accounts, inventory holding, real-time fetching) or an admin panel, we add a backend database infrastructure. These add-ons start from ₹3,000 depending on complexity." },
+    { q: "Do you provide digital marketing?", a: "Yes. Along with free basic guidance included with selected website packages, we offer full-service digital marketing including Meta Ads, Lead Generation, and Growth Strategy." },
+    { q: "Do you provide SEO?", a: "Yes, we build SEO-ready websites and offer dedicated Search Engine Optimization (SEO) services to help you rank higher on Google through technical, on-page, and local SEO." },
+    { q: "Can you build ecommerce website?", a: "Yes. We build high-converting ecommerce platforms with secure checkout, inventory management, fast loading speeds, and optimized UX/UI." },
+    { q: "Can you redesign my old website?", a: "Absolutely. We specialize in modernizing outdated sites to increase speed, improve mobile responsiveness, update the brand look, and optimize for conversions." },
+    { q: "How do I contact DEZO?", a: "You can reach us instantly by clicking any WhatsApp button on this site, messaging us at +91 91144 11026, or filling out the secure contact form below." }
   ];
 
   return (
@@ -461,27 +484,27 @@ export const FaqSection = ({ openIndex, setOpenIndex }: { openIndex: number | nu
       <div className="max-w-[50rem] mx-auto px-4 lg:px-8">
         <Reveal direction="up">
           <div className="text-center mb-16">
-            <h2 className="clamp-h2 font-black text-main-dark tracking-tight">Frequently Asked Questions About Dezo</h2>
+            <h2 className="clamp-h2 font-black text-main-dark tracking-tight">Frequently Asked Questions</h2>
           </div>
         </Reveal>
         
         <div className="space-y-4">
           {faqs.map((faq, idx) => (
-            <Reveal key={idx} delay={idx * 100} direction="up">
-              <div className="border border-main-light rounded-2xl bg-main-light overflow-hidden smooth-transition hover:border-brand-primary/50 overflow-hidden">
+            <Reveal key={idx} delay={idx * 50} direction="up">
+              <div className="border border-main-light rounded-2xl bg-main-light overflow-hidden smooth-transition hover:border-[var(--primary)]/50">
                 <button 
                   className="w-full px-6 py-5 flex items-center justify-between font-bold text-left focus:outline-none"
                   onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
                 >
-                  <span className="text-lg text-main-dark pr-8">{faq.q}</span>
-                  <div className={`w-8 h-8 rounded-full bg-panel-white flex items-center justify-center border border-main-light shrink-0 text-main-dark smooth-transition ${openIndex === idx ? 'bg-brand-primary text-white border-brand-primary transform rotate-180' : ''}`}>
+                  <span className="text-base text-main-dark pr-8">{faq.q}</span>
+                  <div className={`w-8 h-8 rounded-full bg-panel-white flex items-center justify-center border border-main-light shrink-0 text-main-dark smooth-transition ${openIndex === idx ? 'bg-[var(--primary)] text-white border-[var(--primary)] transform rotate-180' : ''}`}>
                     <ChevronDown size={16} />
                   </div>
                 </button>
                 <div 
-                  className={`px-6 smooth-transition overflow-hidden ${openIndex === idx ? 'max-h-40 pb-5 opacity-100' : 'max-h-0 opacity-0'}`}
+                  className={`px-6 smooth-transition overflow-hidden ${openIndex === idx ? 'max-h-96 pb-5 opacity-100' : 'max-h-0 opacity-0'}`}
                 >
-                  <p className="text-main-muted">{faq.a}</p>
+                  <p className="text-main-muted font-medium pb-2 text-sm leading-relaxed">{faq.a}</p>
                 </div>
               </div>
             </Reveal>

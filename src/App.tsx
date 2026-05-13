@@ -1,8 +1,9 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { 
   Menu, X, Search, 
-  ArrowUpRight, ArrowUp, Phone, MessageSquare, MapPin
+  ArrowUpRight, ArrowUp, Phone, MessageSquare, MapPin, Check
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import { ThemeStyles } from './ThemeStyles';
 import { portfolioData, categories } from './data';
@@ -20,6 +21,14 @@ import { AnimatedFavicon } from './AnimatedFavicon';
 
 import { AboutUsPage } from './AboutUsPage';
 import { NotFoundPage } from './NotFoundPage';
+import { LiveTechRadar } from './components/LiveTechRadar';
+import { FreeToolsSection } from './components/FreeToolsSection';
+import { AIGrowthTools } from './components/AIGrowthTools';
+import { LiveWebMarketingRadar } from './components/LiveWebMarketingRadar';
+
+import { ViralHookSection } from './components/ViralHookSection';
+import { PricingSection, ChallengeSection, DigitalMarketingSection, GrowthOffersSection } from './components/PricingAndOffers';
+import { ServicesTabs, ExpandableSection, OfferBanner } from './components/SmartSections';
 
 const WebDevPage = lazy(() => import('./pages').then(m => ({ default: m.WebDevPage })));
 const BbsrWebDevPage = lazy(() => import('./pages').then(m => ({ default: m.BbsrWebDevPage })));
@@ -47,12 +56,22 @@ export default function App() {
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [is404, setIs404] = useState(false);
   const [isDesktop, setIsDesktop] = useState(true);
   
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showAllProjects, setShowAllProjects] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<any>(null);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const [isGlowMode, setIsGlowMode] = useState(true);
+
+  useEffect(() => {
+    if (!isGlowMode) {
+      document.body.classList.add('night-mode');
+    } else {
+      document.body.classList.remove('night-mode');
+    }
+  }, [isGlowMode]);
   
   const [formData, setFormData] = useState({
     name: '', email: '', phone: '', businessName: '', city: '', service: '', budget: '', message: ''
@@ -67,10 +86,6 @@ export default function App() {
     window.addEventListener('resize', handleResize);
     
     document.title = "Dezo | Web Development & Digital Marketing Agency India";
-    
-    if (window.location.pathname !== '/' && window.location.pathname !== '') {
-      setIs404(true);
-    }
 
     const timer1 = setTimeout(() => setIsFadingOut(true), 400);
     const timer2 = setTimeout(() => setIsLoading(false), 800);
@@ -140,13 +155,12 @@ export default function App() {
     setIsSubmitting(false);
     setIsSubmitted(true);
     
-    const whatsappMessage = `Hello Tarik, I am ${formData.name}. 
-Email: ${formData.email}
+    const whatsappMessage = `Hi DEZO, I want a website.
+Name: ${formData.name}
 Phone: ${formData.phone}
 Business: ${formData.businessName || 'N/A'}
-City: ${formData.city || 'N/A'}
+Website Type: ${formData.service}
 Budget: ${formData.budget || 'N/A'}
-Interested in: ${formData.service}
 Message: ${formData.message}`;
 
     const whatsappUrl = `https://wa.me/919114411026?text=${encodeURIComponent(whatsappMessage)}`;
@@ -201,6 +215,15 @@ Message: ${formData.message}`;
     }
   };
 
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
+      document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   if (isLoading) {
     return (
       <div className={`fixed inset-0 z-[200] bg-main-dark flex flex-col items-center justify-center smooth-transition ${isFadingOut ? 'opacity-0 scale-105' : 'opacity-100 scale-100'}`}>
@@ -217,32 +240,39 @@ Message: ${formData.message}`;
     );
   }
 
-  if (is404) {
-    return <NotFoundPage />;
-  }
-
   return (
-    <div className="min-h-screen bg-main-light text-main-dark font-sans scroll-smooth">
+    <div className="min-h-screen bg-main-light text-main-dark font-sans scroll-smooth relative">
       <ThemeStyles />
       <AnimatedFavicon />
-
-      <div className="fixed bottom-6 right-6 z-[70] flex flex-col gap-3">
-        <button aria-label="Scroll to Top" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className={`w-12 h-12 bg-panel-white border border-main-light rounded-full flex items-center justify-center text-main-muted shadow-lg smooth-transition hover:bg-main-light active:scale-95 ${scrolled ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
-          <ArrowUp size={20} />
-        </button>
+      
+      {/* Live Reactive Responsive DM Web Dev Background Animation */}
+      <div className="fixed inset-0 pointer-events-none z-[0] overflow-hidden">
+        {/* Reactive Mouse Gradient Tracking */}
+        <div 
+          className="absolute inset-0 opacity-30 transition-opacity duration-300"
+          style={{
+            background: 'radial-gradient(600px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh), var(--primary) 0%, transparent 60%)',
+            mixBlendMode: 'screen'
+          }}
+        />
+        {/* Floating Animated Orbs */}
+        <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-gradient-to-br from-[var(--primary)] to-transparent opacity-20 blur-[100px] animate-float"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--primary)] opacity-10 blur-[120px] animate-float-delayed"></div>
+        {/* Web Dev Grid Interface */}
+        <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+CjxwYXRoIGQ9Ik0wIDBoNDB2NDBIMHoiIGZpbGw9Im5vbmUiIC8+CjxwYXRoIGQ9Ik0wIDM5LjV2MWg0MHYtMUgweiIgZmlsbD0icmdiYSgyNTUsIDI1NSwgMjU1LCAwLjQpIiAvPgo8cGF0aCBkPSJNMzkuNSAwbC41LjB2NDBoLTFWMHoiIGZpbGw9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC40KSIgLz4KPC9zdmc+')] [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]"></div>
       </div>
 
-      <header className={`fixed top-0 left-0 right-0 z-[60] smooth-transition ${scrolled ? 'bg-[var(--bg-nav)] backdrop-blur-[var(--glass-blur)] py-3 shadow-sm border-b border-main-light' : 'bg-transparent py-4 lg:py-6'}`}>
-        <div className="max-w-[90rem] mx-auto px-4 lg:px-8 flex justify-between items-center">
+      <header className={`fixed top-0 left-0 right-0 z-[60] smooth-transition ${scrolled ? 'bg-[var(--bg-nav)] backdrop-blur-[var(--glass-blur)] shadow-sm border-b border-main-light' : 'bg-transparent'}`}>
+        <div className={`max-w-[90rem] mx-auto px-4 lg:px-8 flex justify-between items-center transition-all duration-300 ${scrolled ? 'py-3' : 'py-4 lg:py-6'}`}>
           <a href="#" className="flex items-center gap-2 z-[70] group" aria-label="Dezo Home" onClick={handleLogoClick}>
             <span className={`font-black text-3xl tracking-[0.2em] smooth-transition logo-animated ${scrolled || mobileMenuOpen ? '' : 'drop-shadow-lg'}`}>DEZO</span>
           </a>
 
           <nav className={`hidden lg:flex items-center space-x-7 ${scrolled ? '' : 'bg-white/5 border border-white/10 backdrop-blur-md px-8 py-3.5 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.2)]'} smooth-transition`}>
-            {['Services', 'Latest Work', 'About', 'Process', 'FAQ'].map((item) => (
+            {['Home', 'Services', 'Portfolio', 'Pricing', 'Free Tools', 'Live Radar', 'Contact'].map((item) => (
               <a 
                 key={item} 
-                href={item === 'About' ? '#' : `#${item.toLowerCase().replace(' ', '-')}`} 
+                href={item === 'Home' ? '#' : item === 'Portfolio' ? '#latest-work' : item === 'Live Radar' ? '#radar' : `#${item.toLowerCase().replace(' ', '-')}`} 
                 onClick={(e) => handleNavClick(e, item)}
                 className={`text-xs font-bold uppercase tracking-[0.15em] smooth-transition ${scrolled || currentPage !== 'home' ? 'text-main-muted hover:text-[var(--primary)]' : 'text-[#F8FAFC] hover:text-[#06B6D4]'}`}
               >
@@ -252,6 +282,13 @@ Message: ${formData.message}`;
           </nav>
 
           <div className="hidden lg:flex items-center gap-4">
+            <button 
+              onClick={() => setIsGlowMode(!isGlowMode)}
+              className={`p-2.5 rounded-full border smooth-transition ${scrolled ? 'bg-main-light border-main-light text-main-muted hover:text-[var(--primary)]' : 'bg-white/10 border-white/20 text-white/70 hover:text-white'} hover:scale-105 active:scale-95`}
+              aria-label="Toggle Glow Mode"
+            >
+              {isGlowMode ? <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/><circle cx="12" cy="12" r="4"/></svg> : <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>}
+            </button>
             <a href="#contact" onClick={(e) => handleNavClick(e, 'contact')} className={`px-7 py-3 text-sm font-bold text-white rounded-full smooth-transition shadow-lg ${scrolled ? 'bg-[var(--primary)]' : 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] shadow-[0_10px_20px_var(--primary)]'} hover:-translate-y-0.5 active:scale-95`}>
               Start a Project
             </a>
@@ -296,83 +333,134 @@ Message: ${formData.message}`;
               <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[var(--primary)] opacity-20 rounded-full blur-[120px] animate-float"></div>
               <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-[var(--accent)] opacity-[0.15] rounded-full blur-[120px] animate-float-delayed"></div>
             </div>
-            <div className="max-w-[90rem] mx-auto px-4 lg:px-8 relative z-10 text-center lg:text-left">
-              <div className="grid lg:grid-cols-12 gap-12 items-center">
-                <div className="lg:col-span-6">
+            <div className="max-w-[90rem] mx-auto px-4 lg:px-8 relative z-10 text-center">
+              <div className="max-w-4xl mx-auto flex flex-col items-center">
+                <div className="w-full">
                   <Reveal direction="up" delay={100}>
                     <h1 className="clamp-h1 font-black text-main-light mb-6">
-                      Web Development <br/>
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">&amp; Digital Marketing</span>
-                      <span className="block text-3xl md:text-5xl mt-2 text-white">Agency in India.</span>
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">Premium Business Websites</span>
+                      <span className="block text-3xl md:text-5xl mt-2 text-white">Starting at ₹4,999</span>
                     </h1>
                   </Reveal>
                   <Reveal direction="up" delay={200}>
-                    <div className="mb-6">
-                      <RotatingText />
-                    </div>
-                  </Reveal>
-                  <Reveal direction="up" delay={300}>
-                    <p className="text-sm sm:text-base md:text-lg text-[#E2E8F0] opacity-90 mb-8 font-medium max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                      DEZO is a web development and digital marketing agency in India helping businesses build fast, modern, and conversion-focused websites. We create premium websites, ecommerce stores, landing pages, SEO systems, Meta Ads, and Google Ads strategies that turn visitors into customers.
+                    <p className="text-sm sm:text-base md:text-lg text-[#E2E8F0] opacity-90 mb-4 font-medium max-w-2xl mx-auto leading-relaxed">
+                      Fast, mobile-friendly, SEO-ready websites built for leads, trust, and business growth.
+                    </p>
+                    <p className="text-sm sm:text-base text-[#F59E0B] font-bold mb-8 max-w-2xl mx-auto">
+                      Platform + Database add-ons from ₹3,000 extra • Free digital marketing guidance with selected packages
                     </p>
                   </Reveal>
-                  <Reveal direction="up" delay={500}>
-                    <div className="flex justify-center lg:justify-start gap-4 mb-12 flex-wrap">
-                      <a href="#contact" className="px-9 py-4 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white font-bold rounded-full hover:-translate-y-1 shadow-[0_10px_20px_rgba(124,58,237,0.4)] hover:shadow-[0_15px_30px_rgba(236,72,153,0.6)] smooth-transition active:scale-95 relative overflow-hidden group">
+                  <Reveal direction="up" delay={300}>
+                    <div className="flex justify-center mb-8">
+                      <ExpandableSection buttonText="See What's Included">
+                        <div className="flex flex-col items-start text-left gap-3 mt-4 text-sm font-bold text-white/80 bg-white/5 border border-white/10 p-5 rounded-2xl w-full max-w-sm mx-auto">
+                          <span className="flex items-center gap-2"><Check size={16} className="text-[#10B981]" /> Mobile-first design</span>
+                          <span className="flex items-center gap-2"><Check size={16} className="text-[#10B981]" /> Basic SEO setup</span>
+                          <span className="flex items-center gap-2"><Check size={16} className="text-[#10B981]" /> WhatsApp CTA</span>
+                          <span className="flex items-center gap-2"><Check size={16} className="text-[#10B981]" /> Fast loading layout</span>
+                          <span className="flex items-center gap-2"><Check size={16} className="text-[#10B981]" /> Free basic digital marketing guidance</span>
+                          <span className="flex items-center gap-2"><Check size={16} className="text-brand-gold" /> Platform/database add-ons available</span>
+                        </div>
+                      </ExpandableSection>
+                    </div>
+                  </Reveal>
+                  <Reveal direction="up" delay={400}>
+                    <div className="flex justify-center gap-4 mb-12 flex-wrap">
+                      <motion.a 
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        href="#contact" 
+                        className="px-8 py-4 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white font-bold rounded-full shadow-[0_10px_20px_rgba(124,58,237,0.4)] hover:shadow-[0_15px_30px_rgba(236,72,153,0.6)] smooth-transition relative overflow-hidden group"
+                      >
                         <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 smooth-transition rounded-full"></div>
-                        <span className="relative z-10">Get Free Website Audit</span>
-                      </a>
-                      <a href="#latest-work" className="px-9 py-4 text-white font-bold rounded-full hover:bg-white/10 border border-white/20 smooth-transition active:scale-95 group">
-                        <span>Start Your Project</span>
-                      </a>
+                        <span className="relative z-10">Get Website at ₹4,999</span>
+                      </motion.a>
+                      <motion.a 
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        href="#latest-work" 
+                        className="px-8 py-4 text-white font-bold rounded-full hover:bg-white/10 border border-white/20 smooth-transition group"
+                      >
+                        <span>View Our Work</span>
+                      </motion.a>
+                      <motion.button 
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => window.open('https://wa.me/919114411026?text=Hi%20DEZO%2C%20I%20want%20a%20website%20starting%20at%20%E2%82%B94%2C999.%20Please%20guide%20me.', '_blank')} 
+                        className="px-8 py-4 bg-[#25D366] text-white font-black rounded-full hover:shadow-[0_15px_30px_rgba(37,211,102,0.4)] smooth-transition flex items-center justify-center gap-2"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 1.833 6.368L.141 24l5.803-1.492A12 12 0 1 0 11.944 0zm0 22C6.918 22 2.802 18.237 2.451 13.315l1.637 1.636a8.878 8.878 0 0 1 10.9-10.9l1.636-1.636C12.186 2.012 11.968 2 11.944 2c-5.522 0-10 4.477-10 10 0 1.76.452 3.411 1.233 4.887L1.93 21.365l4.63-1.196A9.957 9.957 0 0 0 11.944 22c5.522 0 10-4.478 10-10s-4.478-10-10-10zm5.176-6.425c-.282-.141-1.669-.824-1.927-.919-.258-.094-.447-.141-.635.141-.188.282-.729.919-.894 1.107-.165.188-.33.211-.612.07-.282-.141-1.19-.439-2.268-1.4-8.37-1.135 7.42-1.925 7.185-1.442-.236.483-3.692.671-5.127.812-.141.141-.33.353-.33.353s-.188.165-.188.447c0 .282.188.635.423.824.236.188.236.47.236.753.047.893-1.011 2.585-2.067 2.679-1.011.094-1.364.094-1.904-.094s-.541-.47-.541-.894.236-1.011.682-1.364c.541-.423.705-.682.894-1.152.188-.47.094-.894-.047-1.176-.141-.282-.635-1.528-.87-2.092-.235-.564-.47-.487-.635-.494-.165-.008-.353-.008-.541-.008s-.494.07-.753.353c-.258.282-1.011.988-1.011 2.4 0 1.411 1.035 2.775 1.176 2.963.141.188 2.022 3.081 4.891 4.316.682.294 1.223.47 1.646.6.682.216 1.305.185 1.796.113.551-.082 1.669-.682 1.904-1.34s.235-1.223.165-1.341c-.07-.118-.258-.188-.541-.33z"/></svg>
+                        Chat on WhatsApp
+                      </motion.button>
                     </div>
                     <p className="text-xs text-white/50 font-bold uppercase tracking-widest mt-4">Web Development, SEO, Meta Ads, Google Ads & Ecommerce</p>
                   </Reveal>
-                </div>
-                <div className="lg:col-span-6 hidden lg:block h-[600px]">
-                  {isDesktop && (
-                    <Reveal direction="left" delay={400} className="w-full h-full">
-                      <HeroVisual nightMode={false} />
-                    </Reveal>
-                  )}
                 </div>
               </div>
             </div>
           </section>
 
-      {/* STATS */}
-      <section className="py-16 lg:py-20 bg-panel-white border-b border-main-light overflow-hidden">
+      {/* OFFER BANNER AND TRUST BADGES */}
+      <OfferBanner />
+      
+      <section className="py-10 bg-panel-white border-b border-main-light overflow-hidden">
         <div className="max-w-[90rem] mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-4 md:gap-6 text-center divide-x divide-main-light">
-            {[
-              { num: 50, suffix: "+", label: "Websites Delivered" },
-              { num: 10, suffix: "+", label: "Industries Served" },
-              { num: 100, suffix: "%", label: "Pan-India Experience" },
-              { num: 24, suffix: "/7", label: "Fast & Secure Sites" }
-            ].map((stat, i) => (
-              <Reveal key={i} delay={i * 100} direction="up">
-                <div>
-                  <div className="text-3xl lg:text-4xl font-black text-main-dark mb-1"><AnimatedCounter end={stat.num} suffix={stat.suffix} nightMode={false} /></div>
-                  <div className="text-[10px] md:text-[11px] font-bold text-brand-primary uppercase tracking-widest leading-snug lg:leading-normal">{stat.label}</div>
-                </div>
-              </Reveal>
-            ))}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-y-6 gap-x-4 text-center divide-x divide-main-light">
+             <div className="px-2">
+               <div className="text-xl md:text-2xl font-black text-main-dark mb-1"><Check size={28} className="mx-auto text-[#10B981]"/></div>
+               <div className="text-[10px] font-bold text-brand-primary uppercase tracking-widest leading-snug">Website ₹4,999</div>
+             </div>
+             <div className="px-2">
+               <div className="text-xl md:text-2xl font-black text-main-dark mb-1"><Check size={28} className="mx-auto text-[#10B981]"/></div>
+               <div className="text-[10px] font-bold text-brand-primary uppercase tracking-widest leading-snug">Add-ons ₹3,000+</div>
+             </div>
+             <div className="px-2">
+               <div className="text-xl md:text-2xl font-black text-main-dark mb-1"><Check size={28} className="mx-auto text-[#10B981]"/></div>
+               <div className="text-[10px] font-bold text-brand-primary uppercase tracking-widest leading-snug">SEO-Ready</div>
+             </div>
+             <div className="px-2">
+               <div className="text-xl md:text-2xl font-black text-main-dark mb-1"><Check size={28} className="mx-auto text-[#10B981]"/></div>
+               <div className="text-[10px] font-bold text-brand-primary uppercase tracking-widest leading-snug">Mobile-First</div>
+             </div>
+             <div className="px-2 hidden lg:block">
+               <div className="text-xl md:text-2xl font-black text-main-dark mb-1"><Check size={28} className="mx-auto text-[#10B981]"/></div>
+               <div className="text-[10px] font-bold text-brand-primary uppercase tracking-widest leading-snug">WhatsApp Leads</div>
+             </div>
+             <div className="px-2 hidden lg:block">
+               <div className="text-xl md:text-2xl font-black text-main-dark mb-1"><Check size={28} className="mx-auto text-[#10B981]"/></div>
+               <div className="text-[10px] font-bold text-brand-primary uppercase tracking-widest leading-snug">Fast Loading</div>
+             </div>
+          </div>
+          
+          <div className="text-center mt-6 max-w-xl mx-auto flex flex-col items-center">
+            <ExpandableSection buttonText="Why Businesses Choose DEZO">
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left bg-main-light p-5 rounded-2xl border border-main-light mt-4 w-full">
+                  <span className="flex gap-2 text-sm font-bold text-main-dark"><Check size={16} className="text-[#10B981] shrink-0 mt-0.5" /> Transparent Pricing</span>
+                  <span className="flex gap-2 text-sm font-bold text-main-dark"><Check size={16} className="text-[#10B981] shrink-0 mt-0.5" /> Premium Quality</span>
+                  <span className="flex gap-2 text-sm font-bold text-main-dark"><Check size={16} className="text-[#10B981] shrink-0 mt-0.5" /> Conversion-Focused</span>
+                  <span className="flex gap-2 text-sm font-bold text-main-dark"><Check size={16} className="text-[#10B981] shrink-0 mt-0.5" /> Marketing Guidance</span>
+                  <span className="flex gap-2 text-sm font-bold text-main-dark"><Check size={16} className="text-[#10B981] shrink-0 mt-0.5" /> Real Portfolio</span>
+                  <span className="flex gap-2 text-sm font-bold text-main-dark"><Check size={16} className="text-[#10B981] shrink-0 mt-0.5" /> Support-Focused</span>
+               </div>
+            </ExpandableSection>
           </div>
         </div>
       </section>
 
-      <ServicesSection nightMode={false} />
-      <AboutSection />
-      <MissionTargetSection />
-      <WhyChooseUsSection />
-      <IndustriesTestimonialsSections />
-      <ProcessSection />
+      {/* 5. Services Tabs */}
+      <ServicesTabs />
 
-      {/* PORTFOLIO */}
+      {/* 6. Pricing Cards */}
+      <PricingSection />
+      
+      {/* 8. Growth Offers Section */}
+      <GrowthOffersSection />
+
+      {/* 7. PORTFOLIO */}
       <section id="latest-work" className="py-24 lg:py-32 bg-panel-white border-y border-main-light overflow-hidden">
         <div className="max-w-[90rem] mx-auto px-4 lg:px-8">
           <Reveal direction="up">
-            <h2 className="clamp-h2 font-black text-main-dark mb-8 text-center tracking-tight">Latest Website Design & Digital Marketing Projects</h2>
+            <h2 className="clamp-h2 font-black text-main-dark mb-8 text-center tracking-tight uppercase">OUR LATEST WEBSITE PROJECTS & DIGITAL WORK</h2>
           </Reveal>
           
           <Reveal direction="up" delay={200}>
@@ -398,39 +486,74 @@ Message: ${formData.message}`;
           </Reveal>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-            {filteredPortfolio.slice(0, 15).map((project: any, i: number) => (
+            {filteredPortfolio.slice(0, showAllProjects ? filteredPortfolio.length : 6).map((project: any, i: number) => (
               <Reveal direction="up" delay={i * 50} key={i}>
-                <a href={project.url !== "#" ? project.url : '#'} target={project.url !== "#" ? "_blank" : "_self"} rel={project.url !== "#" ? "noopener noreferrer" : ""} className="block group h-full">
-                  <article className="bg-main-light rounded-3xl p-6 border border-main-light h-full flex flex-col justify-between hover:border-brand-primary smooth-transition shadow-sm hover:shadow-[0_20px_40px_-15px_rgba(37,99,235,0.15)] relative overflow-hidden group-hover:-translate-y-1 active:translate-y-0 active:scale-[0.98]">
-                    <div>
-                      <div className="text-[10px] font-bold text-brand-primary uppercase bg-panel-white px-3 py-1 rounded-full border border-main-light inline-block mb-4 shadow-sm">{project.category}</div>
-                      <h4 className="text-xl md:text-2xl font-black text-main-dark group-hover:text-brand-primary mb-2 line-clamp-2">{project.title}</h4>
+                <div className="block group h-full">
+                  <motion.article 
+                    whileHover={{ y: -8, scale: 1.01 }}
+                    className="bg-main-light rounded-3xl p-6 border border-main-light h-full flex flex-col justify-between hover:border-[var(--primary)]/50 smooth-transition shadow-sm hover:shadow-[0_20px_40px_-15px_rgba(139,92,246,0.15)] relative overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 to-[var(--accent)]/5 opacity-0 group-hover:opacity-100 smooth-transition pointer-events-none"></div>
+                    <div className="relative z-10 mb-6">
+                      <div className="text-[10px] font-bold text-[var(--primary)] uppercase bg-panel-white px-3 py-1 rounded-full border border-[var(--primary)]/20 inline-block mb-4 shadow-sm">{project.category}</div>
+                      <h4 className="text-xl md:text-2xl font-black text-main-dark group-hover:text-[var(--primary)] mb-2 line-clamp-2 smooth-transition">{project.title}</h4>
+                      <p className="text-sm text-main-muted font-medium mb-4 line-clamp-2">Optimized for conversion and speed.</p>
                       <div className="text-xs text-main-muted font-mono opacity-70 mb-4 truncate">{project.url.replace(/^https?:\/\/(www\.)?/, '')}</div>
                     </div>
-                    <div className="mt-auto border-t border-main-light pt-4 flex justify-between items-center group-hover:border-brand-primary/20 smooth-transition">
-                      <span className="text-xs font-bold uppercase tracking-widest text-main-dark group-hover:text-brand-primary">Visit Website</span>
-                      <div className="w-8 h-8 rounded-full bg-panel-white flex items-center justify-center border border-main-light group-hover:border-brand-primary group-hover:bg-brand-primary smooth-transition shadow-sm">
-                        <ArrowUpRight size={16} className="text-main-muted group-hover:text-white smooth-transition"/>
-                      </div>
+                    <div className="mt-auto border-t border-main-light pt-6 flex justify-between items-center relative z-10 gap-2">
+                      <button onClick={() => setSelectedProject(project)} className="flex-1 py-3 text-center text-[10px] font-bold uppercase tracking-widest text-main-dark bg-white border border-main-light hover:border-[var(--primary)] rounded-xl hover:text-[var(--primary)] smooth-transition flex items-center justify-center gap-1 shadow-sm">View Details <ArrowUpRight size={14} /></button>
+                      <a href={`https://wa.me/919114411026?text=Hi%20dezo%2C%20I%20like%20the%20${encodeURIComponent(project.title)}%20project.%20I%20want%20to%20get%20a%20similar%20website.`} target="_blank" rel="noopener noreferrer" className="flex-1 py-3 text-center text-[10px] font-bold uppercase tracking-widest text-[var(--primary)] bg-[var(--primary)]/10 border border-[var(--primary)]/20 hover:bg-[var(--primary)] hover:text-white rounded-xl smooth-transition shadow-sm">Get Similar</a>
                     </div>
-                  </article>
-                </a>
+                  </motion.article>
+                </div>
               </Reveal>
             ))}
           </div>
+          
+          {!showAllProjects && filteredPortfolio.length > 6 && (
+            <Reveal direction="up" delay={200}>
+              <div className="mt-12 flex justify-center">
+                <button 
+                  onClick={() => setShowAllProjects(true)}
+                  className="px-8 py-3 bg-[var(--bg-white)] border border-main-light rounded-full text-xs font-bold uppercase tracking-widest text-[#D4D4D8] hover:text-[var(--primary)] hover:border-[var(--primary)] smooth-transition shadow-sm"
+                >
+                  Show More Projects
+                </button>
+              </div>
+            </Reveal>
+          )}
+
           <Reveal direction="up" delay={200}>
-            <div className="text-center mt-12 bg-[var(--primary)]/5 p-8 rounded-3xl border border-[var(--primary)]/20 shadow-sm">
-              <p className="text-2xl font-black text-[var(--primary)] mb-2">+ 174 more projects in this category.</p>
-              <p className="text-main-muted font-bold text-sm tracking-widest uppercase">Here 5k website project we have</p>
+            <div className="text-center mt-12 bg-[var(--primary)]/5 p-8 rounded-3xl border border-[var(--primary)]/20 shadow-sm flex flex-col items-center justify-center">
+              <p className="text-2xl font-black text-[var(--primary)] mb-2">Want a premium website like these?</p>
+              <p className="text-[#D4D4D8] font-medium text-sm mb-6">Join hundreds of businesses growing their online presence with DEZO.</p>
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => window.open('https://wa.me/919114411026?text=Hi%20dezo%2C%20I%20have%20seen%20your%20portfolio.%20I%20want%20to%20get%20a%20website%20developed.', '_blank')} 
+                className="px-8 py-4 bg-[#25D366] text-white font-black rounded-full hover:shadow-[0_15px_30px_rgba(37,211,102,0.4)] smooth-transition flex items-center justify-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 1.833 6.368L.141 24l5.803-1.492A12 12 0 1 0 11.944 0zm0 22C6.918 22 2.802 18.237 2.451 13.315l1.637 1.636a8.878 8.878 0 0 1 10.9-10.9l1.636-1.636C12.186 2.012 11.968 2 11.944 2c-5.522 0-10 4.477-10 10 0 1.76.452 3.411 1.233 4.887L1.93 21.365l4.63-1.196A9.957 9.957 0 0 0 11.944 22c5.522 0 10-4.478 10-10s-4.478-10-10-10zm5.176-6.425c-.282-.141-1.669-.824-1.927-.919-.258-.094-.447-.141-.635.141-.188.282-.729.919-.894 1.107-.165.188-.33.211-.612.07-.282-.141-1.19-.439-2.268-1.4-8.37-1.135 7.42-1.925 7.185-1.442-.236.483-3.692.671-5.127.812-.141.141-.33.353-.33.353s-.188.165-.188.447c0 .282.188.635.423.824.236.188.236.47.236.753.047.893-1.011 2.585-2.067 2.679-1.011.094-1.364.094-1.904-.094s-.541-.47-.541-.894.236-1.011.682-1.364c.541-.423.705-.682.894-1.152.188-.47.094-.894-.047-1.176-.141-.282-.635-1.528-.87-2.092-.235-.564-.47-.487-.635-.494-.165-.008-.353-.008-.541-.008s-.494.07-.753.353c-.258.282-1.011.988-1.011 2.4 0 1.411 1.035 2.775 1.176 2.963.141.188 2.022 3.081 4.891 4.316.682.294 1.223.47 1.646.6.682.216 1.305.185 1.796.113.551-.082 1.669-.682 1.904-1.34s.235-1.223.165-1.341c-.07-.118-.258-.188-.541-.33z"/></svg>
+                Get a Similar Website
+              </motion.button>
             </div>
           </Reveal>
         </div>
       </section>
 
-      <FaqSection openIndex={openFaqIndex} setOpenIndex={setOpenFaqIndex} />
+      {/* 8. Free AI Growth Tools */}
+      <AIGrowthTools />
+
+      {/* 9. Live Web & Marketing Radar */}
+      <LiveWebMarketingRadar />
+
+      {/* 10. Challenge / Promise */}
+      <ChallengeSection />
+
+      {/* 11. Blog Preview */}
       <BlogSection />
 
-      {/* CONTACT */}
+      {/* 12. Lead Form / CONTACT */}
       <section id="contact" className="py-24 lg:py-32 bg-main-light overflow-hidden">
         <div className="max-w-[90rem] mx-auto px-4 lg:px-8">
           <Reveal direction="scale">
@@ -438,17 +561,13 @@ Message: ${formData.message}`;
               <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-primary/5 blur-[100px] rounded-full pointer-events-none"></div>
               
               <div className="lg:w-1/3 relative z-10 flex flex-col justify-start pt-4">
-                  <h2 className="clamp-h2 font-black text-main-dark mb-4 tracking-tight">Start Growing With Dezo Today</h2>
+                  <h2 className="clamp-h2 font-black text-[#F4F4F5] mb-4 tracking-tight">Start Growing With Dezo Today</h2>
                   <p className="text-main-muted mb-10 font-medium">Ready to take your digital presence to the next level? Reach out to us today.</p>
                   
                   <div className="space-y-8">
                     <div>
-                      <h4 className="text-xs font-bold text-main-dark uppercase tracking-[0.2em] mb-2 opacity-50">CEO</h4>
-                      <p className="text-xl font-black text-[var(--primary)]">Rohan Dinkar Sanap</p>
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-main-dark uppercase tracking-[0.2em] mb-2 opacity-50">Director</h4>
-                      <p className="text-xl font-black text-[var(--primary)]">Tarik Islam</p>
+                      <h4 className="text-xs font-bold text-[#F4F4F5] uppercase tracking-[0.2em] mb-2 opacity-50">DEZO Expert Team</h4>
+                      <p className="text-xl font-black text-[var(--primary)]">Ready to Build Your Digital Future</p>
                     </div>
                     <div>
                       <h4 className="text-xs font-bold text-main-dark uppercase tracking-[0.2em] mb-2 opacity-50">Contact Info</h4>
@@ -510,30 +629,28 @@ Message: ${formData.message}`;
 
                 <div className="grid md:grid-cols-2 gap-5">
                   <div>
-                    <label htmlFor="cityInput" className="text-[10px] font-bold uppercase tracking-widest mb-2 block text-main-dark">City</label>
-                    <input id="cityInput" name="city" type="text" value={formData.city} onChange={handleFormChange} className="w-full bg-main-light border border-main-light rounded-xl px-5 min-h-[56px] text-sm text-main-dark focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 smooth-transition" placeholder="e.g. Bhubaneswar" />
-                  </div>
-                  <div>
-                    <label htmlFor="budgetInput" className="text-[10px] font-bold uppercase tracking-widest mb-2 block text-main-dark">Estimated Budget</label>
+                    <label htmlFor="budgetInput" className="text-[10px] font-bold uppercase tracking-widest mb-2 block text-main-dark">Budget Range</label>
                     <select id="budgetInput" name="budget" value={formData.budget} onChange={handleFormChange} className="w-full bg-main-light border border-main-light rounded-xl px-5 min-h-[56px] text-sm text-main-dark appearance-none focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 smooth-transition" style={{ backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1em' }}>
                       <option value="">Select Budget (Optional)</option>
-                      <option value="Under ₹50,000">Under ₹50,000</option>
-                      <option value="₹50,000 - ₹1,000,000">₹50,000 - ₹1,00,000</option>
-                      <option value="₹1,00,000 - ₹2,00,000">₹1,00,000 - ₹2,00,000</option>
-                      <option value="₹2,00,000+">₹2,00,000+</option>
+                      <option value="₹4,999 - Starter Package">₹4,999 - Starter Package</option>
+                      <option value="₹7,999 - Business Growth">₹7,999 - Business Growth</option>
+                      <option value="₹10,000+ - Custom Platform">₹10,000+ - Custom Platform</option>
+                      <option value="Custom Budget">Custom Budget</option>
                     </select>
                   </div>
-                </div>
-
-                <div>
-                  <label htmlFor="serviceInput" className="text-[10px] font-bold uppercase tracking-widest mb-2 block text-main-dark">Service Needed <span className="text-red-500">*</span></label>
-                  <select id="serviceInput" name="service" value={formData.service} onChange={handleFormChange} className="w-full bg-main-light border border-main-light rounded-xl px-5 min-h-[56px] text-sm text-main-dark appearance-none focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 smooth-transition" style={{ backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1em' }}>
-                    <option value="">Select Service</option>
-                    <option value="Website Development">Website Development</option>
-                    <option value="Ecommerce">Ecommerce</option>
-                    <option value="Digital Marketing">Digital Marketing</option>
-                  </select>
-                  {formErrors.service && <p className="text-red-500 text-xs font-bold mt-1.5">{formErrors.service}</p>}
+                  <div>
+                    <label htmlFor="serviceInput" className="text-[10px] font-bold uppercase tracking-widest mb-2 block text-main-dark">Website Type Needed <span className="text-red-500">*</span></label>
+                    <select id="serviceInput" name="service" value={formData.service} onChange={handleFormChange} className="w-full bg-main-light border border-main-light rounded-xl px-5 min-h-[56px] text-sm text-main-dark appearance-none focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 smooth-transition" style={{ backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1em' }}>
+                      <option value="">Select Website Type</option>
+                      <option value="Starter Website ₹4,999">Starter Website ₹4,999</option>
+                      <option value="Business Website">Business Website</option>
+                      <option value="Ecommerce Website">Ecommerce Website</option>
+                      <option value="Platform / Database Website">Platform / Database Website</option>
+                      <option value="SEO / Digital Marketing">SEO / Digital Marketing</option>
+                      <option value="Not Sure, Need Guidance">Not Sure, Need Guidance</option>
+                    </select>
+                    {formErrors.service && <p className="text-red-500 text-xs font-bold mt-1.5">{formErrors.service}</p>}
+                  </div>
                 </div>
 
                 <div>
@@ -561,6 +678,10 @@ Message: ${formData.message}`;
           </Reveal>
         </div>
       </section>
+
+      {/* 13. FAQ Section */}
+      <FaqSection />
+      
       </main>
         } />
         <Route path="/web-development-company-india" element={<WebDevPage />} />
@@ -582,10 +703,20 @@ Message: ${formData.message}`;
       {/* FOOTER */}
       <footer className="bg-main-dark pt-20 lg:pt-28 pb-10 border-t border-main-dark">
           <div className="max-w-[90rem] mx-auto px-4 lg:px-8">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
-                  <div className="col-span-2 md:col-span-1">
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-16">
+                  <div className="col-span-2 lg:col-span-2">
                     <span className="font-black text-3xl tracking-[0.2em] text-main-light mb-4 block">DEZO</span>
                     <p className="text-main-muted text-sm font-medium mb-6">Premium web development and digital marketing agency delivering scalable solutions for brands in India.</p>
+                    
+                    <div className="bg-[#1E293B] p-5 rounded-2xl mb-6 border border-[#334155]">
+                      <p className="text-white font-bold mb-1">Premium Websites Start at ₹4,999</p>
+                      <p className="text-[#94A3B8] text-xs font-medium mb-4">Plus Free Digital Marketing Guidance with selected plans.</p>
+                      <a href="https://wa.me/919114411026?text=Hi%20dezo%2C%20I%20want%20to%20get%20a%20website%20starting%20at%20%E2%82%B94%2C999.%20Please%20guide%20me" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#25D366] text-white px-4 py-2 rounded-lg font-bold text-sm hover:opacity-90 smooth-transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 1.833 6.368L.141 24l5.803-1.492A12 12 0 1 0 11.944 0zm0 22C6.918 22 2.802 18.237 2.451 13.315l1.637 1.636a8.878 8.878 0 0 1 10.9-10.9l1.636-1.636C12.186 2.012 11.968 2 11.944 2c-5.522 0-10 4.477-10 10 0 1.76.452 3.411 1.233 4.887L1.93 21.365l4.63-1.196A9.957 9.957 0 0 0 11.944 22c5.522 0 10-4.478 10-10s-4.478-10-10-10zm5.176-6.425c-.282-.141-1.669-.824-1.927-.919-.258-.094-.447-.141-.635.141-.188.282-.729.919-.894 1.107-.165.188-.33.211-.612.07-.282-.141-1.19-.439-2.268-1.4-8.37-1.135 7.42-1.925 7.185-1.442-.236.483-3.692.671-5.127.812-.141.141-.33.353-.33.353s-.188.165-.188.447c0 .282.188.635.423.824.236.188.236.47.236.753.047.893-1.011 2.585-2.067 2.679-1.011.094-1.364.094-1.904-.094s-.541-.47-.541-.894.236-1.011.682-1.364c.541-.423.705-.682.894-1.152.188-.47.094-.894-.047-1.176-.141-.282-.635-1.528-.87-2.092-.235-.564-.47-.487-.635-.494-.165-.008-.353-.008-.541-.008s-.494.07-.753.353c-.258.282-1.011.988-1.011 2.4 0 1.411 1.035 2.775 1.176 2.963.141.188 2.022 3.081 4.891 4.316.682.294 1.223.47 1.646.6.682.216 1.305.185 1.796.113.551-.082 1.669-.682 1.904-1.34s.235-1.223.165-1.341c-.07-.118-.258-.188-.541-.33z"/></svg> 
+                        WhatsApp Us
+                      </a>
+                    </div>
+                    
                     <div className="flex gap-4 text-main-light/70 text-sm font-bold">
                         <a href="#" aria-label="Facebook"><span className="hover:text-[var(--primary)] smooth-transition cursor-pointer">FB</span></a>
                         <a href="#" aria-label="Instagram"><span className="hover:text-[var(--primary)] smooth-transition cursor-pointer">IG</span></a>
@@ -628,6 +759,113 @@ Message: ${formData.message}`;
               </div>
           </div>
       </footer>
+
+      {/* Portfolio Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            onClick={() => setSelectedProject(null)}
+          >
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="bg-panel-white rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-main-light relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={() => setSelectedProject(null)}
+                className="absolute top-4 right-4 w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center smooth-transition z-10"
+              >
+                <X size={20} className="text-[#F4F4F5]" />
+              </button>
+              
+              <div className="flex flex-col md:flex-row">
+                <div className="w-full md:w-1/2 min-h-[300px] md:min-h-[500px] bg-main-dark relative overflow-hidden flex items-center justify-center p-8">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/10 to-[var(--accent)]/10"></div>
+                  <div className="relative z-10 text-center">
+                    <h3 className="text-3xl font-black text-main-light opacity-50">{selectedProject.title}</h3>
+                    <p className="font-bold text-main-muted mt-4 tracking-widest uppercase text-xs">Preview Area</p>
+                  </div>
+                </div>
+                
+                <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-panel-white">
+                  <div className="mb-6">
+                    <span className="text-[10px] font-bold text-[var(--primary)] uppercase bg-[var(--primary)]/10 px-3 py-1 rounded-full border border-[var(--primary)]/20 inline-block mb-3">{selectedProject.category}</span>
+                    <h2 className="text-3xl font-black text-main-light mb-4 drop-shadow-sm">{selectedProject.title}</h2>
+                    <p className="text-main-muted font-medium mb-6 leading-relaxed">
+                      A premium, completely responsive website built for maximum conversion. This project features mobile-first architecture, strict SEO adherence, and lightning-fast loading speeds on all devices.
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-3 mb-8">
+                    <div className="flex items-center gap-3">
+                      <Check size={18} className="text-[#10B981]" />
+                      <span className="font-bold text-sm text-[#F4F4F5]">Responsive Mobile-First Design</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Check size={18} className="text-[#10B981]" />
+                      <span className="font-bold text-sm text-[#F4F4F5]">High-Converting Call to Actions</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Check size={18} className="text-[#10B981]" />
+                      <span className="font-bold text-sm text-[#F4F4F5]">On-Page SEO Optimized</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <a 
+                      href={selectedProject.url !== "#" ? selectedProject.url : '#'} 
+                      target={selectedProject.url !== "#" ? "_blank" : "_self"} 
+                      rel="noopener noreferrer" 
+                      className="px-6 py-3.5 bg-main-dark hover:bg-black text-white text-sm font-bold uppercase tracking-widest rounded-xl text-center smooth-transition flex-1 whitespace-nowrap"
+                    >
+                      Visit Live Site
+                    </a>
+                    <a 
+                      href={`https://wa.me/919114411026?text=Hi%20DEZO%2C%20I%20want%20a%20website%20similar%20to%20${encodeURIComponent(selectedProject.title)}.`}
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="px-6 py-3.5 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white text-sm font-bold uppercase tracking-widest rounded-xl text-center smooth-transition flex-1 whitespace-nowrap shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                    >
+                      Get Similar Site
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Mobile Sticky CTA */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[80] bg-main-dark/95 backdrop-blur-lg border-t border-main-light p-3 flex gap-2 pb-[env(safe-area-inset-bottom)]">
+        <a 
+          href="#pricing"
+          onClick={(e) => {
+             e.preventDefault();
+             document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          className="flex-1 bg-panel-white border border-main-light hover:border-[var(--primary)] text-main-light font-bold text-center py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-sm smooth-transition"
+        >
+          <span className="text-[10px] uppercase tracking-widest hidden sm:inline-block">Website</span>
+          <span className="text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">₹4,999</span>
+        </a>
+        <a 
+          href="https://wa.me/919114411026?text=Hi%20DEZO%2C%20I%20am%20interested%20in%20your%20services."
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 bg-[#25D366] text-white font-bold text-center py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg smooth-transition"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 1.833 6.368L.141 24l5.803-1.492A12 12 0 1 0 11.944 0zm0 22C6.918 22 2.802 18.237 2.451 13.315l1.637 1.636a8.878 8.878 0 0 1 10.9-10.9l1.636-1.636C12.186 2.012 11.968 2 11.944 2c-5.522 0-10 4.477-10 10 0 1.76.452 3.411 1.233 4.887L1.93 21.365l4.63-1.196A9.957 9.957 0 0 0 11.944 22c5.522 0 10-4.478 10-10s-4.478-10-10-10zm5.176-6.425c-.282-.141-1.669-.824-1.927-.919-.258-.094-.447-.141-.635.141-.188.282-.729.919-.894 1.107-.165.188-.33.211-.612.07-.282-.141-1.19-.439-2.268-1.4-8.37-1.135 7.42-1.925 7.185-1.442-.236.483-3.692.671-5.127.812-.141.141-.33.353-.33.353s-.188.165-.188.447c0 .282.188.635.423.824.236.188.236.47.236.753.047.893-1.011 2.585-2.067 2.679-1.011.094-1.364.094-1.904-.094s-.541-.47-.541-.894.236-1.011.682-1.364c.541-.423.705-.682.894-1.152.188-.47.094-.894-.047-1.176-.141-.282-.635-1.528-.87-2.092-.235-.564-.47-.487-.635-.494-.165-.008-.353-.008-.541-.008s-.494.07-.753.353c-.258.282-1.011.988-1.011 2.4 0 1.411 1.035 2.775 1.176 2.963.141.188 2.022 3.081 4.891 4.316.682.294 1.223.47 1.646.6.682.216 1.305.185 1.796.113.551-.082 1.669-.682 1.904-1.34s.235-1.223.165-1.341c-.07-.118-.258-.188-.541-.33z"/></svg>
+          <span className="text-sm">WhatsApp</span>
+        </a>
+      </div>
+
+
     </div>
   );
 }

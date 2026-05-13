@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
@@ -13,30 +14,39 @@ async function startServer() {
   // Add middlewares to parse JSON bodies
   app.use(express.json());
 
-  // API Routes
-  app.get("/api/health", (req, res) => {
-    res.json({ status: "ok", timestamp: new Date().toISOString() });
-  });
-
-  app.post("/api/contact", (req, res) => {
+  app.all("/api/:functionName", async (req, res, next) => {
+    const { functionName } = req.params;
+    if (functionName === 'health') {
+        return res.json({ status: "ok", timestamp: new Date().toISOString() });
+    }
     try {
-      const { name, email, phone, businessName, service, budget, message } = req.body;
+      const fnPath = path.join(process.cwd(), 'netlify/functions', `${functionName}.js`);
       
-      // In a real application, you would send an email, save to database, etc.
-      // Here we log the request and return success.
-      console.log(`New contact submission from ${name} (${phone}) for ${service}`);
-      
-      // Simulate real-world delay for premium feel
-      setTimeout(() => {
-        res.status(200).json({ 
-          success: true, 
-          message: "Form received. We will contact you soon." 
-        });
-      }, 800);
-      
+      let module;
+      try {
+        module = await import('file://' + fnPath);
+      } catch (e) {
+        return next(); // if not found, pass to next middleware
+      }
+
+      if (module.handler) {
+        const event = {
+          httpMethod: req.method,
+          body: req.method !== 'GET' && req.method !== 'HEAD' ? JSON.stringify(req.body) : null,
+          queryStringParameters: req.query,
+          headers: req.headers
+        };
+        const result = await module.handler(event, {});
+        if (result.headers) {
+          res.set(result.headers);
+        }
+        res.status(result.statusCode || 200).send(result.body);
+      } else {
+        next();
+      }
     } catch (err) {
       console.error(err);
-      res.status(500).json({ success: false, message: "Internal server error" });
+      res.status(500).json({ error: "Function error" });
     }
   });
 

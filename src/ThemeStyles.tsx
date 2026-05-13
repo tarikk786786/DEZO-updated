@@ -3,40 +3,61 @@ import React from 'react';
 export const ThemeStyles = () => (
   <style dangerouslySetInnerHTML={{__html: `
     :root {
-      /* Premium Dark Mode Colors (Vibrant) */
-      --bg-nav: rgba(10, 10, 22, 0.85);
-      --bg-dark: #0A0A16;
-      --bg-darker: #030308;
-      --bg-light: #12101F;
-      --bg-white: #1B182E;
-      --text-dark: #F8FAFC;
-      --text-light: #FFFFFF;
-      --text-muted: #A1A1AA;
-      --text-light-muted: #D4D4D8;
-      --primary: #8B5CF6;
-      --accent: #F472B6;
-      --gold: #FBBF24;
-      --border-light: #27273F;
-      --border-dark: #373752;
-      --glow-opacity: 1;
-      --anim-speed: 0.8s;
-      --anim-dist: 40px;
-      --shadow-soft: 0 20px 40px -15px rgba(139, 92, 246, 0.4);
-      --glass-blur: blur(20px);
+      /* Theme System */
+      --bg-main: #06060A; /* Deep navy / black */
+      --bg-surface: #0E0E14; /* Slightly lighter surface */
+      --bg-card: rgba(20, 20, 30, 0.6); /* Glassmorphism card */
       
-      /* Typography defaults */
+      --text-primary: #FFFFFF;
+      --text-secondary: #E2E8F0;
+      --text-muted: #94A3B8;
+      
+      --accent-primary: #3B82F6; /* Electric blue */
+      --accent-secondary: #06B6D4; /* Cyan glow */
+      --accent-glow: #8B5CF6; /* Soft purple gradient */
+      --accent-premium: #FBBF24; /* Gold highlight */
+      
+      --whatsapp-green: #25D366;
+      
+      --border-soft: rgba(255, 255, 255, 0.08);
+      --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+      
+      --radius-sm: 0.5rem;
+      --radius-md: 1rem;
+      --radius-lg: 1.5rem;
+      --radius-xl: 2rem;
+      
+      --section-padding: 6rem;
+      --container-width: 1200px;
+      
+      /* Mapping old variables for backward compatibility temporarily */
+      --bg-nav: rgba(6, 6, 10, 0.85);
+      --bg-dark: var(--bg-main);
+      --bg-darker: var(--bg-main);
+      --bg-light: var(--bg-surface);
+      --bg-white: var(--bg-surface);
+      --bg-panel-white: var(--bg-surface);
+      --text-dark: var(--text-primary);
+      --text-light: var(--text-secondary);
+      --primary: var(--accent-primary);
+      --accent: var(--accent-secondary);
+      --gold: var(--accent-premium);
+      --border-light: var(--border-soft);
+      --border-dark: var(--border-soft);
+      --anim-speed: 0.4s;
+      
       --line-height-body: 1.6;
-      --tracking-body: 0.01em;
-      --hero-bg: radial-gradient(circle at top center, #1E1242 0%, #0A0A16 100%);
+      --hero-bg: radial-gradient(circle at top center, rgba(59, 130, 246, 0.15) 0%, var(--bg-main) 100%);
     }
 
     body {
       line-height: var(--line-height-body);
-      letter-spacing: var(--tracking-body);
-      background-color: var(--bg-light);
+      background-color: var(--bg-main);
+      color: var(--text-primary);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
+      font-family: 'Inter', system-ui, sans-serif;
     }
 
     /* Ultra-smooth transitions */
@@ -71,6 +92,10 @@ export const ThemeStyles = () => (
     .bg-main-dark { background-color: var(--bg-dark); }
     .bg-main-light { background-color: var(--bg-light); }
     .bg-panel-white { background-color: var(--bg-white); }
+    
+    /* Override generic Tailwind white where it's used as a solid panel */
+    .bg-white { background-color: var(--bg-surface) !important; }
+    
     .text-main-dark { color: var(--text-dark); }
     .text-main-light { color: var(--text-light); }
     .text-main-muted { color: var(--text-muted); }
@@ -79,9 +104,9 @@ export const ThemeStyles = () => (
 
     .smooth-transition { transition: all var(--anim-speed) cubic-bezier(0.22, 1, 0.36, 1); }
     
-    @keyframes float { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-12px) rotate(0.5deg); } }
-    @keyframes float-delayed { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-18px) rotate(-0.5deg); } }
-    @keyframes pulse-soft { 0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); } }
+    @keyframes float { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-8px) rotate(0.2deg); } }
+    @keyframes float-delayed { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-12px) rotate(-0.2deg); } }
+    @keyframes pulse-soft { 0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); } }
     @keyframes shimmer { 0% { background-position: 200% center; } 100% { background-position: -200% center; } }
     @keyframes bar-grow { 0% { transform: scaleY(0.1); opacity: 0; } 100% { transform: scaleY(1); opacity: 1; } }
     @keyframes typing { from { width: 0 } to { width: 100% } }
@@ -115,18 +140,16 @@ export const ThemeStyles = () => (
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     html { scroll-behavior: smooth; }
 
-    .clamp-h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 1.05; letter-spacing: -0.02em; }
-    .clamp-h2 { font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.15; letter-spacing: -0.02em; }
-    .clamp-p { font-size: clamp(1.05rem, 2vw, 1.15rem); }
+    .clamp-h1 { font-size: clamp(2.1rem, 6vw, 5rem); line-height: 1.1; letter-spacing: -0.02em; font-weight: 900; }
+    .clamp-h2 { font-size: clamp(1.7rem, 4vw, 3rem); line-height: 1.2; letter-spacing: -0.01em; font-weight: 800; }
+    .clamp-p { font-size: clamp(1rem, 1.5vw, 1.125rem); line-height: 1.6; }
 
     .glass-card {
-      background: rgba(255, 255, 255, 0.02);
-      backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
-      border-left: 1px solid rgba(255, 255, 255, 0.08);
-      border-right: 1px solid rgba(255, 255, 255, 0.03);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255,255,255,0.02);
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-soft);
+      border-radius: var(--radius-xl);
     }
     
     ::selection {
