@@ -85,29 +85,19 @@ export const ThemeStyles = () => (
     }
 
     @media (max-width: 768px) {
-      :root {
-        --glass-blur: 0px;
-      }
       .heavy-animation,
       .particles,
       .canvas-bg,
-      .desktop-only-animation,
-      .animate-float,
-      .animate-float-delayed,
-      .hero-grid {
+      .desktop-only-animation {
         display: none !important;
-        animation: none !important;
       }
       .glass-card, [class*="backdrop-blur"] {
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        background: rgba(15, 23, 30, 0.95) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+        background: rgba(15, 23, 30, 0.85) !important;
       }
       .smooth-transition {
-        transition-duration: 0.2s !important;
-      }
-      * {
-        text-rendering: auto !important;
+        transition-duration: 0.3s !important;
       }
     }
 

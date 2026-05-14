@@ -24,9 +24,8 @@ async function startServer() {
         return res.status(503).json({ error: "Gemini API key is not configured. Please provide it in the settings." });
       }
 
-      const genAI = new GoogleGenAI(apiKey as string);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
+      const ai = new GoogleGenAI({ apiKey: apiKey as string });
+      
       let prompt = `You are DEZO's website and digital marketing tool engine. Generate useful, practical, business-friendly suggestions. Be confident, clear, and professional. Keep results actionable and easy to send on WhatsApp. Do not include markdown formatting.\n\n`;
       prompt += `Tool: ${tool}\nInputs:\n${JSON.stringify(input, null, 2)}\n\n`;
       
@@ -49,15 +48,16 @@ async function startServer() {
         prompt += `Output format: Valid JSON representing the result of the tool.`;
       }
 
-      const result = await model.generateContent({
+      const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
         contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: {
+        config: {
           responseMimeType: "application/json",
         },
       });
 
-      const response = result.response;
-      const text = response.text();
+      const text = response.text;
+      if (!text) throw new Error("Empty response from AI");
       const jsonResult = JSON.parse(text);
       res.json(jsonResult);
     } catch (error: any) {

@@ -37,8 +37,8 @@ export const MetaAdsCopyGenerator = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-6">
-      <div className="w-full md:w-1/2 overflow-y-auto max-h-[80vh] px-1 pb-4">
+    <div className="flex flex-col md:flex-row gap-8">
+      <div className="w-full md:w-1/2 md:max-h-[70vh] md:overflow-y-auto px-1 pb-4 custom-scrollbar">
         <form onSubmit={generate} className="space-y-4">
           <FormField label="Business Type / Industry" id="businessType" value={formData.businessType} onChange={handleChange} required placeholder="e.g., Real Estate Agency" />
           <FormField label="Main Product / Service" id="product" value={formData.product} onChange={handleChange} required placeholder="e.g., Luxury Villas" />
@@ -61,7 +61,7 @@ export const MetaAdsCopyGenerator = () => {
         </form>
       </div>
 
-      <div className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 border border-main-light flex flex-col h-full min-h-[500px]">
+      <div className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 border border-main-light flex flex-col min-h-[400px] md:h-auto">
         {result ? (
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center mb-4">

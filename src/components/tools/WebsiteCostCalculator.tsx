@@ -41,8 +41,8 @@ export const WebsiteCostCalculator = () => {
     : `Hi DEZO, I need a website. Please guide me.`;
 
   return (
-    <div className="flex flex-col md:flex-row gap-6">
-      <div className="w-full md:w-1/2 overflow-y-auto max-h-[80vh] px-1 pb-4">
+    <div className="flex flex-col md:flex-row gap-8">
+      <div className="w-full md:w-1/2 md:max-h-[70vh] md:overflow-y-auto px-1 pb-4 custom-scrollbar">
         <form onSubmit={generate} className="space-y-4">
           <FormField label="Business Type / Industry" id="businessType" value={formData.businessType} onChange={handleChange} required placeholder="e.g., Real Estate, Healthcare" />
           <div className="grid grid-cols-2 gap-4">
@@ -83,7 +83,7 @@ export const WebsiteCostCalculator = () => {
         </form>
       </div>
 
-      <div className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 text-white flex flex-col relative overflow-hidden border border-main-light h-full min-h-[500px]">
+      <div className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 text-white flex flex-col relative overflow-hidden border border-main-light min-h-[400px] md:h-auto">
         <div className="absolute inset-0 bg-[url('https://transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="relative z-10 w-full flex flex-col h-full">
           {result ? (

@@ -29,7 +29,7 @@ export const MetaAdsBudgetCalculator = () => {
 
   return (
     <div className="flex flex-col md:flex-row gap-6">
-      <div className="w-full md:w-1/2 overflow-y-auto max-h-[80vh] px-1 pb-4">
+      <div className="w-full md:w-1/2 md:overflow-y-auto md:max-h-[80vh] px-1 pb-4">
         <form onSubmit={calculateWithExpert} className="space-y-4">
           <FormField label="Industry / Business" id="industry" value={formData.industry} onChange={handleChange} required placeholder="e.g. Real Estate, Dentistry" />
           <FormField label="Monthly Ad Budget (₹)" id="monthlyBudget" type="number" value={formData.monthlyBudget} onChange={handleChange} required />
@@ -54,7 +54,7 @@ export const MetaAdsBudgetCalculator = () => {
         </div>
       </div>
       
-      <div className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 border border-main-light flex flex-col h-full min-h-[500px]">
+      <div className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 border border-main-light flex flex-col h-full min-h-[400px]">
         {result ? (
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-center gap-2 mb-4">

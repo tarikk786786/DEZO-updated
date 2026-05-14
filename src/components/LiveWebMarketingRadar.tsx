@@ -27,12 +27,15 @@ export const LiveWebMarketingRadar = () => {
         if (cachedObj && cachedObj.timestamp && (Date.now() - cachedObj.timestamp < 3600000)) {
            setNews(cachedObj.data);
            setLoading(false);
-           return;
         }
       } catch (e) {}
     }
 
     fetchNews();
+
+    // Auto-update every 45s if visible
+    const interval = setInterval(fetchNews, 45000);
+    return () => clearInterval(interval);
   }, [isIntersecting]);
 
   const fetchNews = async () => {
@@ -92,7 +95,7 @@ export const LiveWebMarketingRadar = () => {
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]"></div>
             </div>
           ) : (
-            news.slice(0, window.innerWidth <= 768 ? 3 : news.length).map((item, idx) => (
+            news.slice(0, window.innerWidth <= 768 ? 5 : news.length).map((item, idx) => (
               <Reveal key={item.id} delay={idx * 50} direction="up">
                 <a 
                   href={item.url} 

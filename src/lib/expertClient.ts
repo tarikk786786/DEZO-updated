@@ -14,9 +14,11 @@ export const getExpertAdvice = async (tool: string, input: any) => {
     if (res.ok && res.headers.get('content-type')?.includes('application/json')) {
       const data = await res.json();
       return data;
+    } else {
+      console.error("API Response Error:", await res.text());
     }
   } catch (error) {
-    // Ignore error
+    console.error("Expert Client Error:", error);
   }
 
   // Fallbacks

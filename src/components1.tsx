@@ -41,7 +41,7 @@ export const Reveal = ({ children, delay = 0, direction = 'up', className = '' }
       variants={getVariants()}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-10%" }}
+      viewport={{ once: true, margin: "-5%", amount: 0.1 }}
       transition={{ 
         duration: 0.8, 
         delay: delay / 1000, 

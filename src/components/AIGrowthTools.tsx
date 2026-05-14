@@ -141,7 +141,7 @@ export const GrowthTools = () => {
           </div>
         </Reveal>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 md:gap-6">
           {toolsList.map((tool, i) => (
             <Reveal key={tool.id} delay={i * 50} direction="up">
               <motion.div 
@@ -152,15 +152,15 @@ export const GrowthTools = () => {
                 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setActiveTool(tool)}
-                className="bg-panel-white border border-main-light p-6 rounded-2xl cursor-pointer hover:border-[var(--primary)]/50 smooth-transition h-full flex flex-col group relative overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[var(--primary)]/10"
+                className="bg-panel-white border border-main-light p-4 sm:p-6 rounded-xl sm:rounded-2xl cursor-pointer hover:border-[var(--primary)]/50 smooth-transition h-full flex flex-col group relative overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[var(--primary)]/10"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 to-transparent opacity-0 group-hover:opacity-100 smooth-transition"></div>
-                <div className="w-12 h-12 bg-black/30 rounded-xl flex items-center justify-center mb-5 relative z-10 border border-white/5">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-black/30 rounded-lg sm:rounded-xl flex items-center justify-center mb-4 sm:mb-5 relative z-10 border border-white/5">
                   {tool.icon}
                 </div>
-                <h3 className="text-lg font-black text-white mb-2 relative z-10">{tool.title}</h3>
-                <p className="text-xs text-main-muted leading-relaxed relative z-10 mb-4">{tool.description}</p>
-                <div className="mt-auto flex items-center text-[10px] font-bold text-[var(--primary)] uppercase tracking-widest relative z-10">
+                <h3 className="text-sm sm:text-lg font-black text-white mb-2 relative z-10 leading-tight">{tool.title}</h3>
+                <p className="text-[10px] sm:text-xs text-main-muted leading-relaxed relative z-10 mb-3 sm:mb-4">{tool.description}</p>
+                <div className="mt-auto flex items-center text-[9px] sm:text-[10px] font-bold text-[var(--primary)] uppercase tracking-widest relative z-10">
                   Open Tool <span className="ml-2 group-hover:translate-x-1 smooth-transition">→</span>
                 </div>
               </motion.div>

@@ -36,8 +36,8 @@ export const WebsiteAuditTool = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-6">
-      <div className="w-full md:w-1/2 overflow-y-auto max-h-[80vh] px-1 pb-4">
+    <div className="flex flex-col md:flex-row gap-8">
+      <div className="w-full md:w-1/2 md:max-h-[70vh] md:overflow-y-auto px-1 pb-4 custom-scrollbar">
         <form onSubmit={runAudit} className="space-y-4">
           <FormField label="Website URL" id="url" value={formData.url} onChange={handleChange} required placeholder="https://example.com" />
           <FormField label="Business Name" id="businessName" value={formData.businessName || ''} onChange={handleChange} required placeholder="Your Business" />
@@ -59,7 +59,7 @@ export const WebsiteAuditTool = () => {
         </form>
       </div>
 
-      <div className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 border border-main-light flex flex-col relative overflow-hidden h-[500px]">
+      <div className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 border border-main-light flex flex-col relative overflow-hidden min-h-[400px] md:h-[600px]">
         {result ? (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col h-full overflow-hidden">
             <h4 className="font-black text-white mb-2 drop-shadow-sm flex items-center gap-2">

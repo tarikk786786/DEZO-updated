@@ -36,7 +36,7 @@ export const BusinessNameGenerator = () => {
 
   return (
     <div className="flex flex-col md:flex-row gap-6">
-      <div className="w-full md:w-1/2 overflow-y-auto max-h-[80vh] px-1 pb-4">
+      <div className="w-full md:w-1/2 md:overflow-y-auto md:max-h-[80vh] px-1 pb-4">
         <form onSubmit={generate} className="space-y-4">
           <FormField label="Industry" id="industry" value={formData.industry} onChange={handleChange} required placeholder="e.g., Tech, Health, Fashion" />
           <FormField label="Style / Tone" type="select" id="style" value={formData.style} onChange={handleChange} options={["Modern & Professional", "Playful & Creative", "Short & Catchy", "Luxury & Premium"]} />
@@ -48,7 +48,7 @@ export const BusinessNameGenerator = () => {
           </button>
         </form>
       </div>
-      <div className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 border border-main-light flex flex-col h-full min-h-[500px]">
+      <div className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 border border-main-light flex flex-col h-full min-h-[400px]">
         {result ? (
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center mb-4">
