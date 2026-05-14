@@ -15,31 +15,47 @@ export const LiveWebMarketingRadar = () => {
     { id: 4, title: 'How page speed still dictates mobile bounce rates in 2026.', category: 'Performance', source: 'Web.dev', time: new Date(Date.now() - 10800000).toISOString(), url: '#' }
   ];
 
+  useEffect(() => {
+    if (!isIntersecting) return;
+    
+    // Check sessionStorage first
+    const cachedObjStr = sessionStorage.getItem('dezo_marketing_news');
+    if (cachedObjStr) {
+      try {
+        const cachedObj = JSON.parse(cachedObjStr);
+        // Only valid for 1 hour to prevent hitting Vercel serverless too much
+        if (cachedObj && cachedObj.timestamp && (Date.now() - cachedObj.timestamp < 3600000)) {
+           setNews(cachedObj.data);
+           setLoading(false);
+           return;
+        }
+      } catch (e) {}
+    }
+
+    fetchNews();
+  }, [isIntersecting]);
+
   const fetchNews = async () => {
     try {
-      const res = await fetch('/api/web-marketing-news');
-      if (res.ok && res.headers.get('content-type')?.includes('application/json')) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8000);
+      
+      const res = await fetch('/api/news', { signal: controller.signal }).catch(() => null);
+      clearTimeout(timeoutId);
+
+      if (res && res.ok) {
         const data = await res.json();
-        if (data.news && data.news.length > 0) {
-          setNews(data.news);
-          return;
-        }
+        setNews(data);
+        sessionStorage.setItem('dezo_marketing_news', JSON.stringify({ data, timestamp: Date.now() }));
+      } else {
+         setNews(fallbackNews);
       }
-      setNews(fallbackNews);
     } catch (err) {
       setNews(fallbackNews);
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (!isIntersecting) return;
-    
-    fetchNews();
-    const interval = setInterval(fetchNews, 45000); // 45 seconds
-    return () => clearInterval(interval);
-  }, [isIntersecting]);
 
   const timeAgo = (dateStr: string) => {
     const d = new Date(dateStr);
@@ -76,7 +92,7 @@ export const LiveWebMarketingRadar = () => {
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]"></div>
             </div>
           ) : (
-            news.slice(0, 3).map((item, idx) => (
+            news.slice(0, window.innerWidth <= 768 ? 3 : news.length).map((item, idx) => (
               <Reveal key={item.id} delay={idx * 50} direction="up">
                 <a 
                   href={item.url} 

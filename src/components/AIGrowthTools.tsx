@@ -21,70 +21,70 @@ const toolsList = [
     title: 'Website Cost Calculator',
     description: 'Get an instant, reliable estimate for your next premium website.',
     icon: <Calculator size={24} className="text-[#10B981]" />,
-    component: <WebsiteCostCalculator />
+    component: WebsiteCostCalculator
   },
   {
     id: 'ads-budget',
     title: 'Meta Ads Budget Planner',
     description: 'Calculate projected clicks, conversions, and CPA for your ad campaigns.',
     icon: <BarChart size={24} className="text-[var(--accent)]" />,
-    component: <MetaAdsBudgetCalculator />
+    component: MetaAdsBudgetCalculator
   },
   {
     id: 'ads-copy',
     title: 'Meta Ads Copy Generator',
     description: 'Write smart, direct ad copies for Facebook and Instagram instantly.',
     icon: <Megaphone size={24} className="text-[#EC4899]" />,
-    component: <MetaAdsCopyGenerator />
+    component: MetaAdsCopyGenerator
   },
   {
     id: 'lp-headline',
     title: 'Landing Page Headliner',
     description: 'Generate aggressive, hard-hitting headlines that convert visitors into leads.',
     icon: <Type size={24} className="text-[var(--primary)]" />,
-    component: <LandingPageHeadlineGenerator />
+    component: LandingPageHeadlineGenerator
   },
   {
     id: 'seo-generator',
     title: 'SEO Meta Generator',
     description: 'Generate optimized titles, descriptions, and keywords for better ranking.',
     icon: <Target size={24} className="text-[#F59E0B]" />,
-    component: <SEOMetaGenerator />
+    component: SEOMetaGenerator
   },
   {
     id: 'google-check',
     title: 'Google Ranking Checklist',
     description: 'The exact 10-point technical checklist to ensure Google loves your website.',
     icon: <CheckCircle size={24} className="text-[#10B981]" />,
-    component: <GoogleRankingChecklist />
+    component: GoogleRankingChecklist
   },
   {
     id: 'website-audit',
     title: 'Website Strength Audit',
     description: 'Check your site health, speed, and conversion strategy privately.',
     icon: <Search size={24} className="text-[var(--primary)]" />,
-    component: <WebsiteAuditTool />
+    component: WebsiteAuditTool
   },
   {
     id: 'blog-idea',
     title: 'Blog Content Ideas',
     description: 'Get fresh, SEO-friendly content topics related to your main business niche.',
     icon: <PenTool size={24} className="text-[var(--accent)]" />,
-    component: <BlogIdeaGenerator />
+    component: BlogIdeaGenerator
   },
   {
     id: 'biz-name',
     title: 'Business Name Ideas',
     description: 'Generate professional, premium business names easily.',
     icon: <Type size={24} className="text-[#F59E0B]" />,
-    component: <BusinessNameGenerator />
+    component: BusinessNameGenerator
   },
   {
     id: 'insta-bio',
     title: 'Instagram Bio Builder',
     description: 'Create clean, conversion-focused Instagram profiles that look established.',
     icon: <Instagram size={24} className="text-[#EC4899]" />,
-    component: <InstagramBioGenerator />
+    component: InstagramBioGenerator
   }
 ];
 
@@ -134,7 +134,7 @@ export const AIGrowthTools = () => {
         title={activeTool?.title}
       >
         <Suspense fallback={<div className="p-8 text-center text-sm font-bold opacity-50 text-white">Loading Tool...</div>}>
-          {activeTool?.component}
+          {activeTool && React.createElement(activeTool.component)}
         </Suspense>
       </ToolModal>
     </section>

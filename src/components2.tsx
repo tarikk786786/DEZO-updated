@@ -71,6 +71,7 @@ export const HeroVisual = ({ nightMode }: any) => {
   }, []);
 
   const handleMouseMove = (e: any) => {
+    if (window.innerWidth <= 768) return;
     if (nightMode || !containerRef.current || prefersReducedMotion) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 15; 
@@ -79,6 +80,7 @@ export const HeroVisual = ({ nightMode }: any) => {
   };
 
   const handleTouchMove = (e: any) => {
+    if (window.innerWidth <= 768) return;
     if (nightMode || !containerRef.current || prefersReducedMotion) return;
     const touch = e.touches[0];
     const rect = containerRef.current.getBoundingClientRect();

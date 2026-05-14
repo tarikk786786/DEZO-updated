@@ -69,6 +69,39 @@ export const ThemeStyles = () => (
       transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
+    @media (max-width: 768px) {
+      * {
+        animation-duration: 0.3s !important;
+      }
+      .heavy-animation,
+      .particles,
+      .hero-video,
+      .canvas-bg,
+      .floating-particles,
+      .desktop-only-animation,
+      .hero-grid {
+        display: none !important;
+        animation: none !important;
+      }
+      .glass-card {
+        background: var(--bg-surface);
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: none !important;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .animate-float,
+      .animate-float-delayed,
+      .animate-pulse,
+      .animate-pulse-soft,
+      .animate-shimmer,
+      .animate-bar-grow,
+      .animate-typing-code {
+        animation: none !important;
+        transform: none !important;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       * {
         animation-duration: 0.001ms !important;

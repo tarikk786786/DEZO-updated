@@ -119,8 +119,17 @@ export default function App() {
     const timer1 = setTimeout(() => setIsFadingOut(true), 400);
     const timer2 = setTimeout(() => setIsLoading(false), 800);
     
-    const handleScroll = () => setScrolled(window.scrollY > 30);
-    window.addEventListener('scroll', handleScroll);
+    let tickingScroll = false;
+    const handleScroll = () => {
+      if (!tickingScroll) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 30);
+          tickingScroll = false;
+        });
+        tickingScroll = true;
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
     
     return () => {
       clearTimeout(timer1);
@@ -245,11 +254,20 @@ Message: ${formData.message}`;
   };
 
   useEffect(() => {
+    if (window.innerWidth <= 768) return;
+    
+    let ticking = false;
     const handleMouseMove = (e: MouseEvent) => {
-      document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
-      document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
+          document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
@@ -397,12 +415,12 @@ Message: ${formData.message}`;
                     </div>
                   </Reveal>
                   <Reveal direction="up" delay={400}>
-                    <div className="flex justify-center gap-4 mb-12 flex-wrap">
+                    <div className="flex justify-center gap-4 mb-12 flex-col sm:flex-row items-center w-full max-w-xs sm:max-w-none mx-auto">
                       <motion.a 
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         href="#contact" 
-                        className="px-8 py-4 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white font-bold rounded-full shadow-[0_10px_20px_rgba(124,58,237,0.4)] hover:shadow-[0_15px_30px_rgba(236,72,153,0.6)] smooth-transition relative overflow-hidden group"
+                        className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white font-bold rounded-full shadow-[0_10px_20px_rgba(124,58,237,0.4)] hover:shadow-[0_15px_30px_rgba(236,72,153,0.6)] smooth-transition relative overflow-hidden group text-center"
                       >
                         <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 smooth-transition rounded-full"></div>
                         <span className="relative z-10">Get Website at ₹4,999</span>
@@ -411,7 +429,7 @@ Message: ${formData.message}`;
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         href="#latest-work" 
-                        className="px-8 py-4 text-white font-bold rounded-full hover:bg-white/10 border border-white/20 smooth-transition group"
+                        className="w-full sm:w-auto px-8 py-4 text-white font-bold rounded-full hover:bg-white/10 border border-white/20 smooth-transition group text-center"
                       >
                         <span>View Our Work</span>
                       </motion.a>
@@ -419,7 +437,7 @@ Message: ${formData.message}`;
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => window.open('https://wa.me/919114411026?text=Hi%20DEZO%2C%20I%20want%20a%20website%20starting%20at%20%E2%82%B94%2C999.%20Please%20guide%20me.', '_blank')} 
-                        className="px-8 py-4 bg-[#25D366] text-white font-black rounded-full hover:shadow-[0_15px_30px_rgba(37,211,102,0.4)] smooth-transition flex items-center justify-center gap-2"
+                        className="w-full sm:w-auto px-8 py-4 bg-[#25D366] text-white font-black rounded-full hover:shadow-[0_15px_30px_rgba(37,211,102,0.4)] smooth-transition flex items-center justify-center gap-2"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 1.833 6.368L.141 24l5.803-1.492A12 12 0 1 0 11.944 0zm0 22C6.918 22 2.802 18.237 2.451 13.315l1.637 1.636a8.878 8.878 0 0 1 10.9-10.9l1.636-1.636C12.186 2.012 11.968 2 11.944 2c-5.522 0-10 4.477-10 10 0 1.76.452 3.411 1.233 4.887L1.93 21.365l4.63-1.196A9.957 9.957 0 0 0 11.944 22c5.522 0 10-4.478 10-10s-4.478-10-10-10zm5.176-6.425c-.282-.141-1.669-.824-1.927-.919-.258-.094-.447-.141-.635.141-.188.282-.729.919-.894 1.107-.165.188-.33.211-.612.07-.282-.141-1.19-.439-2.268-1.4-8.37-1.135 7.42-1.925 7.185-1.442-.236.483-3.692.671-5.127.812-.141.141-.33.353-.33.353s-.188.165-.188.447c0 .282.188.635.423.824.236.188.236.47.236.753.047.893-1.011 2.585-2.067 2.679-1.011.094-1.364.094-1.904-.094s-.541-.47-.541-.894.236-1.011.682-1.364c.541-.423.705-.682.894-1.152.188-.47.094-.894-.047-1.176-.141-.282-.635-1.528-.87-2.092-.235-.564-.47-.487-.635-.494-.165-.008-.353-.008-.541-.008s-.494.07-.753.353c-.258.282-1.011.988-1.011 2.4 0 1.411 1.035 2.775 1.176 2.963.141.188 2.022 3.081 4.891 4.316.682.294 1.223.47 1.646.6.682.216 1.305.185 1.796.113.551-.082 1.669-.682 1.904-1.34s.235-1.223.165-1.341c-.07-.118-.258-.188-.541-.33z"/></svg>
                         Chat on WhatsApp
@@ -518,7 +536,7 @@ Message: ${formData.message}`;
           </Reveal>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-            {filteredPortfolio.slice(0, showAllProjects ? filteredPortfolio.length : 6).map((project: any, i: number) => (
+            {filteredPortfolio.slice(0, showAllProjects ? filteredPortfolio.length : (isDesktop ? 6 : 3)).map((project: any, i: number) => (
               <Reveal direction="up" delay={i * 50} key={i}>
                 <div className="block group h-full">
                   <motion.article 
