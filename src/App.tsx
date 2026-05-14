@@ -20,8 +20,8 @@ import { AnimatedFavicon } from './AnimatedFavicon';
 
 import { AboutUsPage } from './AboutUsPage';
 import { NotFoundPage } from './NotFoundPage';
-import { AIGrowthTools } from './components/AIGrowthTools';
-import { LiveWebMarketingRadar } from './components/LiveWebMarketingRadar';
+const AIGrowthTools = lazy(() => import('./components/AIGrowthTools').then(m => ({ default: m.AIGrowthTools })));
+const LiveWebMarketingRadar = lazy(() => import('./components/LiveWebMarketingRadar').then(m => ({ default: m.LiveWebMarketingRadar })));
 
 import { ViralHookSection } from './components/ViralHookSection';
 import { PricingSection, ChallengeSection, DigitalMarketingSection, GrowthOffersSection } from './components/PricingAndOffers';
@@ -179,7 +179,7 @@ export default function App() {
           Service: formData.service,
           Message: formData.message,
       })
-    }).catch(err => console.error("Form submission error:", err));
+    }).catch(() => {});
 
     setIsSubmitting(false);
     setIsSubmitted(true);
@@ -574,10 +574,14 @@ Message: ${formData.message}`;
       </section>
 
       {/* 8. Free AI Growth Tools */}
-      <AIGrowthTools />
+      <Suspense fallback={<div className="py-20 text-center opacity-50 text-white">Loading Tools...</div>}>
+        <AIGrowthTools />
+      </Suspense>
 
       {/* 9. Live Web & Marketing Radar */}
-      <LiveWebMarketingRadar />
+      <Suspense fallback={<div className="py-20 text-center opacity-50 text-white">Loading Radar...</div>}>
+        <LiveWebMarketingRadar />
+      </Suspense>
 
       {/* 10. Challenge / Promise */}
       <ChallengeSection />
@@ -873,6 +877,7 @@ Message: ${formData.message}`;
           </motion.div>
         )}
       </AnimatePresence>
+      <div className="pb-20 md:pb-0"></div>
       {/* Mobile Sticky CTA */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-[80] bg-main-dark/95 backdrop-blur-lg border-t border-main-light p-3 flex gap-2 pb-[env(safe-area-inset-bottom)]">
         <a 
