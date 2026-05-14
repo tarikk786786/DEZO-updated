@@ -38,7 +38,7 @@ export const WebsiteAuditTool = () => {
   return (
     <div className="flex flex-col md:flex-row gap-6">
       <div className="w-full md:w-1/2 overflow-y-auto max-h-[80vh] px-1 pb-4">
-        <form onSubmit={runExpertAudit} className="space-y-4">
+        <form onSubmit={runAudit} className="space-y-4">
           <FormField label="Website URL" id="url" value={formData.url} onChange={handleChange} required placeholder="https://example.com" />
           <FormField label="Business Name" id="businessName" value={formData.businessName || ''} onChange={handleChange} required placeholder="Your Business" />
           <FormField label="Industry" id="industry" value={formData.industry || ''} onChange={handleChange} required placeholder="e.g. Healthcare, Tech" />

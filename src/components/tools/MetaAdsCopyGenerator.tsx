@@ -29,8 +29,9 @@ export const MetaAdsCopyGenerator = () => {
 
   const copyToClipboard = () => {
     if (!result) return;
-    const text = result.ads.map((ad: any, i: number) => `Ad ${i + 1}\nHeadline: ${ad.headline}\nText: ${ad.primaryText}\nCTA: ${ad.cta}\n`).join('\n');
-    navigator.clipboard.writeText(text);
+    const ad1 = `Ad 1\nHeadline: ${result.headlines?.[0]}\nText: ${result.primaryTexts?.[0]}\nCTA: ${result.ctaLines?.[0]}`;
+    const ad2 = `Ad 2\nHeadline: ${result.headlines?.[1]}\nText: ${result.primaryTexts?.[1]}\nCTA: ${result.ctaLines?.[1]}`;
+    navigator.clipboard.writeText(`${ad1}\n\n${ad2}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
