@@ -9,7 +9,7 @@ export const LiveWebMarketingRadar = () => {
   const [ref, isIntersecting] = useIntersectionObserver({ rootMargin: '200px 0px', triggerOnce: true });
 
   const fallbackNews = [
-    { id: 1, title: 'Google confirms AI Overviews rolling out to more countries globally.', category: 'SEO', source: 'Search Engine Land', time: new Date().toISOString(), url: '#' },
+    { id: 1, title: 'Google updates Search Algorithm globally.', category: 'SEO', source: 'Search Engine Land', time: new Date().toISOString(), url: '#' },
     { id: 2, title: 'Meta Ads introduces lower CPA targeting features for local businesses.', category: 'Social Ads', source: 'Social Media Today', time: new Date(Date.now() - 3600000).toISOString(), url: '#' },
     { id: 3, title: 'Next.js 15 preview released with smaller bundle sizes and faster routing.', category: 'Web Dev', source: 'Vercel Blog', time: new Date(Date.now() - 7200000).toISOString(), url: '#' },
     { id: 4, title: 'How page speed still dictates mobile bounce rates in 2026.', category: 'Performance', source: 'Web.dev', time: new Date(Date.now() - 10800000).toISOString(), url: '#' }

@@ -64,7 +64,7 @@ app.post("/api/gemini-generate", async (req, res) => {
 // News API for the Radar
 app.get("/api/news", (req, res) => {
   const news = [
-    { id: Date.now() + 1, title: 'Google confirms AI Overviews rolling out to more countries globally.', category: 'SEO', source: 'Search Engine Land', time: new Date().toISOString(), url: 'https://searchengineland.com' },
+    { id: Date.now() + 1, title: 'Google updates Search Algorithm globally.', category: 'SEO', source: 'Search Engine Land', time: new Date().toISOString(), url: 'https://searchengineland.com' },
     { id: Date.now() + 2, title: 'Meta Ads introduces lower CPA targeting features for local businesses.', category: 'Social Ads', source: 'Social Media Today', time: new Date(Date.now() - 1800000).toISOString(), url: 'https://socialmediatoday.com' },
     { id: Date.now() + 3, title: 'Next.js 15 update: Improved server actions and faster builds.', category: 'Web Dev', source: 'Vercel', time: new Date(Date.now() - 3600000).toISOString(), url: 'https://nextjs.org' },
     { id: Date.now() + 4, title: 'Instagram Bio strategies that are converting 30% better in 2026.', category: 'Strategy', source: 'Marketing Brew', time: new Date(Date.now() - 7200000).toISOString(), url: 'https://marketingbrew.com' },

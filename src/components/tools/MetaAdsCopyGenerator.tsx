@@ -10,6 +10,9 @@ export const MetaAdsCopyGenerator = () => {
     product: '',
     offer: '',
     target: '',
+    location: '',
+    budget: '',
+    goal: 'Leads'
   });
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);

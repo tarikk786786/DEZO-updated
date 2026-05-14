@@ -20,7 +20,7 @@ import { AnimatedFavicon } from './AnimatedFavicon';
 
 import { AboutUsPage } from './AboutUsPage';
 import { NotFoundPage } from './NotFoundPage';
-const GrowthTools = lazy(() => import('./components/AIGrowthTools').then(m => ({ default: m.GrowthTools })));
+const GrowthTools = lazy(() => import('./components/GrowthTools').then(m => ({ default: m.GrowthTools })));
 const LiveWebMarketingRadar = lazy(() => import('./components/LiveWebMarketingRadar').then(m => ({ default: m.LiveWebMarketingRadar })));
 
 import { ViralHookSection } from './components/ViralHookSection';
@@ -549,8 +549,9 @@ Message: ${formData.message}`;
               <Reveal direction="up" delay={i * 50} key={i}>
                 <div className="block group h-full">
                   <motion.article 
-                    whileHover={{ y: -8, scale: 1.01 }}
-                    className="bg-main-light rounded-3xl p-6 border border-main-light h-full flex flex-col justify-between hover:border-[var(--primary)]/50 smooth-transition shadow-sm hover:shadow-[0_20px_40px_-15px_rgba(139,92,246,0.15)] relative overflow-hidden"
+                    whileHover={{ y: -15, scale: 1.03, transition: { type: "spring", stiffness: 300, damping: 15 } }}
+                    whileTap={{ scale: 0.98 }}
+                    className="bg-main-light rounded-3xl p-6 border border-main-light h-full flex flex-col justify-between hover:border-[var(--primary)]/50 smooth-transition shadow-sm hover:shadow-[0_40px_60px_-15px_rgba(139,92,246,0.3)] relative overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 to-[var(--accent)]/5 opacity-0 group-hover:opacity-100 smooth-transition pointer-events-none"></div>
                     <div className="relative z-10 mb-6">

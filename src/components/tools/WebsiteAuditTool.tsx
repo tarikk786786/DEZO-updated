@@ -10,6 +10,9 @@ export const WebsiteAuditTool = () => {
   const [formData, setFormData] = useState({
     url: '',
     goal: 'More leads',
+    businessName: '',
+    industry: '',
+    phone: ''
   });
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
