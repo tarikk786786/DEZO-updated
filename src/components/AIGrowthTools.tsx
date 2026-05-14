@@ -90,14 +90,6 @@ const toolsList = [
 
 export const GrowthTools = () => {
   const [activeTool, setActiveTool] = useState<any>(null);
-  const [showKeyInput, setShowKeyInput] = useState(false);
-  const [apiKey, setApiKey] = useState(() => (typeof window !== 'undefined' ? localStorage.getItem('dezo_gemini_key') || '' : ''));
-
-  const saveApiKey = () => {
-    localStorage.setItem('dezo_gemini_key', apiKey);
-    setShowKeyInput(false);
-    alert('API Key Saved Successfully!');
-  };
 
   return (
     <section id="free-tools" className="py-24 lg:py-32 bg-main-dark border-y border-main-light overflow-hidden relative">
@@ -110,34 +102,6 @@ export const GrowthTools = () => {
             <p className="text-main-muted max-w-2xl mx-auto text-sm md:text-base leading-relaxed mb-6">
               Use our expert-crafted tools to calculate costs, plan your ad budgets, and generate converting copy directly inside our website.
             </p>
-            <button 
-              onClick={() => setShowKeyInput(!showKeyInput)}
-              className="text-[10px] font-black uppercase tracking-widest text-[var(--primary)] border border-[var(--primary)]/30 px-4 py-2 rounded-full hover:bg-[var(--primary)] hover:text-white transition-all"
-            >
-              {apiKey ? 'API Key Configured ✓' : 'Configure Gemini API Key'}
-            </button>
-
-            {showKeyInput && (
-              <motion.div 
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-6 max-w-md mx-auto bg-panel-white p-6 rounded-2xl border border-white/10 shadow-2xl"
-              >
-                <h4 className="text-white font-bold mb-4 text-left">Custom Gemini API Key</h4>
-                <input 
-                  type="password" 
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  placeholder="Enter your Gemini API key..."
-                  className="w-full bg-main-dark border border-white/10 rounded-xl px-4 py-3 text-white text-sm mb-4 focus:outline-none focus:border-[var(--primary)]"
-                />
-                <div className="flex gap-2">
-                  <button onClick={saveApiKey} className="flex-1 bg-[var(--primary)] text-white font-bold py-2 rounded-xl text-sm">Save Key</button>
-                  <button onClick={() => setShowKeyInput(false)} className="flex-1 bg-white/5 text-white font-bold py-2 rounded-xl text-sm">Cancel</button>
-                </div>
-                <p className="mt-3 text-[10px] text-main-muted text-left">Your key is stored locally in your browser and never shared with us. If left empty, our built-in key will be used (subject to rate limits).</p>
-              </motion.div>
-            )}
           </div>
         </Reveal>
 

@@ -14,7 +14,7 @@ import {
   RotatingText, FallbackImage, HeroVisual 
 } from './components2';
 import {
-  BlogSection, FaqSection
+  BlogSection, FaqSection, ProcessSection, AboutSection
 } from './components3';
 import { AnimatedFavicon } from './AnimatedFavicon';
 
@@ -392,7 +392,7 @@ Message: ${formData.message}`;
               <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-16">
                 {/* Visual / Animation Column */}
                 <div className="w-full sm:w-[85%] lg:w-1/2 h-[320px] sm:h-[400px] lg:h-[600px] relative order-1 lg:order-2 mb-2 lg:mb-0 mx-auto overflow-hidden sm:overflow-visible">
-                  <Reveal direction="down" delay={200}>
+                  <Reveal direction="down" delay={200} className="w-full h-full absolute inset-0">
                      <HeroVisual nightMode={!isGlowMode} />
                   </Reveal>
                 </div>
@@ -501,10 +501,18 @@ Message: ${formData.message}`;
       {/* 5. Services Tabs */}
       <ServicesTabs />
 
-      {/* 6. Pricing Cards */}
-      <PricingSection />
+      {/* 6. About Section */}
+      <AboutSection />
+
+      {/* 7. Working Process */}
+      <ProcessSection />
+
+      {/* 8. Pricing Cards */}
+      <section id="pricing">
+        <PricingSection />
+      </section>
       
-      {/* 8. Growth Offers Section */}
+      {/* 9. Growth Offers Section */}
       <GrowthOffersSection />
 
       {/* 7. PORTFOLIO */}

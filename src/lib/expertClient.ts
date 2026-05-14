@@ -1,12 +1,9 @@
 export const getExpertAdvice = async (tool: string, input: any) => {
   try {
-    const customKey = typeof window !== 'undefined' ? localStorage.getItem('dezo_gemini_key') : null;
-    
     const res = await fetch('/api/gemini-generate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...(customKey ? { 'x-gemini-key': customKey } : {})
       },
       body: JSON.stringify({ tool, input })
     });

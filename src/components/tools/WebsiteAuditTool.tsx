@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { FormField } from '../ui/FormField';
 import { WhatsAppCTA } from '../ui/WhatsAppCTA';
 import { Search, Activity, Gauge, Smartphone, CheckCircle, Bot } from 'lucide-react';
@@ -6,6 +6,7 @@ import { motion } from 'motion/react';
 import { getExpertAdvice } from '../../lib/expertClient';
 
 export const WebsiteAuditTool = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
     url: '',
     goal: 'More leads',
@@ -27,6 +28,12 @@ export const WebsiteAuditTool = () => {
     const data = await getExpertAdvice('WebsiteAuditTool', formData);
     setResult(data);
     setLoading(false);
+    
+    if (window.innerWidth <= 768) {
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
   };
 
   const getScoreColor = (score: number) => {
@@ -59,7 +66,7 @@ export const WebsiteAuditTool = () => {
         </form>
       </div>
 
-      <div className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 border border-main-light flex flex-col relative overflow-hidden min-h-[400px] md:h-[600px]">
+      <div ref={resultRef} className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 border border-main-light flex flex-col relative overflow-hidden min-h-[400px] md:h-[600px]">
         {result ? (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col h-full overflow-hidden">
             <h4 className="font-black text-white mb-2 drop-shadow-sm flex items-center gap-2">

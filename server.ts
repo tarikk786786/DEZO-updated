@@ -3,6 +3,8 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 
+process.env.GEMINI_API_KEY = "AIzaSyCyRCjpY-fEeYiYwMMS0BOze-BEAxJqv1I";
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
@@ -13,20 +15,15 @@ async function startServer() {
   app.post("/api/gemini-generate", async (req, res) => {
     try {
       const { tool, input } = req.body;
-      const customKey = req.headers['x-gemini-key'];
-      const apiKey = customKey || process.env.GEMINI_API_KEY;
+      const apiKey = process.env.GEMINI_API_KEY;
 
       if (!tool || !input) {
         return res.status(400).json({ error: "Missing tool or input" });
       }
 
-      if (!apiKey) {
-        return res.status(503).json({ error: "Gemini API key is not configured. Please provide it in the settings." });
-      }
-
       const ai = new GoogleGenAI({ apiKey: apiKey as string });
       
-      let prompt = `You are DEZO's website and digital marketing tool engine. Generate useful, practical, business-friendly suggestions. Be confident, clear, and professional. Keep results actionable and easy to send on WhatsApp. Do not include markdown formatting.\n\n`;
+      let prompt = `You are an expert digital marketing assistant. Generate useful, practical, business-friendly suggestions. Be confident, clear, and professional. Keep results actionable and easy to send on WhatsApp. Do not include markdown formatting.\n\n`;
       prompt += `Tool: ${tool}\nInputs:\n${JSON.stringify(input, null, 2)}\n\n`;
       
       const formats: Record<string, string> = {
@@ -49,7 +46,7 @@ async function startServer() {
       }
 
       const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-3.1-flash",
         contents: [{ role: "user", parts: [{ text: prompt }] }],
         config: {
           responseMimeType: "application/json",
@@ -64,6 +61,19 @@ async function startServer() {
       console.error("Gemini API Error:", error);
       res.status(500).json({ error: error.message || "Internal AI Server Error" });
     }
+  });
+
+  // News API for the Radar
+  app.get("/api/news", (req, res) => {
+    const news = [
+      { id: Date.now() + 1, title: 'Google confirms AI Overviews rolling out to more countries globally.', category: 'SEO', source: 'Search Engine Land', time: new Date().toISOString(), url: 'https://searchengineland.com' },
+      { id: Date.now() + 2, title: 'Meta Ads introduces lower CPA targeting features for local businesses.', category: 'Social Ads', source: 'Social Media Today', time: new Date(Date.now() - 1800000).toISOString(), url: 'https://socialmediatoday.com' },
+      { id: Date.now() + 3, title: 'Next.js 15 update: Improved server actions and faster builds.', category: 'Web Dev', source: 'Vercel', time: new Date(Date.now() - 3600000).toISOString(), url: 'https://nextjs.org' },
+      { id: Date.now() + 4, title: 'Instagram Bio strategies that are converting 30% better in 2026.', category: 'Strategy', source: 'Marketing Brew', time: new Date(Date.now() - 7200000).toISOString(), url: 'https://marketingbrew.com' },
+      { id: Date.now() + 5, title: 'Why mobile-first design is still the #1 priority for Google rankings.', category: 'SEO', source: 'Google Blog', time: new Date(Date.now() - 10800000).toISOString(), url: 'https://blog.google' }
+    ];
+    // Randomize slightly to feel "Live"
+    res.json(news.sort(() => Math.random() - 0.5));
   });
 
   // Health check

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { FormField } from '../ui/FormField';
 import { WhatsAppCTA } from '../ui/WhatsAppCTA';
 import { Bot, Copy, Check } from 'lucide-react';
 import { getExpertAdvice } from '../../lib/expertClient';
 
 export const SEOMetaGenerator = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
     topic: '',
     businessType: '',
@@ -25,6 +26,12 @@ export const SEOMetaGenerator = () => {
     const data = await getExpertAdvice('SEOMetaGenerator', formData);
     setResult(data);
     setLoading(false);
+    
+    if (window.innerWidth <= 768) {
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
   };
 
   const copyToClipboard = () => {
@@ -54,7 +61,7 @@ export const SEOMetaGenerator = () => {
         </form>
       </div>
 
-      <div className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 border border-main-light flex flex-col h-full">
+      <div ref={resultRef} className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 border border-main-light flex flex-col h-full">
         {result ? (
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center mb-4">

@@ -1,6 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, Suspense } from 'react';
 import { Globe, Target, TrendingUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Sparkles, OrbitControls } from '@react-three/drei';
+import * as THREE from 'three';
 
 export const RotatingText = () => {
   const phrases = [
@@ -57,190 +60,97 @@ export const FallbackImage = ({ src, alt, className, fallbackInitials }: any) =>
   return <img loading="lazy" decoding="async" src={src} alt={alt} className={className} onError={() => setError(true)} />;
 };
 
-export const HeroVisual = ({ nightMode }: any) => {
-  const [slide, setSlide] = useState(0);
-  const totalSlides = 3;
-  const [direction, setDirection] = useState(0);
+const ParticleGlobe = () => {
+  const pointsRef = useRef<THREE.Points>(null);
+  const particlesCount = 2000;
 
-  const paginate = (newDirection: number) => {
-    setDirection(newDirection);
-    setSlide((prev) => (prev + newDirection + totalSlides) % totalSlides);
-  };
+  const positions = useMemo(() => {
+    const pos = new Float32Array(particlesCount * 3);
+    const goldenRatio = (1 + Math.sqrt(5)) / 2;
+    for (let i = 0; i < particlesCount; i++) {
+        // Fibonacci sphere distribution for even spread
+        const theta = 2 * Math.PI * i / goldenRatio;
+        const phi = Math.acos(1 - 2 * (i + 0.5) / particlesCount);
+        
+        pos[i * 3] = 2.5 * Math.cos(theta) * Math.sin(phi); // x
+        pos[i * 3 + 1] = 2.5 * Math.sin(theta) * Math.sin(phi); // y
+        pos[i * 3 + 2] = 2.5 * Math.cos(phi); // z
+    }
+    return pos;
+  }, [particlesCount]);
 
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 300 : -300,
-      opacity: 0,
-      scale: 0.9
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-      scale: 1
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? 300 : -300,
-      opacity: 0,
-      scale: 0.9
-    })
-  };
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      paginate(1);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, []);
+  useFrame((state, delta) => {
+    if (pointsRef.current) {
+        pointsRef.current.rotation.y += delta * 0.1;
+        // Float effect
+        pointsRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+    }
+  });
 
   return (
-    <div className="w-full h-full relative flex flex-col items-center justify-center">
-      <div className="w-full relative h-[300px] md:h-[450px] flex items-center justify-center overflow-visible">
-        <AnimatePresence initial={false} custom={direction} mode="wait">
-          <motion.div
-            key={slide}
-            custom={direction}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              x: { type: "spring", stiffness: 260, damping: 20 },
-              opacity: { duration: 0.5 },
-              scale: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
-            }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.8}
-            onDragEnd={(e, { offset, velocity }) => {
-              const swipe = Math.abs(offset.x) > 50 || Math.abs(velocity.x) > 500;
-              if (swipe) {
-                paginate(offset.x > 0 ? -1 : 1);
-              }
-            }}
-            className="absolute inset-0 flex items-center justify-center p-4 cursor-grab active:cursor-grabbing"
-          >
-            {slide === 0 && (
-              <motion.div 
-                whileHover={{ rotateY: -10, rotateX: 5, scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                style={{ transformStyle: "preserve-3d" }}
-                className="relative w-full max-w-lg aspect-video"
-              >
-                {/* Main Glass 3D Browser Window */}
-                <div className="glass-card w-full h-[85%] rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[#030712]/80 md:backdrop-blur-xl">
-                  <div className="h-10 bg-[#0F172A]/80 border-b border-white/10 flex items-center px-5 gap-2.5">
-                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
-                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
-                    <div className="mx-auto w-1/2 h-5 bg-[#020617] border border-white/5 rounded flex items-center justify-center">
-                      <span className="text-[9px] font-bold text-slate-500 tracking-widest uppercase">design.dezo</span>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <div className="w-32 h-6 bg-white/10 rounded-full mb-6"></div>
-                    <div className="w-full h-24 bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/10 rounded-xl border border-white/5 mb-4 relative overflow-hidden">
-                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="h-12 bg-white/5 rounded-lg"></div>
-                      <div className="h-12 bg-white/5 rounded-lg"></div>
-                    </div>
-                  </div>
-                </div>
-                {/* Floating Code Snippet */}
-                <motion.div 
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 4, repeat: Infinity }}
-                  className="absolute -bottom-4 -left-4 md:-left-12 w-[60%] sm:w-[50%] bg-[#020617]/95 backdrop-blur-xl border border-white/10 rounded-xl p-4 shadow-2xl"
-                >
-                  <div className="flex gap-1.5 mb-3">
-                    <div className="w-2 h-2 rounded-full bg-red-400"></div>
-                    <div className="w-2 h-2 rounded-full bg-green-400"></div>
-                  </div>
-                  <div className="space-y-1 font-mono text-[9px] sm:text-[11px]">
-                    <div className="text-[var(--primary)]">const <span className="text-white">Growth</span> = () =&gt; {'{'}</div>
-                    <div className="pl-3 text-[var(--accent)]">render(<span className="text-white">"Premium"</span>);</div>
-                    <div className="text-[var(--primary)]">{'}'}</div>
-                  </div>
-                </motion.div>
-              </motion.div>
-            )}
+    <points ref={pointsRef}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={positions.length / 3}
+          array={positions}
+          itemSize={3}
+        />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.03}
+        color="#06b6d4"
+        transparent
+        opacity={0.8}
+        sizeAttenuation
+        blending={THREE.AdditiveBlending}
+      />
+    </points>
+  );
+};
 
-            {slide === 1 && (
-              <div className="w-full max-w-lg grid grid-cols-2 gap-4">
-                <div className="glass-card col-span-2 p-6 rounded-2xl bg-[#0F172A]/80 border border-white/10 shadow-2xl">
-                   <div className="flex justify-between items-center mb-6">
-                     <span className="text-sm font-bold text-white uppercase tracking-widest">Performance ROI</span>
-                     <TrendingUp className="text-green-400" size={20} />
-                   </div>
-                   <div className="text-4xl font-black text-white mb-2">4.8x</div>
-                   <div className="text-xs text-slate-400 mb-6">Average Return on Ad Spend</div>
-                   <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        animate={{ width: "85%" }}
-                        className="h-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]"
-                      />
-                   </div>
-                </div>
-                <div className="glass-card p-5 rounded-2xl bg-[#020617]/80 border border-white/5 shadow-xl">
-                   <div className="text-[10px] text-slate-500 font-bold uppercase mb-2">SEO Health</div>
-                   <div className="text-2xl font-bold text-green-400">100/100</div>
-                </div>
-                <div className="glass-card p-5 rounded-2xl bg-[#020617]/80 border border-white/5 shadow-xl">
-                   <div className="text-[10px] text-slate-500 font-bold uppercase mb-2">Google Ads</div>
-                   <div className="text-2xl font-bold text-[var(--primary)]">+142%</div>
-                </div>
-              </div>
-            )}
-
-            {slide === 2 && (
-              <div className="w-full max-w-lg flex flex-col items-center text-center">
-                 <div className="relative mb-8">
-                    <div className="w-32 h-32 md:w-48 md:h-48 rounded-full border-4 border-[var(--primary)]/30 flex items-center justify-center p-4">
-                       <div className="w-full h-full rounded-full border-t-4 border-[var(--accent)] animate-spin" style={{ animationDuration: '3s' }}></div>
-                    </div>
-                    <div className="absolute inset-0 flex items-center justify-center flex-col">
-                       <span className="text-3xl md:text-5xl font-black text-white">10x</span>
-                       <span className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest">Growth Boost</span>
-                    </div>
-                 </div>
-                 <div className="flex flex-wrap justify-center gap-3">
-                    {['Reliable', 'Creative', 'Strategic', 'Native'].map((word, i) => (
-                      <span key={i} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-bold text-white/80">
-                        {word}
-                      </span>
-                    ))}
-                 </div>
-              </div>
-            )}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Slide Indicators */}
-      <div className="flex items-center gap-4 mt-8 relative z-20">
-        <div className="flex gap-2">
-          {[0, 1, 2].map((i) => (
-            <button
-              key={i}
-              onClick={() => {
-                setDirection(i > slide ? 1 : -1);
-                setSlide(i);
-              }}
-              className={`h-1.5 rounded-full smooth-transition ${slide === i ? 'w-8 bg-[var(--primary)]' : 'w-2 bg-white/20'}`}
+export const HeroVisual = ({ nightMode }: any) => {
+  return (
+    <div className="w-full h-full relative cursor-grab active:cursor-grabbing overflow-hidden touch-none z-[20] rounded-3xl lg:border lg:border-white/5 lg:bg-white/[0.02]">
+      <div className="absolute inset-0 z-[0] bg-gradient-to-b from-transparent to-[#030712]/50">
+        <Suspense fallback={
+          <div className="w-full h-full flex flex-col items-center justify-center text-white/50 backdrop-blur-md">
+            <Globe className="w-8 h-8 animate-spin mb-4 opacity-50" />
+            <span className="text-xs uppercase tracking-widest font-bold">Initializing Environment</span>
+          </div>
+        }>
+          <Canvas camera={{ position: [0, 0, 6], fov: 60 }} dpr={[1, 2]}>
+            <ambientLight intensity={0.5} />
+            <directionalLight position={[10, 10, 5]} intensity={1} />
+            <ParticleGlobe />
+            {/* Glowing inner core */}
+            <mesh>
+              <sphereGeometry args={[2.4, 32, 32]} />
+              <meshBasicMaterial color="#0f172a" transparent opacity={0.6} />
+            </mesh>
+            <Sparkles count={400} scale={8} size={1.5} speed={0.4} color="#8b5cf6" opacity={0.5} />
+            <Sparkles count={200} scale={10} size={2.5} speed={0.2} color="#06b6d4" opacity={0.3} />
+            <OrbitControls 
+              enableZoom={false} 
+              enablePan={false}
+              autoRotate 
+              autoRotateSpeed={0.5} 
+              minPolarAngle={Math.PI / 3} 
+              maxPolarAngle={Math.PI / 1.5} 
             />
-          ))}
-        </div>
-        <span className="text-[10px] font-black text-white/40 font-mono">{slide + 1} / {totalSlides}</span>
+          </Canvas>
+        </Suspense>
       </div>
-      <div className="mt-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest animate-pulse flex items-center gap-2">
-        <span className="opacity-50">←</span>
-        {slide === 0 && "Design Excellence"}
-        {slide === 1 && "Marketing ROI"}
-        {slide === 2 && "Business Growth"}
-        <span className="opacity-50">→</span>
+
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center justify-center pointer-events-none z-[10] w-[90%]">
+         <div className="glass-card bg-[#030712]/70 backdrop-blur-xl rounded-2xl border border-white/10 p-4 shadow-2xl flex items-center gap-4 w-full relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+            <TrendingUp className="text-[var(--primary)] relative z-10" size={28} />
+            <div className="flex flex-col relative z-10">
+               <span className="text-white font-black text-lg sm:text-xl tracking-tight leading-none mb-1">AI & Data-Driven</span>
+               <span className="text-white/60 text-[10px] sm:text-xs font-bold uppercase tracking-widest leading-none">Scalable Ecosystems</span>
+            </div>
+         </div>
       </div>
     </div>
   );

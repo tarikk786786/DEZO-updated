@@ -23,10 +23,10 @@ export const ToolModal = ({ isOpen, onClose, title, children }: any) => {
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 30 }}
-            className="bg-main-light rounded-2xl md:rounded-3xl w-full max-w-4xl shadow-2xl relative flex flex-col border border-white/5 max-h-[92vh] sm:max-h-[85vh] mx-auto"
+            className="bg-main-light rounded-2xl md:rounded-3xl w-full max-w-4xl shadow-2xl relative flex flex-col border border-white/5 h-[92vh] sm:h-auto sm:max-h-[85vh] mx-auto overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-white/10">
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-white/10 shrink-0">
               <h3 className="text-base sm:text-xl font-black text-white px-1 leading-tight line-clamp-1">{title}</h3>
               <button 
                 onClick={onClose}
@@ -35,7 +35,7 @@ export const ToolModal = ({ isOpen, onClose, title, children }: any) => {
                 <X size={20} className="text-main-muted hover:text-[var(--primary)]" />
               </button>
             </div>
-            <div className="p-4 sm:p-6 overflow-y-auto custom-scrollbar flex-grow">
+            <div className="p-4 sm:p-6 overflow-y-auto custom-scrollbar flex-grow overscroll-contain">
               {children}
             </div>
           </motion.div>

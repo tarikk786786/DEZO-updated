@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { FormField } from '../ui/FormField';
 import { WhatsAppCTA } from '../ui/WhatsAppCTA';
 import { UserCheck, Calculator } from 'lucide-react';
 import { getExpertAdvice } from '../../lib/expertClient';
 
 export const WebsiteCostCalculator = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
     businessType: '',
     websiteType: 'Starter Website',
@@ -30,6 +31,12 @@ export const WebsiteCostCalculator = () => {
     const data = await getExpertAdvice('WebsiteCostCalculator', formData);
     setResult(data);
     setLoading(false);
+    
+    if (window.innerWidth <= 768) {
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
   };
 
   const handleChange = (e: any) => {
@@ -83,7 +90,7 @@ export const WebsiteCostCalculator = () => {
         </form>
       </div>
 
-      <div className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 text-white flex flex-col relative overflow-hidden border border-main-light min-h-[400px] md:h-auto">
+      <div ref={resultRef} className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 text-white flex flex-col relative overflow-hidden border border-main-light min-h-[400px] md:h-auto">
         <div className="absolute inset-0 bg-[url('https://transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="relative z-10 w-full flex flex-col h-full">
           {result ? (

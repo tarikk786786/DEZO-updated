@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { FormField } from '../ui/FormField';
 import { WhatsAppCTA } from '../ui/WhatsAppCTA';
 import { Calculator, UserCheck } from 'lucide-react';
 import { getExpertAdvice } from '../../lib/expertClient';
 
 export const MetaAdsBudgetCalculator = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
     industry: '',
     monthlyBudget: '15000',
@@ -25,6 +26,12 @@ export const MetaAdsBudgetCalculator = () => {
     const data = await getExpertAdvice('MetaAdsBudgetCalculator', formData);
     setResult(data);
     setLoading(false);
+    
+    if (window.innerWidth <= 768) {
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
   };
 
   return (
@@ -54,7 +61,7 @@ export const MetaAdsBudgetCalculator = () => {
         </div>
       </div>
       
-      <div className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 border border-main-light flex flex-col h-full min-h-[400px]">
+      <div ref={resultRef} className="w-full md:w-1/2 bg-main-dark rounded-2xl p-6 border border-main-light flex flex-col h-full min-h-[400px]">
         {result ? (
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-center gap-2 mb-4">
