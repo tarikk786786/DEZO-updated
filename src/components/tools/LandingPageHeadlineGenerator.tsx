@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FormField } from '../ui/FormField';
 import { WhatsAppCTA } from '../ui/WhatsAppCTA';
-import { Bot, Copy, Check } from 'lucide-react';
+import { Zap, Copy, Check } from 'lucide-react';
 import { getExpertAdvice } from '../../lib/expertClient';
 
 export const LandingPageHeadlineGenerator = () => {
@@ -40,7 +40,7 @@ export const LandingPageHeadlineGenerator = () => {
           <FormField label="Target Audience" id="audience" value={formData.audience} onChange={handleChange} required placeholder="e.g., Marketing Agencies" />
           <FormField label="Main Benefit" id="benefit" value={formData.benefit} onChange={handleChange} required placeholder="e.g., Get 10x more leads automatically" />
           <button type="submit" disabled={loading} className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[var(--accent)] smooth-transition">
-            {loading ? <span className="animate-pulse">Generating...</span> : <><Bot size={18} /> Generate Headlines</>}
+            {loading ? <span className="animate-pulse">Generating...</span> : <><Zap size={18} /> Generate Headlines</>}
           </button>
         </form>
       </div>
@@ -79,7 +79,7 @@ export const LandingPageHeadlineGenerator = () => {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center text-center h-full text-main-muted opacity-50 py-10">
-            <Bot size={48} className="mb-4 text-[var(--primary)]" />
+            <Zap size={48} className="mb-4 text-[var(--primary)]" />
             <p className="font-bold">Enter details to generate high-converting landing page copy.</p>
           </div>
         )}

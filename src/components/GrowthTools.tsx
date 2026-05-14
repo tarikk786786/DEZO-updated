@@ -100,7 +100,7 @@ export const GrowthTools = () => {
           <div className="text-center mb-16">
             <h2 className="clamp-h2 font-black text-white tracking-tight mb-4">Professional Growth Tools</h2>
             <p className="text-main-muted max-w-2xl mx-auto text-sm md:text-base leading-relaxed mb-6">
-              Use our expert-crafted tools to calculate costs, plan your ad budgets, and generate converting copy directly inside our website.
+              Use our pro-crafted tools to calculate costs, plan your ad budgets, and generate converting copy directly inside our website.
             </p>
           </div>
         </Reveal>

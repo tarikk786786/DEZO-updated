@@ -118,8 +118,9 @@ export default function App() {
     
     document.title = "Dezo | Web Development & Digital Marketing Agency India";
 
-    const timer1 = setTimeout(() => setIsFadingOut(true), 300);
-    const timer2 = setTimeout(() => setIsLoading(false), 600);
+    const isMobile = window.innerWidth < 768;
+    const timer1 = setTimeout(() => setIsFadingOut(true), isMobile ? 800 : 1200);
+    const timer2 = setTimeout(() => setIsLoading(false), isMobile ? 1200 : 1600);
     
     let tickingScroll = false;
     const handleScroll = () => {
@@ -234,7 +235,13 @@ Message: ${formData.message}`;
       window.scrollTo({top: 0});
       return; 
     } 
-    const sectionId = item.toLowerCase().replace(' ', '-');
+    
+    let sectionId = item.toLowerCase().replace(' ', '-');
+    if (item === 'Home') sectionId = 'home';
+    if (item === 'Portfolio') sectionId = 'latest-work';
+    if (item === 'Live Radar') sectionId = 'radar';
+    if (item === 'Latest Work') sectionId = 'latest-work';
+
     if (location.pathname !== '/') {
       navigate('/');
       setTimeout(() => {
@@ -275,17 +282,83 @@ Message: ${formData.message}`;
 
   if (isLoading) {
     return (
-      <div className={`fixed inset-0 z-[200] bg-main-dark flex flex-col items-center justify-center smooth-transition ${isFadingOut ? 'opacity-0 scale-105' : 'opacity-100 scale-100'}`}>
+      <motion.div 
+        initial={{ opacity: 1 }}
+        animate={{ opacity: isFadingOut ? 0 : 1 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="fixed inset-0 z-[200] bg-[#050505] flex items-center justify-center overflow-hidden font-mono"
+      >
         <ThemeStyles />
-        <div className="relative flex flex-col items-center">
-          <div className="w-32 h-[3px] bg-slate-800 mb-8 overflow-hidden rounded-full shadow-[0_0_20px_rgba(124,58,237,0.5)]">
-             <div className="w-full h-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] origin-left animate-[scale-x_0.6s_ease-in-out_forwards]"></div>
-          </div>
-          <span className="logo-animated text-main-light font-black tracking-[0.4em] text-5xl mb-3">DEZO</span>
-          <span className="text-[var(--accent)] font-bold tracking-[0.2em] text-[10px] uppercase">Digital Excellence</span>
+        
+        {/* Hacker Matrix Grid */}
+        <div 
+          className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+          style={{ backgroundImage: 'linear-gradient(rgba(0,255,100,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,100,0.5) 1px, transparent 1px)', backgroundSize: '30px 30px' }} 
+        />
+
+        <div className="relative z-10 w-full max-w-4xl px-4 md:px-10 h-screen flex flex-col justify-end pb-20 sm:pb-32">
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="w-full"
+          >
+            {/* Code Content Floating on Screen */}
+            <div className="text-sm sm:text-base md:text-xl lg:text-2xl text-gray-300 leading-snug sm:leading-relaxed overflow-hidden">
+              <div className="flex flex-col gap-3 sm:gap-4 font-mono">
+                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.05 }} className="text-[#A78BFA] flex items-center gap-3">
+                   <div className="w-2 h-2 rounded-full bg-[#34D399]" /> Checking Node.js environment...
+                </motion.div>
+                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 }} className="flex items-center gap-3">
+                   <div className="w-2 h-2 rounded-full bg-[#34D399]" /> Resolving dependencies
+                </motion.div>
+                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }} className="text-[#60A5FA] flex items-center gap-3">
+                   <div className="w-2 h-2 rounded-full bg-[#34D399]" /> Initializing <span className="font-black text-white pl-1">DEZO</span> Core Modules
+                </motion.div>
+                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.35 }} className="pl-5 text-gray-400">
+                   {'>'} Bundling Next-Gen Web Assets...
+                </motion.div>
+                
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45 }} className="my-4 border-l-4 border-[#10B981] pl-6 py-2 bg-[#10B981]/5 backdrop-blur-sm">
+                   <div className="text-[#10B981] font-black tracking-widest uppercase mb-3 text-lg md:text-xl">Building Production Architecture</div>
+                   <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-xs sm:text-sm md:text-base font-bold">
+                     <span className="text-gray-400">React.js Engine</span><span className="text-[#FCD34D]">Active</span>
+                     <span className="text-gray-400">SEO Meta Layers</span><span className="text-[#FCD34D]">Injected</span>
+                     <span className="text-gray-400">UI/UX Styling</span><span className="text-[#FCD34D]">Compiled</span>
+                     <span className="text-gray-400">Analytics Pixel</span><span className="text-[#FCD34D]">Fired</span>
+                   </div>
+                </motion.div>
+                
+                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.65 }} className="text-[#34D399] font-black mt-4 text-base sm:text-xl md:text-2xl drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]">
+                   $ DEZO connection established <span className="text-white ml-2">v.2.0</span>
+                </motion.div>
+
+                <motion.div 
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}
+                  className="flex items-center gap-3 mt-8 text-[#F472B6]"
+                >
+                  <span className="font-black text-xl sm:text-3xl md:text-5xl uppercase tracking-[0.2em] font-sans">LAUNCHING</span>
+                  <motion.span 
+                    animate={{ opacity: [1, 0, 1] }} 
+                    transition={{ repeat: Infinity, duration: 0.6 }}
+                    className="w-4 sm:w-6 md:w-8 h-8 sm:h-12 md:h-16 bg-[#F472B6]"
+                  />
+                </motion.div>
+              </div>
+            </div>
+            
+            {/* Progress line full width at bottom */}
+            <div className="fixed bottom-0 left-0 h-[4px] sm:h-[6px] w-full bg-[#0D0D11] z-50">
+                <motion.div 
+                  initial={{ x: "-100%" }}
+                  animate={{ x: "0%" }}
+                  transition={{ duration: 0.8, ease: "circOut" }}
+                  className="absolute inset-0 bg-gradient-to-r from-[#8B5CF6] via-[#3B82F6] to-[#10B981] shadow-[0_0_20px_rgba(16,185,129,0.8)]"
+                />
+            </div>
+          </motion.div>
         </div>
-        <style dangerouslySetInnerHTML={{__html: `@keyframes scale-x { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }`}} />
-      </div>
+      </motion.div>
     );
   }
 
@@ -356,11 +429,14 @@ Message: ${formData.message}`;
 
         {/* Mobile Navigation Drawer */}
         <div className={`fixed inset-0 bg-panel-white z-[65] lg:hidden flex flex-col justify-center px-6 smooth-transition transform ${mobileMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
+          <button aria-label="Close Mobile Menu" className="absolute top-4 right-4 p-2 z-[70] active:scale-90 smooth-transition" onClick={() => setMobileMenuOpen(false)}>
+            <X size={28} className="text-main-dark" />
+          </button>
           <div className="flex flex-col space-y-6 text-center mt-16">
-            {['Services', 'Latest Work', 'About', 'Process', 'FAQ'].map((item, i) => (
+            {['Home', 'Services', 'Portfolio', 'Pricing', 'Free Tools', 'Live Radar', 'Contact'].map((item, i) => (
                <a 
                  key={item} 
-                 href={item === 'About' ? '#' : `#${item.toLowerCase().replace(' ', '-')}`} 
+                 href={item === 'Home' ? '#' : item === 'Portfolio' ? '#latest-work' : item === 'Live Radar' ? '#radar' : `#${item.toLowerCase().replace(' ', '-')}`} 
                  onClick={(e) => handleNavClick(e, item)} 
                  className="text-2xl font-black tracking-tight text-main-dark hover:text-[var(--primary)] smooth-transition" 
                  style={{ transitionDelay: `${i * 50}ms` }}
@@ -368,7 +444,7 @@ Message: ${formData.message}`;
                 {item}
               </a>
             ))}
-            <a href="#contact" onClick={(e) => handleNavClick(e, 'contact')} className="mt-8 px-8 py-4 bg-[var(--primary)] text-white text-lg font-bold rounded-full mx-auto inline-block active:scale-95 smooth-transition">
+            <a href="#contact" onClick={(e) => handleNavClick(e, 'Contact')} className="mt-8 px-8 py-4 bg-[var(--primary)] text-white text-lg font-bold rounded-full mx-auto inline-block active:scale-95 smooth-transition">
               Start a Project
             </a>
           </div>
@@ -391,8 +467,8 @@ Message: ${formData.message}`;
             <div className="max-w-[90rem] mx-auto px-4 lg:px-8 relative z-10">
               <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-16">
                 {/* Visual / Animation Column */}
-                <div className="w-full sm:w-[85%] lg:w-1/2 h-[320px] sm:h-[400px] lg:h-[600px] relative order-1 lg:order-2 mb-2 lg:mb-0 mx-auto overflow-hidden sm:overflow-visible">
-                  <Reveal direction="down" delay={200} className="w-full h-full absolute inset-0">
+                <div className="w-full sm:w-[85%] lg:w-1/2 h-[320px] sm:h-[400px] lg:h-[600px] relative order-1 lg:order-2 mb-2 lg:mb-0 mx-auto overflow-visible">
+                  <Reveal direction="down" delay={200} className="w-full h-full absolute inset-0 overflow-visible">
                      <HeroVisual nightMode={!isGlowMode} />
                   </Reveal>
                 </div>

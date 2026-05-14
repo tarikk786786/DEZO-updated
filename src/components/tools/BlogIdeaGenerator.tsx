@@ -44,7 +44,7 @@ export const BlogIdeaGenerator = () => {
           <FormField label="Tone / Style" type="select" id="tone" value={formData.tone} onChange={handleChange} options={["Informative & Educational", "Opinionated & Bold", "Listicles & Guides", "Case Studies & Storytelling"]} />
           <FormField label="Focus Keyphrase (Optional)" id="focusKeyphrase" value={formData.focusKeyphrase} onChange={handleChange} placeholder="e.g., home workouts for men" />
           <button type="submit" disabled={loading} className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[var(--accent)] smooth-transition mt-4">
-            {loading ? <span className="animate-pulse">Generating Expert Topics...</span> : <><UserCheck size={18} /> Generate Blog Strategy</>}
+            {loading ? <span className="animate-pulse">Generating Pro Topics...</span> : <><UserCheck size={18} /> Generate Blog Strategy</>}
           </button>
         </form>
       </div>
@@ -52,7 +52,7 @@ export const BlogIdeaGenerator = () => {
         {result ? (
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center mb-4">
-              <h4 className="font-black text-white">Expert Content Strategy</h4>
+              <h4 className="font-black text-white">Pro Content Strategy</h4>
               <button onClick={copyToClipboard} className="flex items-center gap-1 text-xs font-bold text-[var(--primary)] hover:text-[var(--accent)] smooth-transition">
                 {copied ? <Check size={14} /> : <Copy size={14} />} {copied ? 'Copied' : 'Copy All'}
               </button>
@@ -73,7 +73,7 @@ export const BlogIdeaGenerator = () => {
               ))}
             </div>
             <div className="mt-auto">
-              <WhatsAppCTA message={`Hi DEZO, Expert generated a blog strategy for my ${formData.niche} business. Can you help me build a website with an SEO-optimized blog section?`} label="Get SEO Blog Website ₹5,999" />
+              <WhatsAppCTA message={`Hi DEZO, Pro generated a blog strategy for my ${formData.niche} business. Can you help me build a website with an SEO-optimized blog section?`} label="Get SEO Blog Website ₹5,999" />
             </div>
           </div>
         ) : (

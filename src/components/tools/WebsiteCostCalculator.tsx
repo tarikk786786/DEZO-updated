@@ -44,7 +44,7 @@ export const WebsiteCostCalculator = () => {
   };
 
   const msg = result 
-    ? `Hi DEZO, I used your Expert Website Cost Calculator. Business: ${formData.businessType}. Website Type: ${formData.websiteType}. Estimated Package: ${result.recommendedPackage}. Estimated Price: ${result.estimatedPriceRange}. Please guide me.`
+    ? `Hi DEZO, I used your Pro Website Cost Calculator. Business: ${formData.businessType}. Website Type: ${formData.websiteType}. Estimated Package: ${result.recommendedPackage}. Estimated Price: ${result.estimatedPriceRange}. Please guide me.`
     : `Hi DEZO, I need a website. Please guide me.`;
 
   return (
@@ -85,7 +85,7 @@ export const WebsiteCostCalculator = () => {
           </div>
 
           <button type="submit" disabled={loading} className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[var(--accent)] smooth-transition mt-4">
-            {loading ? <span className="animate-pulse">Analyzing Requirements...</span> : <><UserCheck size={18} /> Calculate Expert Estimate</>}
+            {loading ? <span className="animate-pulse">Analyzing Requirements...</span> : <><UserCheck size={18} /> Calculate Pro Estimate</>}
           </button>
         </form>
       </div>
@@ -97,7 +97,7 @@ export const WebsiteCostCalculator = () => {
             <div className="flex flex-col h-full">
               <div className="text-center mb-6">
                 <Calculator size={32} className="text-[var(--primary)] mx-auto mb-2" />
-                <p className="text-xs font-bold text-main-muted uppercase tracking-widest mb-1">Expert Recommendation & Estimate</p>
+                <p className="text-xs font-bold text-main-muted uppercase tracking-widest mb-1">Pro Recommendation & Estimate</p>
                 <h2 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">{result.estimatedPriceRange}</h2>
               </div>
               
@@ -129,7 +129,7 @@ export const WebsiteCostCalculator = () => {
           ) : (
             <div className="flex flex-col items-center justify-center text-center h-full text-main-muted opacity-50 py-10 my-auto">
               <UserCheck size={48} className="mb-4 text-[var(--primary)]" />
-              <p className="font-bold">Enter your requirements to get an Expert-crafted cost estimate and package recommendation.</p>
+              <p className="font-bold">Enter your requirements to get an Pro-crafted cost estimate and package recommendation.</p>
             </div>
           )}
         </div>

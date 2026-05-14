@@ -53,7 +53,7 @@ export const MetaAdsBudgetCalculator = () => {
             disabled={loading}
             className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[var(--accent)] smooth-transition mt-4"
           >
-            {loading ? <span className="animate-pulse">Calculating Expert Strategy...</span> : <><UserCheck size={18} /> Get Expert Target Strategy</>}
+            {loading ? <span className="animate-pulse">Calculating Pro Strategy...</span> : <><UserCheck size={18} /> Get Pro Target Strategy</>}
           </button>
         </form>
         <div className="mt-4 p-4 bg-[var(--primary)]/10 border border-[var(--primary)]/20 rounded-xl text-xs font-medium text-[var(--primary)]">
@@ -66,7 +66,7 @@ export const MetaAdsBudgetCalculator = () => {
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-center gap-2 mb-4">
               <Calculator className="text-[var(--primary)]" size={24} />
-              <h4 className="font-black text-white text-xl">Expert Projections</h4>
+              <h4 className="font-black text-white text-xl">Pro Projections</h4>
             </div>
             
             <div className="space-y-4 flex-grow overflow-y-auto mb-4 pr-2">
@@ -105,13 +105,13 @@ export const MetaAdsBudgetCalculator = () => {
             </div>
             
             <div className="mt-auto">
-              <WhatsAppCTA message={`Hi DEZO, I want to run Meta Ads. Expert suggests ${result.estimatedLeadRange} leads for my ${formData.industry} business. Please help me build a Landing Page (₹3,999) + Ad Setup to achieve this.`} label="Build Funnel & Run Ads" />
+              <WhatsAppCTA message={`Hi DEZO, I want to run Meta Ads. Pro suggests ${result.estimatedLeadRange} leads for my ${formData.industry} business. Please help me build a Landing Page (₹3,999) + Ad Setup to achieve this.`} label="Build Funnel & Run Ads" />
             </div>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center text-center h-full text-main-muted opacity-50 py-10 my-auto">
             <Calculator size={48} className="mb-4 text-[var(--primary)]" />
-            <p className="font-bold">Enter your budget details to get Expert-powered projections and a funnel strategy.</p>
+            <p className="font-bold">Enter your budget details to get Pro projections and a funnel strategy.</p>
           </div>
         )}
       </div>

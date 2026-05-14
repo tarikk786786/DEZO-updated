@@ -126,6 +126,30 @@ export const AboutUsPage = ({ onBack }: { onBack: () => void }) => {
             </div>
           </Reveal>
 
+          <Reveal direction="up" delay={550}>
+            <div className="bg-panel-white p-10 md:p-14 rounded-[2.5rem] border border-main-light shadow-xl relative overflow-hidden group">
+              <div className="absolute top-[-10%] right-[-5%] w-[250px] h-[250px] bg-[var(--primary)] opacity-[0.05] group-hover:opacity-[0.1] blur-[60px] rounded-full smooth-transition"></div>
+              
+              <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
+                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shrink-0 shadow-lg border-4 border-white bg-gradient-to-br from-[var(--primary)] to-[var(--accent)]">
+                  <a href="https://ibb.co/vvC6hbT3" target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+                    <img src="https://i.ibb.co/1JYtM3Pr/Whats-App-Image-2026-05-08-at-9-13-17-AM-1.jpg" alt="Tarik Islam Director" className="w-full h-full object-cover" />
+                  </a>
+                </div>
+                <div>
+                  <h3 className="text-3xl font-black text-main-dark mb-2">Tarik Islam</h3>
+                  <p className="text-[var(--primary)] font-bold uppercase tracking-widest text-sm mb-6">Director & Founder</p>
+                  <p className="mb-4">
+                    His mission is simple: <span className="text-main-dark font-black">to stop businesses from settling for average.</span> In an online world flooded with basic templates and slow performance, Tarik built DEZO to bring premium digital engineering and high-performance marketing to brands that want to dominate their industry.
+                  </p>
+                  <p className="italic text-main-dark font-medium border-l-4 border-[var(--accent)] pl-4">
+                    "We don't just write code or run ads. We build digital authority. If your website doesn't make your competitors nervous, we haven't done our job."
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+
           <Reveal direction="up" delay={600}>
             <div className="bg-panel-white p-10 md:p-14 rounded-[2.5rem] border border-[var(--primary)]/20 shadow-[0_20px_50px_var(--primary)_0.1] text-center">
               <p className="text-2xl md:text-3xl leading-snug mb-8">

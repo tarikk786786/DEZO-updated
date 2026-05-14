@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { FormField } from '../ui/FormField';
 import { WhatsAppCTA } from '../ui/WhatsAppCTA';
-import { Bot, Copy, Check } from 'lucide-react';
+import { Zap, Copy, Check } from 'lucide-react';
 import { getExpertAdvice } from '../../lib/expertClient';
 
 export const SEOMetaGenerator = () => {
@@ -56,7 +56,7 @@ export const SEOMetaGenerator = () => {
             disabled={loading}
             className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[var(--accent)] smooth-transition"
           >
-            {loading ? <span className="animate-pulse">Generating...</span> : <><Bot size={18} /> Generate SEO Pack</>}
+            {loading ? <span className="animate-pulse">Generating...</span> : <><Zap size={18} /> Generate SEO Pack</>}
           </button>
         </form>
       </div>
@@ -104,7 +104,7 @@ export const SEOMetaGenerator = () => {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center text-center h-full text-main-muted opacity-50 py-10">
-            <Bot size={48} className="mb-4 text-[var(--primary)]" />
+            <Zap size={48} className="mb-4 text-[var(--primary)]" />
             <p className="font-bold">Enter details to generate your optimized SEO tags instantly.</p>
           </div>
         )}

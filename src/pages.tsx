@@ -67,7 +67,13 @@ const PageLayout = ({ title, h1, meta, children, schemaData }: any) => {
           <div className="bg-panel-white border border-main-light p-8 rounded-3xl mt-12 text-center shadow-sm">
             <h2 className="text-2xl font-black mb-4 text-main-dark">Ready to Start Your Project?</h2>
             <p className="mb-6 font-medium">Get a free website audit or consultation for your digital growth strategy.</p>
-            <Link to="/" onClick={() => setTimeout(() => document.getElementById('contact')?.scrollIntoView({behavior:'smooth'}), 100)} className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white font-bold rounded-full hover:-translate-y-1 shadow-[0_10px_20px_rgba(124,58,237,0.4)] smooth-transition active:scale-95">Get Free Website Audit</Link>
+            <Link to="/" onClick={() => {
+              window.scrollTo(0,0);
+              setTimeout(() => {
+                const el = document.getElementById('contact');
+                if(el) el.scrollIntoView({behavior:'smooth'});
+              }, 300);
+            }} className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white font-bold rounded-full hover:-translate-y-1 shadow-[0_10px_20px_rgba(124,58,237,0.4)] smooth-transition active:scale-95">Get Free Website Audit</Link>
           </div>
         </div>
       </main>
@@ -588,7 +594,13 @@ export const ContactPage = () => {
         <div className="bg-panel-white p-6 rounded-2xl border border-main-light shadow-sm text-center">
           <h3 className="text-xl font-bold text-main-dark mb-4">Schedule a Free Consultation</h3>
           <p className="mb-6 text-main-muted text-sm">We'll review your current digital presence and provide an actionable strategy.</p>
-          <Link to="/" onClick={() => setTimeout(() => document.getElementById('contact')?.scrollIntoView({behavior:'smooth'}), 100)} className="inline-block px-8 py-4 bg-[var(--primary)] text-white font-bold rounded-full hover:-translate-y-1 shadow-md smooth-transition">Open Contact Form</Link>
+          <Link to="/" onClick={() => {
+            window.scrollTo(0,0);
+            setTimeout(() => {
+              const el = document.getElementById('contact');
+              if(el) el.scrollIntoView({behavior:'smooth'});
+            }, 300);
+          }} className="inline-block px-8 py-4 bg-[var(--primary)] text-white font-bold rounded-full hover:-translate-y-1 shadow-md smooth-transition">Open Contact Form</Link>
         </div>
       </div>
     </div>
@@ -612,7 +624,13 @@ export const PortfolioPage = () => {
   >
     <p className="text-xl text-main-muted mb-8 leading-relaxed">We have partnered with 50+ businesses across 10 industries to deliver premium digital solutions. From blazing fast landing pages to robust ecommerce platforms, view our recent projects.</p>
     <div className="text-center mt-8">
-      <Link to="/" onClick={() => setTimeout(() => document.getElementById('latest-work')?.scrollIntoView({behavior:'smooth'}), 100)} className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white font-bold rounded-full shadow-lg hover:-translate-y-1 smooth-transition">View All Projects</Link>
+      <Link to="/" onClick={() => {
+        window.scrollTo(0,0);
+        setTimeout(() => {
+          const el = document.getElementById('latest-work');
+          if(el) el.scrollIntoView({behavior:'smooth'});
+        }, 300);
+      }} className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white font-bold rounded-full shadow-lg hover:-translate-y-1 smooth-transition">View All Projects</Link>
     </div>
   </PageLayout>
   );

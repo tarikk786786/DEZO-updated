@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FormField } from '../ui/FormField';
 import { WhatsAppCTA } from '../ui/WhatsAppCTA';
-import { Megaphone, Copy, Check, Bot } from 'lucide-react';
+import { Megaphone, Copy, Check, Zap } from 'lucide-react';
 import { getExpertAdvice } from '../../lib/expertClient';
 
 export const MetaAdsCopyGenerator = () => {
@@ -58,7 +58,7 @@ export const MetaAdsCopyGenerator = () => {
             disabled={loading}
             className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[var(--accent)] smooth-transition mt-4"
           >
-            {loading ? <span className="animate-pulse">Writing Expert Ads...</span> : <><Bot size={18} /> Generate Ad Copy</>}
+            {loading ? <span className="animate-pulse">Writing Pro Ads...</span> : <><Zap size={18} /> Generate Ad Copy</>}
           </button>
           <p className="text-[10px] uppercase font-bold tracking-widest text-main-muted mt-2 text-center">Good ads require a high-converting landing page.</p>
         </form>
@@ -68,7 +68,7 @@ export const MetaAdsCopyGenerator = () => {
         {result ? (
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center mb-4">
-              <h4 className="font-black text-white">Your Expert Ad Strategy</h4>
+              <h4 className="font-black text-white">Your Pro Ad Strategy</h4>
               <button onClick={copyToClipboard} className="flex items-center gap-1 text-xs font-bold text-[var(--primary)] hover:text-[var(--accent)] smooth-transition">
                 {copied ? <Check size={14} /> : <Copy size={14} />} {copied ? 'Copied' : 'Copy All'}
               </button>

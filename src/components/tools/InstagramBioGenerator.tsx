@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FormField } from '../ui/FormField';
 import { WhatsAppCTA } from '../ui/WhatsAppCTA';
-import { Bot, Copy, Check } from 'lucide-react';
+import { Zap, Copy, Check } from 'lucide-react';
 import { getExpertAdvice } from '../../lib/expertClient';
 
 export const InstagramBioGenerator = () => {
@@ -48,7 +48,7 @@ export const InstagramBioGenerator = () => {
           <FormField label="Contact Method / CTA" id="contactMethod" value={formData.contactMethod} onChange={handleChange} required placeholder="e.g., DM for details / Link below" />
           <FormField label="Tone" type="select" id="tone" value={formData.tone} onChange={handleChange} options={["Professional & Direct", "Playful & Casual", "Luxury & Minimal"]} />
           <button type="submit" disabled={loading} className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[var(--accent)] smooth-transition mt-4">
-            {loading ? <span className="animate-pulse">Generating Expert Bios...</span> : <><Bot size={18} /> Generate Perfect Bio</>}
+            {loading ? <span className="animate-pulse">Generating Pro Bios...</span> : <><Zap size={18} /> Generate Perfect Bio</>}
           </button>
         </form>
       </div>
@@ -98,7 +98,7 @@ export const InstagramBioGenerator = () => {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center text-center h-full text-main-muted opacity-50 py-10 my-auto">
-            <Bot size={48} className="mb-4 text-[var(--primary)]" />
+            <Zap size={48} className="mb-4 text-[var(--primary)]" />
             <p className="font-bold">Create an engaging, Conversion-focused Instagram bio.</p>
           </div>
         )}
