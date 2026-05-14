@@ -119,8 +119,8 @@ export default function App() {
     document.title = "Dezo | Web Development & Digital Marketing Agency India";
 
     const isMobile = window.innerWidth < 768;
-    const timer1 = setTimeout(() => setIsFadingOut(true), isMobile ? 800 : 1200);
-    const timer2 = setTimeout(() => setIsLoading(false), isMobile ? 1200 : 1600);
+    const timer1 = setTimeout(() => setIsFadingOut(true), isMobile ? 300 : 500);
+    const timer2 = setTimeout(() => setIsLoading(false), isMobile ? 600 : 800);
     
     let tickingScroll = false;
     const handleScroll = () => {

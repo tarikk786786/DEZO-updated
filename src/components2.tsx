@@ -77,6 +77,11 @@ const RealNightEarth = ({ isDay }: { isDay: boolean }) => {
     const currentScroll = useRef(0);
 
     const activeMap = isDay ? dayMap : nightMap;
+    // VERY IMPORTANT FOR PERFORMANCE
+    const isMobile = window.innerWidth < 768;
+    const geomDetail = isMobile ? 24 : 48; // lower segments for mobile
+    const torusRingDetail = isMobile ? 32 : 64; 
+    const glowDetail = isMobile ? 12 : 32;
 
     React.useEffect(() => {
         const handleScroll = () => {
@@ -116,7 +121,6 @@ const RealNightEarth = ({ isDay }: { isDay: boolean }) => {
         if(groupRef.current) {
             groupRef.current.rotation.y += delta * 0.05;
             // Less extreme scroll effect on mobile to save performance
-            const isMobile = window.innerWidth < 768;
             const scrollMultiplier = isMobile ? 0.0005 : 0.001;
             groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.1) * 0.02 + currentScroll.current * scrollMultiplier;
             groupRef.current.position.y = currentScroll.current * -0.003;
@@ -138,7 +142,7 @@ const RealNightEarth = ({ isDay }: { isDay: boolean }) => {
         <group ref={groupRef} rotation={[0, -Math.PI / 2, 0]}>
             {/* Ambient Outer Glow / Atmosphere */}
             <mesh>
-                <sphereGeometry args={[2.5, 32, 32]} />
+                <sphereGeometry args={[2.5, glowDetail, glowDetail]} />
                 <meshBasicMaterial 
                     color={isDay ? "#60a5fa" : "#4338ca"} 
                     transparent 
@@ -148,7 +152,7 @@ const RealNightEarth = ({ isDay }: { isDay: boolean }) => {
                 />
             </mesh>
             <mesh>
-                <sphereGeometry args={[2.7, 32, 32]} />
+                <sphereGeometry args={[2.7, glowDetail, glowDetail]} />
                 <meshBasicMaterial 
                     color={isDay ? "#34d399" : "#10b981"} 
                     transparent 
@@ -158,15 +162,17 @@ const RealNightEarth = ({ isDay }: { isDay: boolean }) => {
                 />
             </mesh>
             
-            {/* Inner green wireframe for hacker feel overlay on earth */}
-            <mesh>
-                <icosahedronGeometry args={[2.25, 3]} />
-                <meshBasicMaterial color={isDay ? "#34d399" : "#10b981"} wireframe transparent opacity={0.05} />
-            </mesh>
+            {/* Inner green wireframe for hacker feel overlay on earth (Optimized) */}
+            {!isMobile && (
+              <mesh>
+                  <icosahedronGeometry args={[2.25, 2]} />
+                  <meshBasicMaterial color={isDay ? "#34d399" : "#10b981"} wireframe transparent opacity={0.05} />
+              </mesh>
+            )}
 
             {/* Core Dark Energy Sphere / Night Earth */}
             <mesh ref={globeRef}>
-                <sphereGeometry args={[2.2, 48, 48]} />
+                <sphereGeometry args={[2.2, geomDetail, geomDetail]} />
                 <meshStandardMaterial 
                     map={activeMap}
                     roughness={0.6}
@@ -179,7 +185,7 @@ const RealNightEarth = ({ isDay }: { isDay: boolean }) => {
 
             {/* Clouds Layer */}
             <mesh ref={cloudsRef}>
-                <sphereGeometry args={[2.22, 48, 48]} />
+                <sphereGeometry args={[2.22, geomDetail, geomDetail]} />
                 <meshStandardMaterial 
                     map={cloudsMap}
                     transparent
@@ -192,15 +198,15 @@ const RealNightEarth = ({ isDay }: { isDay: boolean }) => {
             {/* Orbital Code Rings - Saturn ring style */}
             <group ref={codeRingsRef}>
                <mesh rotation={[Math.PI/2, 0, 0]}>
-                   <torusGeometry args={[3.2, 0.005, 64, 100]} />
+                   <torusGeometry args={[3.2, 0.005, 16, torusRingDetail]} />
                    <meshBasicMaterial color={isDay ? "#0ea5e9" : "#38bdf8"} transparent opacity={0.4} />
                </mesh>
                <mesh rotation={[Math.PI/2, Math.PI/6, 0]}>
-                   <torusGeometry args={[3.6, 0.005, 64, 100]} />
+                   <torusGeometry args={[3.6, 0.005, 16, torusRingDetail]} />
                    <meshBasicMaterial color={isDay ? "#6366f1" : "#8b5cf6"} transparent opacity={0.3} />
                </mesh>
                <mesh rotation={[0, Math.PI/2, Math.PI/4]}>
-                   <torusGeometry args={[4, 0.005, 64, 100]} />
+                   <torusGeometry args={[4, 0.005, 16, torusRingDetail]} />
                    <meshBasicMaterial color={isDay ? "#059669" : "#10b981"} transparent opacity={0.2} />
                </mesh>
                
@@ -247,6 +253,7 @@ const RealNightEarth = ({ isDay }: { isDay: boolean }) => {
 
 export const HeroVisual = ({ nightMode }: any) => {
   const [isDay, setIsDay] = useState(false);
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   const customCursor = isDay 
     ? `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><text x="50%" y="54%" font-size="42" dominant-baseline="middle" text-anchor="middle" style="filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5)) drop-shadow(0 0 12px rgba(250,204,21,0.8));">🛰️</text></svg>') 32 32, auto`
@@ -264,18 +271,18 @@ export const HeroVisual = ({ nightMode }: any) => {
             <span className="text-xs uppercase tracking-widest font-bold">Initializing Environment</span>
           </div>
         }>
-          <Canvas camera={{ position: [0, 0, 8.5], fov: 50 }} dpr={[1, 1.5]} performance={{ min: 0.5 }}>
+          <Canvas camera={{ position: [0, 0, 8.5], fov: 50 }} dpr={isMobile ? [1, 1] : [1, 1.5]} performance={{ min: 0.5 }}>
             <ambientLight intensity={isDay ? 2.5 : 1.5} />
             <pointLight position={[10, 10, 5]} intensity={isDay ? 3.5 : 2.5} color={isDay ? "#fbbf24" : "#06b6d4"} />
             <pointLight position={[-10, -10, -5]} intensity={isDay ? 3.5 : 2.5} color={isDay ? "#34d399" : "#8b5cf6"} />
             <RealNightEarth isDay={isDay} />
-            <Sparkles count={150} scale={10} size={1.5} speed={0.4} color={isDay ? "#34d399" : "#8b5cf6"} opacity={0.5} />
-            {!isDay && <Stars radius={10} depth={50} count={600} factor={3} saturation={0} fade speed={1} />}
+            <Sparkles count={isMobile ? 50 : 150} scale={10} size={1.5} speed={0.4} color={isDay ? "#34d399" : "#8b5cf6"} opacity={0.5} />
+            {!isDay && <Stars radius={10} depth={50} count={isMobile ? 200 : 600} factor={3} saturation={0} fade speed={1} />}
             <OrbitControls 
               enableZoom={false} 
               enablePan={false}
               autoRotate 
-              autoRotateSpeed={1.0} 
+              autoRotateSpeed={isMobile ? 0.5 : 1.0} 
               minPolarAngle={Math.PI / 2.5} 
               maxPolarAngle={Math.PI / 1.5} 
             />
