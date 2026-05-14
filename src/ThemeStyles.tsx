@@ -44,10 +44,12 @@ export const ThemeStyles = () => (
       --gold: var(--accent-premium);
       --border-light: var(--border-soft);
       --border-dark: var(--border-soft);
-      --anim-speed: 0.4s;
+      --anim-speed: 0.3s;
       
       --line-height-body: 1.6;
       --hero-bg: radial-gradient(circle at top center, rgba(59, 130, 246, 0.15) 0%, var(--bg-main) 100%);
+      
+      --glass-blur: 16px;
     }
 
     body {
@@ -58,47 +60,54 @@ export const ThemeStyles = () => (
       -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      text-rendering: optimizeLegibility;
     }
+
+    /* Rendering Optimizations */
+    section {
+      content-visibility: auto;
+      contain-intrinsic-size: 1px 500px;
+    }
+    
+    #home { content-visibility: visible; }
 
     /* Ultra-smooth transitions */
     .bg-main-dark, .bg-main-light, .bg-panel-white, 
     .text-main-dark, .text-main-light, .text-main-muted,
     .border-main-light, .border-main-dark {
-      transition-property: background-color, color, border-color, box-shadow;
-      transition-duration: 0.6s;
-      transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+      transition-property: background-color, color, border-color, box-shadow, transform, filter;
+      transition-duration: 0.5s;
+      transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .smooth-transition {
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @media (max-width: 768px) {
-      * {
-        animation-duration: 0.3s !important;
+      :root {
+        --glass-blur: 0px;
       }
       .heavy-animation,
       .particles,
-      .hero-video,
       .canvas-bg,
-      .floating-particles,
       .desktop-only-animation,
+      .animate-float,
+      .animate-float-delayed,
       .hero-grid {
         display: none !important;
         animation: none !important;
       }
-      .glass-card {
-        background: var(--bg-surface);
+      .glass-card, [class*="backdrop-blur"] {
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
-        box-shadow: none !important;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(15, 23, 30, 0.95) !important;
       }
-      .animate-float,
-      .animate-float-delayed,
-      .animate-pulse,
-      .animate-pulse-soft,
-      .animate-shimmer,
-      .animate-bar-grow,
-      .animate-typing-code {
-        animation: none !important;
-        transform: none !important;
+      .smooth-transition {
+        transition-duration: 0.2s !important;
+      }
+      * {
+        text-rendering: auto !important;
       }
     }
 
@@ -173,9 +182,9 @@ export const ThemeStyles = () => (
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     html { scroll-behavior: smooth; }
 
-    .clamp-h1 { font-size: clamp(2.1rem, 6vw, 5rem); line-height: 1.1; letter-spacing: -0.02em; font-weight: 900; }
-    .clamp-h2 { font-size: clamp(1.7rem, 4vw, 3rem); line-height: 1.2; letter-spacing: -0.01em; font-weight: 800; }
-    .clamp-p { font-size: clamp(1rem, 1.5vw, 1.125rem); line-height: 1.6; }
+    .clamp-h1 { font-size: clamp(2.2rem, 8vw, 5rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 900; word-break: break-word; }
+    .clamp-h2 { font-size: clamp(1.7rem, 5vw, 3.5rem); line-height: 1.2; letter-spacing: -0.02em; font-weight: 800; word-break: break-word; }
+    .clamp-p { font-size: clamp(1rem, 1.8vw, 1.2rem); line-height: 1.6; opacity: 0.9; }
 
     .glass-card {
       background: var(--bg-card);
@@ -198,6 +207,13 @@ export const ThemeStyles = () => (
     @keyframes grid-move {
       0% { transform: translateY(0); }
       100% { transform: translateY(50px); }
+    }
+
+    @media (max-width: 768px) {
+      .logo-animated {
+        animation: background-pan 4s linear infinite !important;
+        filter: none !important;
+      }
     }
 
     .hero-grid {

@@ -88,7 +88,7 @@ const toolsList = [
   }
 ];
 
-export const AIGrowthTools = () => {
+export const GrowthTools = () => {
   const [activeTool, setActiveTool] = useState<any>(null);
 
   return (
@@ -98,9 +98,9 @@ export const AIGrowthTools = () => {
       <div className="max-w-[90rem] mx-auto px-4 lg:px-8 relative z-10">
         <Reveal direction="up">
           <div className="text-center mb-16">
-            <h2 className="clamp-h2 font-black text-white tracking-tight mb-4">Free Business Growth Tools</h2>
+            <h2 className="clamp-h2 font-black text-white tracking-tight mb-4">Professional Growth Tools</h2>
             <p className="text-main-muted max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
-              Use DEZO's free tools to calculate costs, plan your ad budgets, and generate converting copy directly inside our website.
+              Use our expert-crafted tools to calculate costs, plan your ad budgets, and generate converting copy directly inside our website.
             </p>
           </div>
         </Reveal>
@@ -109,9 +109,14 @@ export const AIGrowthTools = () => {
           {toolsList.map((tool, i) => (
             <Reveal key={tool.id} delay={i * 50} direction="up">
               <motion.div 
-                whileHover={{ y: -5 }}
+                whileHover={{ 
+                  y: -12, 
+                  scale: 1.02,
+                  transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
+                }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => setActiveTool(tool)}
-                className="bg-panel-white border border-main-light p-6 rounded-2xl cursor-pointer hover:border-[var(--primary)]/50 smooth-transition h-full flex flex-col group relative overflow-hidden"
+                className="bg-panel-white border border-main-light p-6 rounded-2xl cursor-pointer hover:border-[var(--primary)]/50 smooth-transition h-full flex flex-col group relative overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[var(--primary)]/10"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 to-transparent opacity-0 group-hover:opacity-100 smooth-transition"></div>
                 <div className="w-12 h-12 bg-black/30 rounded-xl flex items-center justify-center mb-5 relative z-10 border border-white/5">

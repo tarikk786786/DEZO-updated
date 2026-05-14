@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FormField } from '../ui/FormField';
 import { WhatsAppCTA } from '../ui/WhatsAppCTA';
 import { Bot, Copy, Check } from 'lucide-react';
-import { generateWithAI } from '../../lib/aiClient';
+import { getExpertAdvice } from '../../lib/expertClient';
 
 export const BusinessNameGenerator = () => {
   const [formData, setFormData] = useState({
@@ -21,7 +21,7 @@ export const BusinessNameGenerator = () => {
   const generate = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    const data = await generateWithAI('BusinessNameGenerator', formData);
+    const data = await getExpertAdvice('BusinessNameGenerator', formData);
     setResult(data);
     setLoading(false);
   };
@@ -44,7 +44,7 @@ export const BusinessNameGenerator = () => {
           <FormField label="Location (Optional)" id="location" value={formData.location} onChange={handleChange} placeholder="e.g., Mumbai" />
           <FormField label="Target Audience" id="audience" value={formData.audience} onChange={handleChange} placeholder="e.g., Startups, Mothers" />
           <button type="submit" disabled={loading} className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[var(--accent)] smooth-transition mt-4">
-            {loading ? <span className="animate-pulse">Generating AI Brand...</span> : <><Bot size={18} /> Generate Brand Name</>}
+            {loading ? <span className="animate-pulse">Generating Expert Brand...</span> : <><Bot size={18} /> Generate Brand Name</>}
           </button>
         </form>
       </div>
@@ -93,7 +93,7 @@ export const BusinessNameGenerator = () => {
               </div>
             </div>
             <div className="mt-auto">
-              <WhatsAppCTA message={`Hi DEZO, AI generated a brand for my new ${formData.industry} business. I need a starter website at ₹4,999 to launch it.`} label="Launch Website ₹4,999" />
+              <WhatsAppCTA message={`Hi DEZO, Expert generated a brand for my new ${formData.industry} business. I need a starter website at ₹4,999 to launch it.`} label="Launch Website ₹4,999" />
             </div>
           </div>
         ) : (

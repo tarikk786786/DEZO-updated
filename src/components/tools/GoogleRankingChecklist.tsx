@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FormField } from '../ui/FormField';
 import { WhatsAppCTA } from '../ui/WhatsAppCTA';
 import { CheckCircle2, Circle, Bot } from 'lucide-react';
-import { generateWithAI } from '../../lib/aiClient';
+import { getExpertAdvice } from '../../lib/expertClient';
 
 export const GoogleRankingChecklist = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +20,7 @@ export const GoogleRankingChecklist = () => {
   const generate = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    const data = await generateWithAI('GoogleRankingChecklist', formData);
+    const data = await getExpertAdvice('GoogleRankingChecklist', formData);
     setResult(data);
     setCompletedTasks({}); // Reset
     setLoading(false);
@@ -68,7 +68,7 @@ export const GoogleRankingChecklist = () => {
             disabled={loading}
             className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[var(--accent)] smooth-transition mt-4"
           >
-            {loading ? <span className="animate-pulse">Building AI Checklist...</span> : <><Bot size={18} /> Generate SEO Plan</>}
+            {loading ? <span className="animate-pulse">Building Expert Checklist...</span> : <><Bot size={18} /> Generate SEO Plan</>}
           </button>
         </form>
       </div>
@@ -77,7 +77,7 @@ export const GoogleRankingChecklist = () => {
         {result ? (
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center mb-4">
-              <h4 className="font-black text-white">AI SEO Action Plan</h4>
+              <h4 className="font-black text-white">Expert SEO Action Plan</h4>
               <div className="text-[var(--primary)] font-bold text-sm bg-[var(--primary)]/10 px-3 py-1 rounded-full">{progress}% Complete</div>
             </div>
             

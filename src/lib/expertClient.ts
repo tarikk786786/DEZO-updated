@@ -1,4 +1,4 @@
-export const generateWithAI = async (tool: string, input: any) => {
+export const getExpertAdvice = async (tool: string, input: any) => {
   try {
     const res = await fetch('/api/gemini-generate', {
       method: 'POST',

@@ -3,7 +3,7 @@ import { FormField } from '../ui/FormField';
 import { WhatsAppCTA } from '../ui/WhatsAppCTA';
 import { Search, Activity, Gauge, Smartphone, CheckCircle, Bot } from 'lucide-react';
 import { motion } from 'motion/react';
-import { generateWithAI } from '../../lib/aiClient';
+import { getExpertAdvice } from '../../lib/expertClient';
 
 export const WebsiteAuditTool = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +24,7 @@ export const WebsiteAuditTool = () => {
       return;
     }
     setLoading(true);
-    const data = await generateWithAI('WebsiteAuditTool', formData);
+    const data = await getExpertAdvice('WebsiteAuditTool', formData);
     setResult(data);
     setLoading(false);
   };
@@ -38,7 +38,7 @@ export const WebsiteAuditTool = () => {
   return (
     <div className="flex flex-col md:flex-row gap-6">
       <div className="w-full md:w-1/2 overflow-y-auto max-h-[80vh] px-1 pb-4">
-        <form onSubmit={runAudit} className="space-y-4">
+        <form onSubmit={runExpertAudit} className="space-y-4">
           <FormField label="Website URL" id="url" value={formData.url} onChange={handleChange} required placeholder="https://example.com" />
           <FormField label="Business Name" id="businessName" value={formData.businessName || ''} onChange={handleChange} required placeholder="Your Business" />
           <FormField label="Industry" id="industry" value={formData.industry || ''} onChange={handleChange} required placeholder="e.g. Healthcare, Tech" />
@@ -50,7 +50,7 @@ export const WebsiteAuditTool = () => {
             disabled={loading}
             className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[var(--accent)] smooth-transition mt-4"
           >
-            {loading ? <span className="animate-pulse flex items-center gap-2"><Activity size={18} className="animate-spin" /> Scanning site...</span> : <><Search size={18} /> Run AI Audit</>}
+            {loading ? <span className="animate-pulse flex items-center gap-2"><Activity size={18} className="animate-spin" /> Scanning site...</span> : <><Search size={18} /> Run Expert Audit</>}
           </button>
           
           <p className="text-xs text-main-muted mt-2 leading-relaxed text-center">
@@ -103,7 +103,7 @@ export const WebsiteAuditTool = () => {
             
             <div className="mt-auto pt-2 bg-main-dark">
               <WhatsAppCTA 
-                message={`Hi DEZO, I used the AI Audit Tool. My website (${formData.url}) scored ${result.auditScore}. Please help me improve design, speed, and conversion rate. Package starting ₹4,999.`} 
+                message={`Hi DEZO, I used the Expert Audit Tool. My website (${formData.url}) scored ${result.auditScore}. Please help me improve design, speed, and conversion rate. Package starting ₹4,999.`} 
                 label="Rebuild Website Start ₹4,999" 
               />
             </div>

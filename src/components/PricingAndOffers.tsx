@@ -53,10 +53,10 @@ export const PricingSection = () => {
           </div>
         </Reveal>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
           {/* Starter Plan */}
           <Reveal direction="up" delay={100} className="h-full">
-            <div className="bg-[#1E293B] border border-[#334155] p-8 md:p-10 rounded-3xl h-full flex flex-col hover:-translate-y-2 smooth-transition shadow-[0_15px_30px_rgba(0,0,0,0.2)] hover:border-[var(--primary)]/50">
+            <div className="bg-[#1E293B] border border-[#334155] p-6 sm:p-8 md:p-10 rounded-3xl h-full flex flex-col hover:-translate-y-2 smooth-transition shadow-[0_15px_30px_rgba(0,0,0,0.2)] hover:border-[var(--primary)]/50">
               <h3 className="text-2xl font-black text-white mb-2">Starter Website</h3>
               <p className="text-[#94A3B8] font-medium mb-6 text-sm">Perfect for establishing online trust</p>
               <div className="mb-8">
@@ -90,7 +90,7 @@ export const PricingSection = () => {
           {/* Business Growth Plan */}
           <Reveal direction="up" delay={200} className="h-full relative z-20">
             <div className="absolute -inset-0.5 bg-gradient-to-b from-[var(--primary)] to-[var(--accent)] rounded-[1.6rem] blur-[2px] opacity-70"></div>
-            <div className="bg-[#0F172A] border border-transparent p-8 md:p-10 rounded-3xl h-full flex flex-col relative z-30 transform md:scale-105 shadow-[0_20px_40px_rgba(124,58,237,0.2)]">
+            <div className="bg-[#0F172A] border border-transparent p-6 sm:p-8 md:p-10 rounded-3xl h-full flex flex-col relative z-30 transform md:scale-105 shadow-[0_20px_40px_rgba(124,58,237,0.2)]">
               <div className="absolute top-0 right-0 bg-gradient-to-r from-[#F59E0B] to-[#EF4444] text-white text-xs font-black uppercase tracking-wider py-1.5 px-4 rounded-bl-xl rounded-tr-3xl shadow-sm">
                 Most Popular
               </div>
@@ -125,7 +125,7 @@ export const PricingSection = () => {
 
           {/* Platform / Database Plan */}
           <Reveal direction="up" delay={300} className="h-full">
-            <div className="bg-[#1E293B] border border-[#334155] p-8 md:p-10 rounded-3xl h-full flex flex-col hover:-translate-y-2 smooth-transition shadow-[0_15px_30px_rgba(0,0,0,0.2)] hover:border-[var(--primary)]/50">
+            <div className="bg-[#1E293B] border border-[#334155] p-6 sm:p-8 md:p-10 rounded-3xl h-full flex flex-col hover:-translate-y-2 smooth-transition shadow-[0_15px_30px_rgba(0,0,0,0.2)] hover:border-[var(--primary)]/50">
               <h3 className="text-2xl font-black text-white mb-2">Platform / Database</h3>
               <p className="text-[#94A3B8] font-medium mb-6 text-sm">Add-on for Web Apps & Portals</p>
               <div className="mb-8">
@@ -235,6 +235,8 @@ export const DigitalMarketingSection = () => {
             <img 
               src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800" 
               alt="Digital Marketing Growth" 
+              loading="lazy"
+              decoding="async"
               className="rounded-[2.5rem] shadow-xl relative z-10 object-cover aspect-video border border-main-light"
             />
             <div className="absolute -bottom-8 -left-8 bg-white p-6 rounded-3xl shadow-2xl z-20 border border-main-light flex gap-4 items-center animate-float">

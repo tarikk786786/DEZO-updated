@@ -26,16 +26,16 @@ export const ToolModal = ({ isOpen, onClose, title, children }: any) => {
             className="bg-main-light rounded-3xl w-full max-w-4xl shadow-2xl relative my-auto sm:my-8 border border-white/5"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-6 border-b border-main-dark">
-              <h3 className="text-xl font-black text-white">{title}</h3>
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-main-dark">
+              <h3 className="text-lg sm:text-xl font-black text-white px-1 leading-tight">{title}</h3>
               <button 
                 onClick={onClose}
-                className="w-8 h-8 bg-panel-white border border-main-light hover:border-[var(--primary)] rounded-full flex items-center justify-center smooth-transition"
+                className="w-10 h-10 bg-panel-white border border-main-light hover:border-[var(--primary)] rounded-full flex items-center justify-center smooth-transition shrink-0"
               >
-                <X size={18} className="text-main-muted hover:text-[var(--primary)]" />
+                <X size={20} className="text-main-muted hover:text-[var(--primary)]" />
               </button>
             </div>
-            <div className="p-6 max-h-[85vh] overflow-y-auto">
+            <div className="p-4 sm:p-6 max-h-[80vh] sm:max-h-[85vh] overflow-y-auto">
               {children}
             </div>
           </motion.div>

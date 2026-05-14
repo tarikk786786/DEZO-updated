@@ -27,12 +27,12 @@ export const useIntersectionObserver = (options: any = {}) => {
 
 export const Reveal = ({ children, delay = 0, direction = 'up', className = '' }: any) => {
   const getVariants = () => {
-    if (direction === 'up') return { hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 }};
-    if (direction === 'down') return { hidden: { opacity: 0, y: -50 }, visible: { opacity: 1, y: 0 }};
-    if (direction === 'left') return { hidden: { opacity: 0, x: 50 }, visible: { opacity: 1, x: 0 }};
-    if (direction === 'right') return { hidden: { opacity: 0, x: -50 }, visible: { opacity: 1, x: 0 }};
+    if (direction === 'up') return { hidden: { opacity: 0, y: 40, scale: 0.98 }, visible: { opacity: 1, y: 0, scale: 1 }};
+    if (direction === 'down') return { hidden: { opacity: 0, y: -40, scale: 0.98 }, visible: { opacity: 1, y: 0, scale: 1 }};
+    if (direction === 'left') return { hidden: { opacity: 0, x: 40, scale: 0.98 }, visible: { opacity: 1, x: 0, scale: 1 }};
+    if (direction === 'right') return { hidden: { opacity: 0, x: -40, scale: 0.98 }, visible: { opacity: 1, x: 0, scale: 1 }};
     if (direction === 'scale') return { hidden: { opacity: 0, scale: 0.9 }, visible: { opacity: 1, scale: 1 }};
-    if (direction === 'outward') return { hidden: { opacity: 0, scale: 1.1 }, visible: { opacity: 1, scale: 1 }};
+    if (direction === 'outward') return { hidden: { opacity: 0, scale: 1.05 }, visible: { opacity: 1, scale: 1 }};
     return { hidden: { opacity: 0 }, visible: { opacity: 1 }};
   };
 
@@ -41,11 +41,12 @@ export const Reveal = ({ children, delay = 0, direction = 'up', className = '' }
       variants={getVariants()}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true, margin: "-10%" }}
       transition={{ 
         duration: 0.8, 
         delay: delay / 1000, 
-        ease: [0.16, 1, 0.3, 1] 
+        ease: [0.16, 1, 0.3, 1],
+        opacity: { duration: 0.6 }
       }}
       className={className}
     >
@@ -67,7 +68,7 @@ export const AnimatedCounter = ({ end, duration = 2500, suffix = "", nightMode }
     const step = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / currentDuration, 1);
-      const easeProgress = 1 - Math.pow(1 - progress, 5); 
+      const easeProgress = 1 - Math.pow(1 - progress, 6); 
       setCount(Math.floor(easeProgress * end));
       
       if (progress < 1) {
@@ -94,20 +95,24 @@ export const DynamicHeadline = ({ words, prefix = "", suffix = "", gradient = fa
       setTimeout(() => {
         setIndex((prev) => (prev + 1) % words.length);
         setFade(true);
-      }, 500);
-    }, 3500);
+      }, 400);
+    }, 4000);
     return () => clearInterval(interval);
   }, [words.length]);
 
   return (
     <span className="inline-flex items-center">
       {prefix && <span className="mr-2">{prefix}</span>}
-      <span className="relative inline-flex overflow-hidden pb-1 md:pb-2 min-w-[220px] md:min-w-[340px] lg:min-w-[420px]">
-        <span 
-          className={`absolute inset-0 smooth-transition ${fade ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-4 blur-[8px]'} ${gradient ? 'logo-animated animate-gradient-text' : ''}`}
+      <span className="relative inline-flex overflow-hidden pb-1 md:pb-2 min-w-[180px] sm:min-w-[220px] md:min-w-[340px] lg:min-w-[420px]">
+        <motion.span 
+          key={index}
+          initial={{ opacity: 0, y: 15, filter: 'blur(4px)' }}
+          animate={{ opacity: fade ? 1 : 0, y: fade ? 0 : -15, filter: fade ? 'blur(0px)' : 'blur(4px)' }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className={`absolute inset-0 ${gradient ? 'logo-animated animate-gradient-text' : ''}`}
         >
           {words[index]}
-        </span>
+        </motion.span>
         <span className="opacity-0 pointer-events-none">{words.reduce((a: string, b: string) => a.length > b.length ? a : b)}</span>
       </span>
       {suffix && <span className="ml-2">{suffix}</span>}

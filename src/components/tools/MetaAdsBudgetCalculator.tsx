@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { FormField } from '../ui/FormField';
 import { WhatsAppCTA } from '../ui/WhatsAppCTA';
-import { Calculator, Bot } from 'lucide-react';
-import { generateWithAI } from '../../lib/aiClient';
+import { Calculator, UserCheck } from 'lucide-react';
+import { getExpertAdvice } from '../../lib/expertClient';
 
 export const MetaAdsBudgetCalculator = () => {
   const [formData, setFormData] = useState({
@@ -19,10 +19,10 @@ export const MetaAdsBudgetCalculator = () => {
 
   const handleChange = (e: any) => setFormData({ ...formData, [e.target.id]: e.target.value });
 
-  const calculateWithAI = async (e: any) => {
+  const calculateWithExpert = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    const data = await generateWithAI('MetaAdsBudgetCalculator', formData);
+    const data = await getExpertAdvice('MetaAdsBudgetCalculator', formData);
     setResult(data);
     setLoading(false);
   };
@@ -30,7 +30,7 @@ export const MetaAdsBudgetCalculator = () => {
   return (
     <div className="flex flex-col md:flex-row gap-6">
       <div className="w-full md:w-1/2 overflow-y-auto max-h-[80vh] px-1 pb-4">
-        <form onSubmit={calculateWithAI} className="space-y-4">
+        <form onSubmit={calculateWithExpert} className="space-y-4">
           <FormField label="Industry / Business" id="industry" value={formData.industry} onChange={handleChange} required placeholder="e.g. Real Estate, Dentistry" />
           <FormField label="Monthly Ad Budget (₹)" id="monthlyBudget" type="number" value={formData.monthlyBudget} onChange={handleChange} required />
           <FormField label="Avg Product/Service Value (₹)" id="averageValue" type="number" value={formData.averageValue} onChange={handleChange} required placeholder="e.g. 5000" />
@@ -46,7 +46,7 @@ export const MetaAdsBudgetCalculator = () => {
             disabled={loading}
             className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[var(--accent)] smooth-transition mt-4"
           >
-            {loading ? <span className="animate-pulse">Calculating AI Strategy...</span> : <><Bot size={18} /> Get AI Target Strategy</>}
+            {loading ? <span className="animate-pulse">Calculating Expert Strategy...</span> : <><UserCheck size={18} /> Get Expert Target Strategy</>}
           </button>
         </form>
         <div className="mt-4 p-4 bg-[var(--primary)]/10 border border-[var(--primary)]/20 rounded-xl text-xs font-medium text-[var(--primary)]">
@@ -59,7 +59,7 @@ export const MetaAdsBudgetCalculator = () => {
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-center gap-2 mb-4">
               <Calculator className="text-[var(--primary)]" size={24} />
-              <h4 className="font-black text-white text-xl">AI Projections</h4>
+              <h4 className="font-black text-white text-xl">Expert Projections</h4>
             </div>
             
             <div className="space-y-4 flex-grow overflow-y-auto mb-4 pr-2">
@@ -98,13 +98,13 @@ export const MetaAdsBudgetCalculator = () => {
             </div>
             
             <div className="mt-auto">
-              <WhatsAppCTA message={`Hi DEZO, I want to run Meta Ads. AI suggests ${result.estimatedLeadRange} leads for my ${formData.industry} business. Please help me build a Landing Page (₹3,999) + Ad Setup to achieve this.`} label="Build Funnel & Run Ads" />
+              <WhatsAppCTA message={`Hi DEZO, I want to run Meta Ads. Expert suggests ${result.estimatedLeadRange} leads for my ${formData.industry} business. Please help me build a Landing Page (₹3,999) + Ad Setup to achieve this.`} label="Build Funnel & Run Ads" />
             </div>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center text-center h-full text-main-muted opacity-50 py-10 my-auto">
             <Calculator size={48} className="mb-4 text-[var(--primary)]" />
-            <p className="font-bold">Enter your budget details to get AI-powered projections and a funnel strategy.</p>
+            <p className="font-bold">Enter your budget details to get Expert-powered projections and a funnel strategy.</p>
           </div>
         )}
       </div>

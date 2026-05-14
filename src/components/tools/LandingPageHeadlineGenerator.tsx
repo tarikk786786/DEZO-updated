@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FormField } from '../ui/FormField';
 import { WhatsAppCTA } from '../ui/WhatsAppCTA';
 import { Bot, Copy, Check } from 'lucide-react';
-import { generateWithAI } from '../../lib/aiClient';
+import { getExpertAdvice } from '../../lib/expertClient';
 
 export const LandingPageHeadlineGenerator = () => {
   const [formData, setFormData] = useState({
@@ -19,7 +19,7 @@ export const LandingPageHeadlineGenerator = () => {
   const generate = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    const data = await generateWithAI('HeadlineGenerator', formData);
+    const data = await getExpertAdvice('HeadlineGenerator', formData);
     setResult(data);
     setLoading(false);
   };

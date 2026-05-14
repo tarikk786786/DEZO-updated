@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { FormField } from '../ui/FormField';
 import { WhatsAppCTA } from '../ui/WhatsAppCTA';
-import { Bot, Copy, Check } from 'lucide-react';
-import { generateWithAI } from '../../lib/aiClient';
+import { UserCheck, Copy, Check } from 'lucide-react';
+import { getExpertAdvice } from '../../lib/expertClient';
 
 export const BlogIdeaGenerator = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +20,7 @@ export const BlogIdeaGenerator = () => {
   const generate = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    const data = await generateWithAI('BlogIdeaGenerator', formData);
+    const data = await getExpertAdvice('BlogIdeaGenerator', formData);
     setResult(data);
     setLoading(false);
   };
@@ -44,7 +44,7 @@ export const BlogIdeaGenerator = () => {
           <FormField label="Tone / Style" type="select" id="tone" value={formData.tone} onChange={handleChange} options={["Informative & Educational", "Opinionated & Bold", "Listicles & Guides", "Case Studies & Storytelling"]} />
           <FormField label="Focus Keyphrase (Optional)" id="focusKeyphrase" value={formData.focusKeyphrase} onChange={handleChange} placeholder="e.g., home workouts for men" />
           <button type="submit" disabled={loading} className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[var(--accent)] smooth-transition mt-4">
-            {loading ? <span className="animate-pulse">Generating AI Topics...</span> : <><Bot size={18} /> Generate Blog Strategy</>}
+            {loading ? <span className="animate-pulse">Generating Expert Topics...</span> : <><UserCheck size={18} /> Generate Blog Strategy</>}
           </button>
         </form>
       </div>
@@ -52,7 +52,7 @@ export const BlogIdeaGenerator = () => {
         {result ? (
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center mb-4">
-              <h4 className="font-black text-white">AI Content Strategy</h4>
+              <h4 className="font-black text-white">Expert Content Strategy</h4>
               <button onClick={copyToClipboard} className="flex items-center gap-1 text-xs font-bold text-[var(--primary)] hover:text-[var(--accent)] smooth-transition">
                 {copied ? <Check size={14} /> : <Copy size={14} />} {copied ? 'Copied' : 'Copy All'}
               </button>
@@ -73,12 +73,12 @@ export const BlogIdeaGenerator = () => {
               ))}
             </div>
             <div className="mt-auto">
-              <WhatsAppCTA message={`Hi DEZO, AI generated a blog strategy for my ${formData.niche} business. Can you help me build a website with an SEO-optimized blog section?`} label="Get SEO Blog Website ₹5,999" />
+              <WhatsAppCTA message={`Hi DEZO, Expert generated a blog strategy for my ${formData.niche} business. Can you help me build a website with an SEO-optimized blog section?`} label="Get SEO Blog Website ₹5,999" />
             </div>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center text-center h-full text-main-muted opacity-50 py-10 my-auto">
-            <Bot size={48} className="mb-4 text-[var(--primary)]" />
+            <UserCheck size={48} className="mb-4 text-[var(--primary)]" />
             <p className="font-bold">Enter details to get fresh, SEO-friendly blog content ideas.</p>
           </div>
         )}

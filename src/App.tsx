@@ -20,7 +20,7 @@ import { AnimatedFavicon } from './AnimatedFavicon';
 
 import { AboutUsPage } from './AboutUsPage';
 import { NotFoundPage } from './NotFoundPage';
-const AIGrowthTools = lazy(() => import('./components/AIGrowthTools').then(m => ({ default: m.AIGrowthTools })));
+const GrowthTools = lazy(() => import('./components/AIGrowthTools').then(m => ({ default: m.GrowthTools })));
 const LiveWebMarketingRadar = lazy(() => import('./components/LiveWebMarketingRadar').then(m => ({ default: m.LiveWebMarketingRadar })));
 
 import { ViralHookSection } from './components/ViralHookSection';
@@ -74,7 +74,7 @@ const AnimatedTrustWords = () => {
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [pathname]);
   return null;
 };
@@ -110,20 +110,22 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    setIsDesktop(window.innerWidth >= 1024);
-    const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
-    window.addEventListener('resize', handleResize);
+    const mediaQuery = window.matchMedia('(min-width: 1024px)');
+    setIsDesktop(mediaQuery.matches);
+    
+    const handleResize = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mediaQuery.addEventListener('change', handleResize);
     
     document.title = "Dezo | Web Development & Digital Marketing Agency India";
 
-    const timer1 = setTimeout(() => setIsFadingOut(true), 400);
-    const timer2 = setTimeout(() => setIsLoading(false), 800);
+    const timer1 = setTimeout(() => setIsFadingOut(true), 300);
+    const timer2 = setTimeout(() => setIsLoading(false), 600);
     
     let tickingScroll = false;
     const handleScroll = () => {
       if (!tickingScroll) {
         window.requestAnimationFrame(() => {
-          setScrolled(window.scrollY > 30);
+          setScrolled(window.scrollY > 20);
           tickingScroll = false;
         });
         tickingScroll = true;
@@ -135,7 +137,7 @@ export default function App() {
       clearTimeout(timer1);
       clearTimeout(timer2);
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
+      mediaQuery.removeEventListener('change', handleResize);
     };
   }, []);
 
@@ -294,19 +296,25 @@ Message: ${formData.message}`;
       
       {/* Live Reactive Responsive DM Web Dev Background Animation */}
       <div className="fixed inset-0 pointer-events-none z-[0] overflow-hidden">
-        {/* Reactive Mouse Gradient Tracking */}
-        <div 
-          className="absolute inset-0 opacity-30 transition-opacity duration-300"
-          style={{
-            background: 'radial-gradient(600px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh), var(--primary) 0%, transparent 60%)',
-            mixBlendMode: 'screen'
-          }}
-        />
-        {/* Floating Animated Orbs */}
-        <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-gradient-to-br from-[var(--primary)] to-transparent opacity-20 blur-[100px] animate-float"></div>
-        <div className="absolute bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--primary)] opacity-10 blur-[120px] animate-float-delayed"></div>
+        {/* Reactive Mouse Gradient Tracking - Only on Desktop */}
+        {isDesktop && (
+          <div 
+            className="absolute inset-0 opacity-30 transition-opacity duration-300"
+            style={{
+              background: 'radial-gradient(600px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh), var(--primary) 0%, transparent 60%)',
+              mixBlendMode: 'screen'
+            }}
+          />
+        )}
+        {/* Floating Animated Orbs - Simplified/Hidden on Mobile */}
+        {isDesktop && (
+          <>
+            <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-gradient-to-br from-[var(--primary)] to-transparent opacity-20 blur-[100px] animate-float"></div>
+            <div className="absolute bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--primary)] opacity-10 blur-[120px] animate-float-delayed"></div>
+          </>
+        )}
         {/* Web Dev Grid Interface */}
-        <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+CjxwYXRoIGQ9Ik0wIDBoNDB2NDBIMHoiIGZpbGw9Im5vbmUiIC8+CjxwYXRoIGQ9Ik0wIDM5LjV2MWg0MHYtMUgweiIgZmlsbD0icmdiYSgyNTUsIDI1NSwgMjU1LCAwLjQpIiAvPgo8cGF0aCBkPSJNMzkuNSAwbC41LjB2NDBoLTFWMHoiIGZpbGw9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC40KSIgLz4KPC9zdmc+')] [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]"></div>
+        <div className="absolute inset-0 opacity-5 md:opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+CjxwYXRoIGQ9Ik0wIDBoNDB2NDBIMHoiIGZpbGw9Im5vbmUiIC8+CjxwYXRoIGQ9Ik0wIDM5LjV2MWg0MHYtMUgweiIgZmlsbD0icmdiYSgyNTUsIDI1NSwgMjU1LCAwLjQpIiAvPgo8cGF0aCBkPSJNMzkuNSAwbC41LjB2NDBoLTFWMHoiIGZpbGw9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC40KSIgLz4KPC9zdmc+')] [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]"></div>
       </div>
 
       <header className={`fixed top-0 left-0 right-0 z-[60] smooth-transition ${scrolled ? 'bg-[var(--bg-nav)] backdrop-blur-[var(--glass-blur)] shadow-sm border-b border-main-light' : 'bg-transparent'}`}>
@@ -373,77 +381,70 @@ Message: ${formData.message}`;
         <Route path="/" element={
           <main>
           {/* HERO SECTION */}
-          <section id="home" className="relative pt-40 pb-24 lg:pt-56 lg:pb-40 overflow-hidden smooth-transition bg-main-dark" style={{ background: 'var(--hero-bg)' }}>
+          <section id="home" className="relative pt-32 pb-20 lg:pt-56 lg:pb-40 overflow-hidden smooth-transition bg-main-dark" style={{ background: 'var(--hero-bg)' }}>
             {/* Abstract Background Effects */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none smooth-transition" style={{ opacity: 'var(--glow-opacity)' }}>
               <div className="hero-grid opacity-30"></div>
-              <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[var(--primary)] opacity-20 rounded-full blur-[120px] animate-float"></div>
-              <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-[var(--accent)] opacity-[0.15] rounded-full blur-[120px] animate-float-delayed"></div>
+              <div className="absolute top-[-10%] md:top-[-20%] right-[-10%] w-[300px] md:w-[800px] h-[300px] md:h-[800px] bg-[var(--primary)] opacity-30 md:opacity-20 rounded-full blur-[80px] md:blur-[120px] animate-float"></div>
+              <div className="absolute bottom-[-10%] left-[-10%] w-[250px] md:w-[600px] h-[250px] md:h-[600px] bg-[var(--accent)] opacity-20 md:opacity-[0.15] rounded-full blur-[80px] md:blur-[120px] animate-float-delayed"></div>
             </div>
-            <div className="max-w-[90rem] mx-auto px-4 lg:px-8 relative z-10 text-center">
-              <div className="max-w-4xl mx-auto flex flex-col items-center">
-                <div className="w-full">
+            <div className="max-w-[90rem] mx-auto px-4 lg:px-8 relative z-10">
+              <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-16">
+                {/* Visual / Animation Column */}
+                <div className="w-full sm:w-[85%] lg:w-1/2 h-[320px] sm:h-[400px] lg:h-[600px] relative order-1 lg:order-2 mb-2 lg:mb-0 mx-auto overflow-hidden sm:overflow-visible">
+                  <Reveal direction="down" delay={200}>
+                     <HeroVisual nightMode={!isGlowMode} />
+                  </Reveal>
+                </div>
+
+                {/* Text Column */}
+                <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left order-2 lg:order-1 pt-2 lg:pt-0">
                   <Reveal direction="up" delay={100}>
-                    <h1 className="clamp-h1 font-black text-main-light mb-6">
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">Premium Business Websites</span>
-                      <span className="block text-3xl md:text-5xl mt-2 text-white">Starting at ₹4,999</span>
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full mb-6 backdrop-blur-sm">
+                      <span className="flex h-2 w-2 rounded-full bg-[var(--primary)] animate-pulse"></span>
+                      <span className="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-widest">Award-Winning Digital Agency</span>
+                    </div>
+                    <h1 className="clamp-h1 font-black text-main-light mb-4 lg:mb-6 tracking-tight">
+                      <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] via-[var(--accent)] to-[var(--primary)] bg-[length:200%_auto] animate-gradient-text px-1">Premium Business Websites</span>
+                      <span className="block text-2xl md:text-5xl mt-3 text-white/90">Starting at Just ₹4,999</span>
                     </h1>
                   </Reveal>
                   <Reveal direction="up" delay={200}>
-                    <p className="text-sm sm:text-base md:text-lg text-[#E2E8F0] opacity-90 mb-4 font-medium max-w-2xl mx-auto leading-relaxed">
-                      Fast, mobile-friendly, SEO-ready websites built for leads, trust, and business growth.
+                    <p className="text-sm sm:text-base md:text-lg text-[#E2E8F0] opacity-90 mb-6 font-medium max-w-2xl mx-auto lg:mx-0 leading-relaxed md:pr-12">
+                      High-speed, SEO-optimized, and mobile-friendly websites designed to convert visitors into loyal customers.
                     </p>
-                    <p className="text-sm sm:text-base text-[#F59E0B] font-bold mb-4 max-w-2xl mx-auto leading-relaxed">
-                      Platform + Database add-ons from ₹3,000 extra • Free digital marketing guidance with selected packages
-                    </p>
-                    <div className="flex justify-center mb-8">
+                    <div className="flex flex-wrap justify-center lg:justify-start gap-3 mb-8">
+                       <div className="px-4 py-1.5 bg-[#F59E0B]/10 border border-[#F59E0B]/30 rounded-lg">
+                          <span className="text-[10px] sm:text-xs text-[#F59E0B] font-bold">₹3,000 Extra for Platform/DB</span>
+                       </div>
+                       <div className="px-4 py-1.5 bg-[var(--primary)]/10 border border-[var(--primary)]/30 rounded-lg">
+                          <span className="text-[10px] sm:text-xs text-[var(--primary)] font-bold">Free Marketing Guidance</span>
+                       </div>
+                    </div>
+                    <div className="flex justify-center lg:justify-start mb-10">
                       <AnimatedTrustWords />
                     </div>
                   </Reveal>
-                  <Reveal direction="up" delay={300}>
-                    <div className="flex justify-center mb-8">
-                      <ExpandableSection buttonText="See What's Included">
-                        <div className="flex flex-col items-start text-left gap-3 mt-4 text-sm font-bold text-white/80 bg-white/5 border border-white/10 p-5 rounded-2xl w-full max-w-sm mx-auto">
-                          <span className="flex items-center gap-2"><Check size={16} className="text-[#10B981]" /> Mobile-first design</span>
-                          <span className="flex items-center gap-2"><Check size={16} className="text-[#10B981]" /> Basic SEO setup</span>
-                          <span className="flex items-center gap-2"><Check size={16} className="text-[#10B981]" /> WhatsApp CTA</span>
-                          <span className="flex items-center gap-2"><Check size={16} className="text-[#10B981]" /> Fast loading layout</span>
-                          <span className="flex items-center gap-2"><Check size={16} className="text-[#10B981]" /> Free basic digital marketing guidance</span>
-                          <span className="flex items-center gap-2"><Check size={16} className="text-brand-gold" /> Platform/database add-ons available</span>
-                        </div>
-                      </ExpandableSection>
-                    </div>
-                  </Reveal>
                   <Reveal direction="up" delay={400}>
-                    <div className="flex justify-center gap-4 mb-12 flex-col sm:flex-row items-center w-full max-w-xs sm:max-w-none mx-auto">
+                    <div className="flex justify-center lg:justify-start gap-4 mb-10 flex-col sm:flex-row items-center w-full max-w-xs sm:max-w-none">
                       <motion.a 
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                         href="#contact" 
-                        className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white font-bold rounded-full shadow-[0_10px_20px_rgba(124,58,237,0.4)] hover:shadow-[0_15px_30px_rgba(236,72,153,0.6)] smooth-transition relative overflow-hidden group text-center"
+                        className="w-full sm:w-auto px-10 py-5 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white font-extrabold rounded-full shadow-[0_15px_30px_rgba(124,58,237,0.4)] hover:shadow-[0_20px_40px_rgba(236,72,153,0.5)] smooth-transition relative overflow-hidden group text-center"
                       >
-                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 smooth-transition rounded-full"></div>
-                        <span className="relative z-10">Get Website at ₹4,999</span>
-                      </motion.a>
-                      <motion.a 
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        href="#latest-work" 
-                        className="w-full sm:w-auto px-8 py-4 text-white font-bold rounded-full hover:bg-white/10 border border-white/20 smooth-transition group text-center"
-                      >
-                        <span>View Our Work</span>
+                        <span className="relative z-10">Get Started Now</span>
                       </motion.a>
                       <motion.button 
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                         onClick={() => window.open('https://wa.me/919114411026?text=Hi%20DEZO%2C%20I%20want%20a%20website%20starting%20at%20%E2%82%B94%2C999.%20Please%20guide%20me.', '_blank')} 
-                        className="w-full sm:w-auto px-8 py-4 bg-[#25D366] text-white font-black rounded-full hover:shadow-[0_15px_30px_rgba(37,211,102,0.4)] smooth-transition flex items-center justify-center gap-2"
+                        className="w-full sm:w-auto px-8 py-5 bg-[#25D366] text-white font-extrabold rounded-full hover:shadow-[0_15px_30px_rgba(37,211,102,0.4)] smooth-transition flex items-center justify-center gap-2"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 1.833 6.368L.141 24l5.803-1.492A12 12 0 1 0 11.944 0zm0 22C6.918 22 2.802 18.237 2.451 13.315l1.637 1.636a8.878 8.878 0 0 1 10.9-10.9l1.636-1.636C12.186 2.012 11.968 2 11.944 2c-5.522 0-10 4.477-10 10 0 1.76.452 3.411 1.233 4.887L1.93 21.365l4.63-1.196A9.957 9.957 0 0 0 11.944 22c5.522 0 10-4.478 10-10s-4.478-10-10-10zm5.176-6.425c-.282-.141-1.669-.824-1.927-.919-.258-.094-.447-.141-.635.141-.188.282-.729.919-.894 1.107-.165.188-.33.211-.612.07-.282-.141-1.19-.439-2.268-1.4-8.37-1.135 7.42-1.925 7.185-1.442-.236.483-3.692.671-5.127.812-.141.141-.33.353-.33.353s-.188.165-.188.447c0 .282.188.635.423.824.236.188.236.47.236.753.047.893-1.011 2.585-2.067 2.679-1.011.094-1.364.094-1.904-.094s-.541-.47-.541-.894.236-1.011.682-1.364c.541-.423.705-.682.894-1.152.188-.47.094-.894-.047-1.176-.141-.282-.635-1.528-.87-2.092-.235-.564-.47-.487-.635-.494-.165-.008-.353-.008-.541-.008s-.494.07-.753.353c-.258.282-1.011.988-1.011 2.4 0 1.411 1.035 2.775 1.176 2.963.141.188 2.022 3.081 4.891 4.316.682.294 1.223.47 1.646.6.682.216 1.305.185 1.796.113.551-.082 1.669-.682 1.904-1.34s.235-1.223.165-1.341c-.07-.118-.258-.188-.541-.33z"/></svg>
-                        Chat on WhatsApp
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 1.833 6.368L.141 24l5.803-1.492A12 12 0 1 0 11.944 0zm0 22C6.918 22 2.802 18.237 2.451 13.315l1.637 1.636a8.878 8.878 0 0 1 10.9-10.9l1.636-1.636C12.186 2.012 11.968 2 11.944 2c-5.522 0-10 4.477-10 10 0 1.76.452 3.411 1.233 4.887L1.93 21.365l4.63-1.196A9.957 9.957 0 0 0 11.944 22c5.522 0 10-4.478 10-10s-4.478-10-10-10zm5.176-6.425c-.282-.141-1.669-.824-1.927-.919-.258-.094-.447-.141-.635.141-.188.282-.729.919-.894 1.107-.165.188-.33.211-.612.07-.282-.141-1.19-.439-2.268-1.4-8.37-1.135 7.42-1.925 7.185-1.442-.236.483-3.692.671-5.127.812-.141.141-.33.353-.33.353s-.188.165-.188.447c0 .282.188.635.423.824.236.188.236.47.236.753.047.893-1.011 2.585-2.067 2.679-1.011.094-1.364.094-1.904-.094s-.541-.47-.541-.894.236-1.011.682-1.364c.541-.423.705-.682.894-1.152.188-.47.094-.894-.047-1.176-.141-.282-.635-1.528-.87-2.092-.235-.564-.47-.487-.635-.494-.165-.008-.353-.008-.541-.008s-.494.07-.753.353c-.258.282-1.011.988-1.011 2.4 0 1.411 1.035 2.775 1.176 2.963.141.188 2.022 3.081 4.891 4.316.682.294 1.223.47 1.646.6.682.216 1.305.185 1.796.113.551-.082 1.669-.682 1.904-1.34s.235-1.223.165-1.341c-.07-.118-.258-.188-.541-.33z"/></svg>
+                        Direct WhatsApp
                       </motion.button>
                     </div>
-                    <p className="text-xs text-white/50 font-bold uppercase tracking-widest mt-4">Web Development, SEO, Meta Ads, Google Ads & Ecommerce</p>
                   </Reveal>
                 </div>
               </div>
@@ -507,19 +508,19 @@ Message: ${formData.message}`;
       <GrowthOffersSection />
 
       {/* 7. PORTFOLIO */}
-      <section id="latest-work" className="py-24 lg:py-32 bg-panel-white border-y border-main-light overflow-hidden">
+      <section id="latest-work" className="py-20 lg:py-32 bg-panel-white border-y border-main-light overflow-hidden">
         <div className="max-w-[90rem] mx-auto px-4 lg:px-8">
           <Reveal direction="up">
-            <h2 className="clamp-h2 font-black text-main-dark mb-8 text-center tracking-tight uppercase">OUR LATEST WEBSITE PROJECTS & DIGITAL WORK</h2>
+            <h2 className="clamp-h2 font-black text-main-dark mb-8 text-center tracking-tight uppercase px-2">OUR LATEST WEBSITE PROJECTS & DIGITAL WORK</h2>
           </Reveal>
           
           <Reveal direction="up" delay={200}>
             <div className="mb-8 space-y-5">
-              <div className="relative max-w-md mx-auto">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-main-muted" size={18} />
+              <div className="relative max-w-md mx-auto px-1">
+                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-main-muted" size={18} />
                 <input aria-label="Search project" type="text" placeholder="Search project..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full bg-main-light border border-main-light rounded-full py-4 pl-12 pr-6 text-sm font-bold shadow-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary smooth-transition" />
               </div>
-              <div className="flex overflow-x-auto hide-scrollbar gap-2.5 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+              <div className="flex overflow-x-auto hide-scrollbar gap-2.5 pb-2 -mx-4 px-5 sm:mx-0 sm:px-0">
                 {categories.map((cat, i) => (
                   <button
                     key={i}
@@ -591,9 +592,9 @@ Message: ${formData.message}`;
         </div>
       </section>
 
-      {/* 8. Free AI Growth Tools */}
+      {/* 8. Free Business Growth Tools */}
       <Suspense fallback={<div className="py-20 text-center opacity-50 text-white">Loading Tools...</div>}>
-        <AIGrowthTools />
+        <GrowthTools />
       </Suspense>
 
       {/* 9. Live Web & Marketing Radar */}
@@ -897,28 +898,44 @@ Message: ${formData.message}`;
       </AnimatePresence>
       <div className="pb-20 md:pb-0"></div>
       {/* Mobile Sticky CTA */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[80] bg-main-dark/95 backdrop-blur-lg border-t border-main-light p-3 flex gap-2 pb-[env(safe-area-inset-bottom)]">
-        <a 
-          href="#pricing"
-          onClick={(e) => {
-             e.preventDefault();
-             document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
-          }}
-          className="flex-1 bg-panel-white border border-main-light hover:border-[var(--primary)] text-main-light font-bold text-center py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-sm smooth-transition"
-        >
-          <span className="text-[10px] uppercase tracking-widest hidden sm:inline-block">Website</span>
-          <span className="text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">₹4,999</span>
-        </a>
-        <a 
-          href="https://wa.me/919114411026?text=Hi%20DEZO%2C%20I%20am%20interested%20in%20your%20services."
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 bg-[#25D366] text-white font-bold text-center py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg smooth-transition"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 1.833 6.368L.141 24l5.803-1.492A12 12 0 1 0 11.944 0zm0 22C6.918 22 2.802 18.237 2.451 13.315l1.637 1.636a8.878 8.878 0 0 1 10.9-10.9l1.636-1.636C12.186 2.012 11.968 2 11.944 2c-5.522 0-10 4.477-10 10 0 1.76.452 3.411 1.233 4.887L1.93 21.365l4.63-1.196A9.957 9.957 0 0 0 11.944 22c5.522 0 10-4.478 10-10s-4.478-10-10-10zm5.176-6.425c-.282-.141-1.669-.824-1.927-.919-.258-.094-.447-.141-.635.141-.188.282-.729.919-.894 1.107-.165.188-.33.211-.612.07-.282-.141-1.19-.439-2.268-1.4-8.37-1.135 7.42-1.925 7.185-1.442-.236.483-3.692.671-5.127.812-.141.141-.33.353-.33.353s-.188.165-.188.447c0 .282.188.635.423.824.236.188.236.47.236.753.047.893-1.011 2.585-2.067 2.679-1.011.094-1.364.094-1.904-.094s-.541-.47-.541-.894.236-1.011.682-1.364c.541-.423.705-.682.894-1.152.188-.47.094-.894-.047-1.176-.141-.282-.635-1.528-.87-2.092-.235-.564-.47-.487-.635-.494-.165-.008-.353-.008-.541-.008s-.494.07-.753.353c-.258.282-1.011.988-1.011 2.4 0 1.411 1.035 2.775 1.176 2.963.141.188 2.022 3.081 4.891 4.316.682.294 1.223.47 1.646.6.682.216 1.305.185 1.796.113.551-.082 1.669-.682 1.904-1.34s.235-1.223.165-1.341c-.07-.118-.258-.188-.541-.33z"/></svg>
-          <span className="text-sm">WhatsApp</span>
-        </a>
-      </div>
+      <AnimatePresence>
+        {scrolled && (
+          <motion.div 
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            className="md:hidden fixed bottom-4 left-4 right-4 z-[80] flex gap-3 pb-[env(safe-area-inset-bottom)]"
+          >
+            <motion.a 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              href="#pricing"
+              className="flex-[0.4] bg-main-dark/95 backdrop-blur-2xl border border-white/10 text-main-light font-bold text-center py-4 rounded-2xl flex items-center justify-center gap-2 shadow-2xl shadow-black/50"
+            >
+              <span className="text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">₹4,999</span>
+            </motion.a>
+            <motion.a 
+              animate={{ 
+                scale: [1, 1.03, 1],
+              }}
+              transition={{
+                scale: { repeat: Infinity, duration: 2, ease: "easeInOut" }
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+              href="https://wa.me/919114411026"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 bg-[#25D366] text-white font-black text-center py-4 rounded-2xl flex items-center justify-center gap-3 shadow-2xl shadow-[#25D366]/20 relative overflow-hidden group"
+            >
+              <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.012 2c-5.523 0-10 4.477-10 10 0 1.76.452 3.411 1.233 4.887L1.93 21.365l4.63-1.196A9.957 9.957 0 0 0 12.012 22c5.522 0 10-4.478 10-10s-4.478-10-10-10zm0 2c4.411 0 8 3.589 8 8s-3.589 8-8 8a7.95 7.95 0 0 1-4.704-1.536l-3.696.953.953-3.696A7.95 7.95 0 0 1 4.012 12c0-4.411 3.589-8 8-8zm-1.176 11.575c-.282.141-1.669.824-1.927.919-.258.094-.447.141-.635-.141-.188-.282-.729-.919-.894-1.107-.165-.188-.33-.211-.612-.07-.282-.141-1.19-.439-2.268-1.4-8.37-1.135 7.42-1.925 7.185-1.442-.236.483-3.692.671-5.127.812-.141.141-.33.353-.33.353s-.188.165-.188.447c0 .282.188.635.423.824.236.188.236.47.236.753.047.893-1.011 2.585-2.067 2.679-1.011.094-1.364.094-1.904-.094s-.541-.47-.541-.894.236-1.011.682-1.364c.541-.423.705-.682.894-1.152.188-.47.094-.894-.047-1.176-.141-.282-.635-1.528-.87-2.092-.235-.564-.47-.487-.635-.494-.165-.008-.353-.008-.541-.008s-.494.07-.753.353c-.258.282-1.011.988-1.011 2.4 0 1.411 1.035 2.775 1.176 2.963.141.188 2.022 3.081 4.891 4.316.682.294 1.223.47 1.646.6.682.216 1.305.185 1.796.113.551-.082 1.669-.682 1.904-1.34s.235-1.223.165-1.341c-.07-.118-.258-.188-.541-.33z"/></svg>
+              <span className="text-sm">WhatsApp Chat</span>
+            </motion.a>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
 
     </div>

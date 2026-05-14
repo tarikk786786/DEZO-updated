@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FormField } from '../ui/FormField';
 import { WhatsAppCTA } from '../ui/WhatsAppCTA';
 import { Bot, Copy, Check } from 'lucide-react';
-import { generateWithAI } from '../../lib/aiClient';
+import { getExpertAdvice } from '../../lib/expertClient';
 
 export const InstagramBioGenerator = () => {
   const [formData, setFormData] = useState({
@@ -23,7 +23,7 @@ export const InstagramBioGenerator = () => {
   const generate = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    const data = await generateWithAI('InstagramBioGenerator', formData);
+    const data = await getExpertAdvice('InstagramBioGenerator', formData);
     setResult(data);
     setLoading(false);
   };
@@ -48,7 +48,7 @@ export const InstagramBioGenerator = () => {
           <FormField label="Contact Method / CTA" id="contactMethod" value={formData.contactMethod} onChange={handleChange} required placeholder="e.g., DM for details / Link below" />
           <FormField label="Tone" type="select" id="tone" value={formData.tone} onChange={handleChange} options={["Professional & Direct", "Playful & Casual", "Luxury & Minimal"]} />
           <button type="submit" disabled={loading} className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[var(--accent)] smooth-transition mt-4">
-            {loading ? <span className="animate-pulse">Generating AI Bios...</span> : <><Bot size={18} /> Generate Perfect Bio</>}
+            {loading ? <span className="animate-pulse">Generating Expert Bios...</span> : <><Bot size={18} /> Generate Perfect Bio</>}
           </button>
         </form>
       </div>

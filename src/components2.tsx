@@ -30,10 +30,10 @@ export const RotatingText = () => {
       <AnimatePresence mode="wait">
         <motion.h3 
           key={index}
-          initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          exit={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -15 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
           className="text-xl sm:text-2xl md:text-3xl font-black leading-tight tracking-tight text-main-light absolute"
         >
           <span className="text-brand-gold border-b-2 border-white/20 pb-1 inline-block">
@@ -58,158 +58,189 @@ export const FallbackImage = ({ src, alt, className, fallbackInitials }: any) =>
 };
 
 export const HeroVisual = ({ nightMode }: any) => {
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [slide, setSlide] = useState(0);
+  const totalSlides = 3;
+  const [direction, setDirection] = useState(0);
+
+  const paginate = (newDirection: number) => {
+    setDirection(newDirection);
+    setSlide((prev) => (prev + newDirection + totalSlides) % totalSlides);
+  };
+
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 300 : -300,
+      opacity: 0,
+      scale: 0.9
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+      scale: 1
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      x: direction < 0 ? 300 : -300,
+      opacity: 0,
+      scale: 0.9
+    })
+  };
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
-    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mediaQuery.addEventListener('change', handler);
-    return () => mediaQuery.removeEventListener('change', handler);
+    const timer = setInterval(() => {
+      paginate(1);
+    }, 6000);
+    return () => clearInterval(timer);
   }, []);
 
-  const handleMouseMove = (e: any) => {
-    if (window.innerWidth <= 768) return;
-    if (nightMode || !containerRef.current || prefersReducedMotion) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 15; 
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -15;
-    setMouse({ x, y });
-  };
-
-  const handleTouchMove = (e: any) => {
-    if (window.innerWidth <= 768) return;
-    if (nightMode || !containerRef.current || prefersReducedMotion) return;
-    const touch = e.touches[0];
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = ((touch.clientX - rect.left) / rect.width - 0.5) * 10; 
-    const y = ((touch.clientY - rect.top) / rect.height - 0.5) * -10;
-    setMouse({ x, y });
-  };
-
-  const handleMouseLeave = () => setMouse({ x: 0, y: 0 });
-
   return (
-    <div 
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onTouchMove={handleTouchMove}
-      onMouseLeave={handleMouseLeave}
-      onTouchEnd={handleMouseLeave}
-      className="w-full h-full relative" 
-      style={{ perspective: '2000px' }}
-    >
-      <div 
-        className="w-full h-full transition-transform duration-[600ms] ease-out"
-        style={{ 
-          transformStyle: 'preserve-3d', 
-          transform: (nightMode || prefersReducedMotion) ? 'none' : `rotateY(${mouse.x}deg) rotateX(${mouse.y}deg)` 
-        }}
-      >
-        {/* Main Glass 3D Browser Window */}
-        <div 
-          className="glass-card absolute right-[-5%] top-[5%] w-[100%] h-[80%] rounded-[2rem] overflow-hidden animate-float"
-          style={{ transform: 'translateZ(20px)' }}
-        >
-          <div className="h-10 bg-[#0F172A]/80 border-b border-white/10 flex items-center px-5 gap-2.5 backdrop-blur-md">
-            <div className="w-3 h-3 rounded-full bg-slate-600"></div>
-            <div className="w-3 h-3 rounded-full bg-slate-600"></div>
-            <div className="w-3 h-3 rounded-full bg-slate-600"></div>
-            <div className="mx-auto w-1/2 h-5 bg-[#020617] border border-white/5 rounded flex items-center justify-center">
-              <span className="text-[9px] font-bold text-slate-500 tracking-widest uppercase">dezo.agency</span>
-            </div>
-          </div>
-          <div className="p-8 h-full bg-[#030712] relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--primary)] opacity-[0.15] blur-[80px] rounded-full"></div>
-            <div className="w-32 h-6 bg-white/10 rounded-full mb-8 backdrop-blur-sm border border-white/5"></div>
-            <div className="w-[90%] h-14 bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20 border border-[var(--accent)]/30 rounded-xl mb-6 flex items-center px-4 relative overflow-hidden">
-               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
-               <div className="w-1/2 h-3 bg-white/40 rounded-full"></div>
-            </div>
-            <div className="grid grid-cols-2 gap-4 mb-6 relative z-10">
-              <div className="h-20 bg-white/5 rounded-xl border border-white/10 p-4 relative overflow-hidden backdrop-blur-md">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-[var(--primary)] opacity-20 blur-xl"></div>
-                <div className="w-8 h-8 rounded-full border border-[var(--primary)]/50 mb-2 shadow-[0_0_10px_var(--primary)]"></div>
-                <div className="w-full h-2 bg-white/10 rounded-full"></div>
+    <div className="w-full h-full relative flex flex-col items-center justify-center">
+      <div className="w-full relative h-[300px] md:h-[450px] flex items-center justify-center overflow-visible">
+        <AnimatePresence initial={false} custom={direction} mode="wait">
+          <motion.div
+            key={slide}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 260, damping: 20 },
+              opacity: { duration: 0.5 },
+              scale: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+            }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.8}
+            onDragEnd={(e, { offset, velocity }) => {
+              const swipe = Math.abs(offset.x) > 50 || Math.abs(velocity.x) > 500;
+              if (swipe) {
+                paginate(offset.x > 0 ? -1 : 1);
+              }
+            }}
+            className="absolute inset-0 flex items-center justify-center p-4 cursor-grab active:cursor-grabbing"
+          >
+            {slide === 0 && (
+              <motion.div 
+                whileHover={{ rotateY: -10, rotateX: 5, scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                style={{ transformStyle: "preserve-3d" }}
+                className="relative w-full max-w-lg aspect-video"
+              >
+                {/* Main Glass 3D Browser Window */}
+                <div className="glass-card w-full h-[85%] rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[#030712]/80 md:backdrop-blur-xl">
+                  <div className="h-10 bg-[#0F172A]/80 border-b border-white/10 flex items-center px-5 gap-2.5">
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                    <div className="mx-auto w-1/2 h-5 bg-[#020617] border border-white/5 rounded flex items-center justify-center">
+                      <span className="text-[9px] font-bold text-slate-500 tracking-widest uppercase">design.dezo</span>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="w-32 h-6 bg-white/10 rounded-full mb-6"></div>
+                    <div className="w-full h-24 bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/10 rounded-xl border border-white/5 mb-4 relative overflow-hidden">
+                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="h-12 bg-white/5 rounded-lg"></div>
+                      <div className="h-12 bg-white/5 rounded-lg"></div>
+                    </div>
+                  </div>
+                </div>
+                {/* Floating Code Snippet */}
+                <motion.div 
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                  className="absolute -bottom-4 -left-4 md:-left-12 w-[60%] sm:w-[50%] bg-[#020617]/95 backdrop-blur-xl border border-white/10 rounded-xl p-4 shadow-2xl"
+                >
+                  <div className="flex gap-1.5 mb-3">
+                    <div className="w-2 h-2 rounded-full bg-red-400"></div>
+                    <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                  </div>
+                  <div className="space-y-1 font-mono text-[9px] sm:text-[11px]">
+                    <div className="text-[var(--primary)]">const <span className="text-white">Growth</span> = () =&gt; {'{'}</div>
+                    <div className="pl-3 text-[var(--accent)]">render(<span className="text-white">"Premium"</span>);</div>
+                    <div className="text-[var(--primary)]">{'}'}</div>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+
+            {slide === 1 && (
+              <div className="w-full max-w-lg grid grid-cols-2 gap-4">
+                <div className="glass-card col-span-2 p-6 rounded-2xl bg-[#0F172A]/80 border border-white/10 shadow-2xl">
+                   <div className="flex justify-between items-center mb-6">
+                     <span className="text-sm font-bold text-white uppercase tracking-widest">Performance ROI</span>
+                     <TrendingUp className="text-green-400" size={20} />
+                   </div>
+                   <div className="text-4xl font-black text-white mb-2">4.8x</div>
+                   <div className="text-xs text-slate-400 mb-6">Average Return on Ad Spend</div>
+                   <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: "85%" }}
+                        className="h-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]"
+                      />
+                   </div>
+                </div>
+                <div className="glass-card p-5 rounded-2xl bg-[#020617]/80 border border-white/5 shadow-xl">
+                   <div className="text-[10px] text-slate-500 font-bold uppercase mb-2">SEO Health</div>
+                   <div className="text-2xl font-bold text-green-400">100/100</div>
+                </div>
+                <div className="glass-card p-5 rounded-2xl bg-[#020617]/80 border border-white/5 shadow-xl">
+                   <div className="text-[10px] text-slate-500 font-bold uppercase mb-2">Google Ads</div>
+                   <div className="text-2xl font-bold text-[var(--primary)]">+142%</div>
+                </div>
               </div>
-              <div className="h-20 bg-white/5 rounded-xl border border-white/10 p-4 relative overflow-hidden backdrop-blur-md">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-[var(--accent)] opacity-20 blur-xl"></div>
-                <div className="w-8 h-8 rounded-full border border-[var(--accent)]/50 mb-2 shadow-[0_0_10px_var(--accent)]"></div>
-                <div className="w-full h-2 bg-white/10 rounded-full"></div>
+            )}
+
+            {slide === 2 && (
+              <div className="w-full max-w-lg flex flex-col items-center text-center">
+                 <div className="relative mb-8">
+                    <div className="w-32 h-32 md:w-48 md:h-48 rounded-full border-4 border-[var(--primary)]/30 flex items-center justify-center p-4">
+                       <div className="w-full h-full rounded-full border-t-4 border-[var(--accent)] animate-spin" style={{ animationDuration: '3s' }}></div>
+                    </div>
+                    <div className="absolute inset-0 flex items-center justify-center flex-col">
+                       <span className="text-3xl md:text-5xl font-black text-white">10x</span>
+                       <span className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest">Growth Boost</span>
+                    </div>
+                 </div>
+                 <div className="flex flex-wrap justify-center gap-3">
+                    {['Reliable', 'Creative', 'Strategic', 'Native'].map((word, i) => (
+                      <span key={i} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-bold text-white/80">
+                        {word}
+                      </span>
+                    ))}
+                 </div>
               </div>
-            </div>
-          </div>
-        </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
-        {/* Live Code Editor Panel */}
-        <div 
-          className="absolute left-[-15%] top-[25%] w-[55%] bg-[#020617]/95 backdrop-blur-xl rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] border border-[#1E293B] p-5 animate-float-delayed"
-          style={{ transform: 'translateZ(70px)' }}
-        >
-          <div className="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
-            <div className="flex gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_10px_rgba(239,68,68,0.5)]"></div>
-              <div className="w-3 h-3 rounded-full bg-yellow-500/80 shadow-[0_0_10px_rgba(234,179,8,0.5)]"></div>
-              <div className="w-3 h-3 rounded-full bg-green-500/80 shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
-            </div>
-            <div className="text-[9px] font-mono text-slate-500">LandingPage.jsx</div>
-          </div>
-          <div className="space-y-2 text-[12px] font-mono leading-relaxed">
-            <div className="text-[var(--primary)]">import <span className="text-white">React</span> from <span className="text-[var(--accent)]">'react'</span>;</div>
-            <div className="text-purple-400">export default function <span className="text-[var(--gold)]">Hero</span>() {'{'}</div>
-            <div className="pl-4 text-[#64748B]">// Award-winning Indian Agency</div>
-            <div className="pl-4 text-[var(--accent)]">return (</div>
-            <div className="pl-8 text-[var(--primary)]">&lt;div className="<span className="text-green-300">premium-growth</span>"&gt;</div>
-            <div className="pl-12 text-white font-bold animate-[text-pop_2s_infinite]">10x Your Digital Presence</div>
-            <div className="pl-8 text-[var(--primary)]">&lt;/div&gt;</div>
-            <div className="pl-4 text-[var(--accent)]">);</div>
-            <div className="text-purple-400">{'}'}</div>
-          </div>
+      {/* Slide Indicators */}
+      <div className="flex items-center gap-4 mt-8 relative z-20">
+        <div className="flex gap-2">
+          {[0, 1, 2].map((i) => (
+            <button
+              key={i}
+              onClick={() => {
+                setDirection(i > slide ? 1 : -1);
+                setSlide(i);
+              }}
+              className={`h-1.5 rounded-full smooth-transition ${slide === i ? 'w-8 bg-[var(--primary)]' : 'w-2 bg-white/20'}`}
+            />
+          ))}
         </div>
-
-        {/* Advanced SEO Dashboard */}
-        <div 
-          className="absolute right-[-5%] bottom-[15%] w-[45%] bg-[#0F172A]/95 backdrop-blur-xl rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] border border-white/10 p-5 animate-float"
-          style={{ transform: 'translateZ(110px)' }}
-        >
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex items-center gap-2 text-xs font-bold text-white"><Globe size={16} className="text-[#06B6D4]" /> Organic Traffic</div>
-            <div className="flex items-center gap-1.5 bg-green-500/10 border border-green-500/20 px-2 py-1 rounded-full">
-              <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-[9px] text-green-400 font-bold uppercase tracking-widest">Live</span>
-            </div>
-          </div>
-          <div className="flex items-end gap-1.5 h-16 border-b border-white/10 pb-1">
-            {[30, 45, 40, 60, 50, 80, 75, 100].map((h, i) => (
-              <div key={i} className="relative w-full h-full flex items-end group">
-                 <div className="w-full bg-gradient-to-t from-[#2563EB] to-[#06B6D4] rounded-t-sm opacity-90 animate-bar-grow" style={{ height: `${h}%`, animationDelay: `${i * 100}ms` }}></div>
-                 <div className="absolute top-0 opacity-0 group-hover:opacity-100 bg-white text-black text-[8px] font-bold p-1 rounded -translate-y-full w-max left-1/2 -translate-x-1/2 transition-opacity z-10">{h}k</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Live Meta Ads Tracker */}
-        <div 
-          className="absolute left-[10%] bottom-[0%] w-[40%] bg-gradient-to-br from-[#2563EB] to-blue-900 rounded-2xl shadow-[0_30px_60px_rgba(37,99,235,0.3)] border border-white/20 p-5 animate-float-delayed relative overflow-hidden"
-          style={{ transform: 'translateZ(140px)' }}
-        >
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNykiLz48L3N2Zz4=')] opacity-50"></div>
-          <div className="relative z-10">
-            <div className="flex justify-between items-center mb-2">
-              <div className="flex items-center gap-2 text-xs font-bold text-white"><Target size={16} className="text-white" /> Meta Ads ROI</div>
-              <div className="bg-white/20 p-1 rounded backdrop-blur-md border border-white/10"><TrendingUp size={12} className="text-white"/></div>
-            </div>
-            <div className="text-3xl font-black text-white tracking-tighter mb-1">4.8x</div>
-            <div className="text-[10px] text-blue-100 font-medium">Average Return on Ad Spend</div>
-            <div className="mt-3 h-1 w-full bg-white/20 rounded-full overflow-hidden">
-               <div className="h-full bg-white rounded-full animate-[scale-x_2s_ease-out_infinite_alternate] origin-left w-[80%]"></div>
-            </div>
-          </div>
-        </div>
-
+        <span className="text-[10px] font-black text-white/40 font-mono">{slide + 1} / {totalSlides}</span>
+      </div>
+      <div className="mt-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest animate-pulse flex items-center gap-2">
+        <span className="opacity-50">←</span>
+        {slide === 0 && "Design Excellence"}
+        {slide === 1 && "Marketing ROI"}
+        {slide === 2 && "Business Growth"}
+        <span className="opacity-50">→</span>
       </div>
     </div>
   );
