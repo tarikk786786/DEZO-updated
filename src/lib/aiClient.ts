@@ -12,12 +12,8 @@ export const generateWithAI = async (tool: string, input: any) => {
       const data = await res.json();
       return data;
     }
-    
-    if (res.status === 503) {
-      console.log('AI backend unavailable, fallback result used.');
-    }
   } catch (error) {
-    console.log('AI network error, fallback result used.', error);
+    // Ignore error
   }
 
   // Fallbacks

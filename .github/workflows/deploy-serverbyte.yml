@@ -27,17 +27,6 @@ jobs:
       - name: Build Application
         run: npm run build
 
-      - name: Create or Ensure SPA .htaccess
-        run: |
-          echo '<IfModule mod_rewrite.c>' > dist/.htaccess
-          echo '  RewriteEngine On' >> dist/.htaccess
-          echo '  RewriteBase /' >> dist/.htaccess
-          echo '  RewriteRule ^index\.html$ - [L]' >> dist/.htaccess
-          echo '  RewriteCond %{REQUEST_FILENAME} !-f' >> dist/.htaccess
-          echo '  RewriteCond %{REQUEST_FILENAME} !-d' >> dist/.htaccess
-          echo '  RewriteRule . /index.html [L]' >> dist/.htaccess
-          echo '</IfModule>' >> dist/.htaccess
-
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:

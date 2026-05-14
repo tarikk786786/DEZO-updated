@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import { motion } from 'motion/react';
 import { Reveal } from '../components1';
 import { Calculator, Target, Search, Megaphone, Type, PenTool, CheckCircle, BarChart, Instagram } from 'lucide-react';
 import { ToolModal } from './ui/ToolModal';
-import { WebsiteCostCalculator } from './tools/WebsiteCostCalculator';
-import { SEOMetaGenerator } from './tools/SEOMetaGenerator';
-import { WebsiteAuditTool } from './tools/WebsiteAuditTool';
-import { MetaAdsCopyGenerator } from './tools/MetaAdsCopyGenerator';
-import { LandingPageHeadlineGenerator } from './tools/LandingPageHeadlineGenerator';
-import { BlogIdeaGenerator } from './tools/BlogIdeaGenerator';
-import { BusinessNameGenerator } from './tools/BusinessNameGenerator';
-import { InstagramBioGenerator } from './tools/InstagramBioGenerator';
-import { GoogleRankingChecklist } from './tools/GoogleRankingChecklist';
-import { MetaAdsBudgetCalculator } from './tools/MetaAdsBudgetCalculator';
+
+const WebsiteCostCalculator = lazy(() => import('./tools/WebsiteCostCalculator').then(m => ({ default: m.WebsiteCostCalculator })));
+const SEOMetaGenerator = lazy(() => import('./tools/SEOMetaGenerator').then(m => ({ default: m.SEOMetaGenerator })));
+const WebsiteAuditTool = lazy(() => import('./tools/WebsiteAuditTool').then(m => ({ default: m.WebsiteAuditTool })));
+const MetaAdsCopyGenerator = lazy(() => import('./tools/MetaAdsCopyGenerator').then(m => ({ default: m.MetaAdsCopyGenerator })));
+const LandingPageHeadlineGenerator = lazy(() => import('./tools/LandingPageHeadlineGenerator').then(m => ({ default: m.LandingPageHeadlineGenerator })));
+const BlogIdeaGenerator = lazy(() => import('./tools/BlogIdeaGenerator').then(m => ({ default: m.BlogIdeaGenerator })));
+const BusinessNameGenerator = lazy(() => import('./tools/BusinessNameGenerator').then(m => ({ default: m.BusinessNameGenerator })));
+const InstagramBioGenerator = lazy(() => import('./tools/InstagramBioGenerator').then(m => ({ default: m.InstagramBioGenerator })));
+const GoogleRankingChecklist = lazy(() => import('./tools/GoogleRankingChecklist').then(m => ({ default: m.GoogleRankingChecklist })));
+const MetaAdsBudgetCalculator = lazy(() => import('./tools/MetaAdsBudgetCalculator').then(m => ({ default: m.MetaAdsBudgetCalculator })));
 
 const toolsList = [
   {
@@ -132,7 +133,9 @@ export const AIGrowthTools = () => {
         onClose={() => setActiveTool(null)}
         title={activeTool?.title}
       >
-        {activeTool?.component}
+        <Suspense fallback={<div className="p-8 text-center text-sm font-bold opacity-50 text-white">Loading Tool...</div>}>
+          {activeTool?.component}
+        </Suspense>
       </ToolModal>
     </section>
   );

@@ -1,22 +1,22 @@
 import { GoogleGenAI } from '@google/genai';
 
-export const handler = async (event) => {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: JSON.stringify({ error: 'Method Not Allowed' }) };
+export default async function handler(request, response) {
+  if (request.method !== 'POST') {
+    return response.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY || 'AIzaSyDoYjK37ZG4yiBXzMgrC2XKXZre2GouCW4';
+  const apiKey = process.env.GEMINI_API_KEY;
 
   try {
-    const { tool, input } = JSON.parse(event.body);
+    const { tool, input } = request.body;
 
     if (!tool || !input) {
-      return { statusCode: 400, body: JSON.stringify({ error: 'Missing tool or input' }) };
+      return response.status(400).json({ error: 'Missing tool or input' });
     }
 
     if (!apiKey) {
-      // Return 503 so the frontend falls back
-      return { statusCode: 503, body: JSON.stringify({ error: 'AI backend unavailable, fallback result used.' }) };
+      // Return 503 so the frontend falls back seamlessly
+      return response.status(503).json({ error: 'AI backend unavailable, fallback result used.' });
     }
     
     const ai = new GoogleGenAI({ apiKey });
@@ -50,7 +50,7 @@ export const handler = async (event) => {
         prompt += `Output format: Valid JSON representing the result of the tool.`;
     }
 
-    const response = await ai.models.generateContent({
+    const responseContent = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
       config: {
@@ -58,7 +58,7 @@ export const handler = async (event) => {
       }
     });
 
-    const text = response.text();
+    const text = responseContent.text();
     let jsonResult;
     try {
         jsonResult = JSON.parse(text);
@@ -66,18 +66,9 @@ export const handler = async (event) => {
         jsonResult = { error: "Failed to parse AI response into JSON", raw: text };
     }
 
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(jsonResult),
-    };
+    return response.status(200).json(jsonResult);
   } catch (error) {
     console.error('Gemini API Error:', error);
-    // don't expose raw errors
-    return {
-      statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Internal AI Server Error, fallback result will be used.' }),
-    };
+    return response.status(500).json({ error: 'Internal AI Server Error, fallback result will be used.' });
   }
-};
+}

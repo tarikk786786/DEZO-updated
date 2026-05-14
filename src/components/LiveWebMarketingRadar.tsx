@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Reveal } from '../components1';
+import { Reveal, useIntersectionObserver } from '../components1';
 import { Rss, ExternalLink, Clock } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export const LiveWebMarketingRadar = () => {
   const [news, setNews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [ref, isIntersecting] = useIntersectionObserver({ rootMargin: '200px 0px', triggerOnce: true });
 
   const fallbackNews = [
     { id: 1, title: 'Google confirms AI Overviews rolling out to more countries globally.', category: 'SEO', source: 'Search Engine Land', time: new Date().toISOString(), url: '#' },
@@ -33,10 +34,12 @@ export const LiveWebMarketingRadar = () => {
   };
 
   useEffect(() => {
+    if (!isIntersecting) return;
+    
     fetchNews();
     const interval = setInterval(fetchNews, 45000); // 45 seconds
     return () => clearInterval(interval);
-  }, []);
+  }, [isIntersecting]);
 
   const timeAgo = (dateStr: string) => {
     const d = new Date(dateStr);
@@ -51,7 +54,7 @@ export const LiveWebMarketingRadar = () => {
   };
 
   return (
-    <section id="radar" className="py-24 lg:py-32 bg-main-light overflow-hidden border-t border-main-light">
+    <section ref={ref as any} id="radar" className="py-24 lg:py-32 bg-main-light overflow-hidden border-t border-main-light">
       <div className="max-w-[50rem] mx-auto px-4 lg:px-8">
         <Reveal direction="up">
           <div className="flex items-center justify-center gap-3 mb-8">

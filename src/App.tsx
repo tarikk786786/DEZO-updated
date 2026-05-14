@@ -14,15 +14,12 @@ import {
   RotatingText, FallbackImage, HeroVisual 
 } from './components2';
 import {
-  ServicesSection, AboutSection, ProcessSection, FaqSection,
-  MissionTargetSection, WhyChooseUsSection, BlogSection, IndustriesTestimonialsSections
+  BlogSection, FaqSection
 } from './components3';
 import { AnimatedFavicon } from './AnimatedFavicon';
 
 import { AboutUsPage } from './AboutUsPage';
 import { NotFoundPage } from './NotFoundPage';
-import { LiveTechRadar } from './components/LiveTechRadar';
-import { FreeToolsSection } from './components/FreeToolsSection';
 import { AIGrowthTools } from './components/AIGrowthTools';
 import { LiveWebMarketingRadar } from './components/LiveWebMarketingRadar';
 
@@ -41,6 +38,38 @@ const LandingPagePage = lazy(() => import('./pages').then(m => ({ default: m.Lan
 const BlogPage = lazy(() => import('./pages').then(m => ({ default: m.BlogPage })));
 const ContactPage = lazy(() => import('./pages').then(m => ({ default: m.ContactPage })));
 const PortfolioPage = lazy(() => import('./pages').then(m => ({ default: m.PortfolioPage })));
+
+const AnimatedTrustWords = () => {
+  const words = ["Impressive Guarantee", "100% Trustable", "High Converting"];
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % words.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="flex items-center gap-1 bg-white/5 border border-white/10 px-6 py-2 rounded-full backdrop-blur-md overflow-hidden h-[40px] shadow-[0_4px_10px_rgba(0,0,0,0.2)]">
+      <span className="text-white/80 text-sm font-bold whitespace-nowrap">Backed by our</span>
+      <div className="relative min-w-[150px] flex items-center justify-start h-full ml-1">
+        <AnimatePresence mode="popLayout">
+          <motion.span
+            key={index}
+            initial={{ opacity: 0, scale: 0.8, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 1.1, y: -15 }}
+            transition={{ duration: 0.4, type: "spring", stiffness: 120 }}
+            className="font-black text-sm absolute whitespace-nowrap drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-500"
+          >
+            {words[index]}
+          </motion.span>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -346,9 +375,12 @@ Message: ${formData.message}`;
                     <p className="text-sm sm:text-base md:text-lg text-[#E2E8F0] opacity-90 mb-4 font-medium max-w-2xl mx-auto leading-relaxed">
                       Fast, mobile-friendly, SEO-ready websites built for leads, trust, and business growth.
                     </p>
-                    <p className="text-sm sm:text-base text-[#F59E0B] font-bold mb-8 max-w-2xl mx-auto">
+                    <p className="text-sm sm:text-base text-[#F59E0B] font-bold mb-4 max-w-2xl mx-auto leading-relaxed">
                       Platform + Database add-ons from ₹3,000 extra • Free digital marketing guidance with selected packages
                     </p>
+                    <div className="flex justify-center mb-8">
+                      <AnimatedTrustWords />
+                    </div>
                   </Reveal>
                   <Reveal direction="up" delay={300}>
                     <div className="flex justify-center mb-8">
